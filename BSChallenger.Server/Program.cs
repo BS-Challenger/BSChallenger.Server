@@ -34,6 +34,8 @@ namespace BSChallenger.Server
                                 .AddControllers(options =>
                                     options.Filters.Add(new HttpResponseExceptionFilter())
                                 )
+
+
                         )
                         .Configure(applicationBuilder =>
                             applicationBuilder

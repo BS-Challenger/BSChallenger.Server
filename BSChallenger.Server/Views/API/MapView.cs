@@ -1,29 +1,26 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Runtime.Serialization;
 
-namespace BSChallenger.Server.Models.API
+namespace BSChallenger.Server.Views.API
 {
-	[PrimaryKey("Id")]
-	public class Map
+	public class MapView
 	{
-		public Map(string hash, string chari, string diff)
+		public MapView(string hash, string chari, string diff)
 		{
 			Hash = hash;
 			Characteristic = chari;
 			Difficulty = diff;
-			Id = Guid.NewGuid();
 		}
-		public Map()
-		{
-			Id = Guid.NewGuid();
-		}
-		[Key]
-		[IgnoreDataMember]
-		public Guid Id { get; set; }
 		public string Hash { get; set; }
 		public string Characteristic { get; set; }
 		public string Difficulty { get; set; }
+
+		public static implicit operator MapView(Models.API.Map lvl)
+		{
+			return new MapView(lvl.Hash, lvl.Characteristic, lvl.Difficulty);
+		}
 	}
 }

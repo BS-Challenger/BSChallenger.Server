@@ -6,27 +6,26 @@ using System.Drawing;
 using System.Security.Cryptography;
 using System;
 using System.Runtime.Serialization;
+using System.Linq;
 
-namespace BSChallenger.Server.Models.API
+namespace BSChallenger.Server.Views.API
 {
-    [PrimaryKey("Id")]
-    public class Ranking
+    public class RankingView
     {
-        public Ranking(string name, string iconURL)
+        public RankingView(string name, string iconURL)
         {
             Name = name;
             IconURL = iconURL;
-            Id = Guid.NewGuid();
         }
-		public Ranking()
-		{
-			Id = Guid.NewGuid();
-		}
-		[Key]
-		[IgnoreDataMember]
-		public Guid Id { get; set; }
         public string Name { get; set; }
         public string IconURL { get; set; }
-        public List<Level> Levels { get; set; }
-    }
+        public List<LevelView> Levels { get; set; }
+
+		public static implicit operator RankingView(Models.API.Ranking rnk)
+		{
+			var rankingView = new RankingView(rnk.Name, rnk.IconURL);
+			rankingView.Levels = rnk.Levels?.Select(x => (LevelView)x).ToList();
+			return rankingView;
+		}
+	}
 }

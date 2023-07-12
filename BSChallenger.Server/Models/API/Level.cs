@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 using System.Xml.Linq;
 
 namespace BSChallenger.Server.Models.API
@@ -21,10 +22,11 @@ namespace BSChallenger.Server.Models.API
 			Id = Guid.NewGuid();
 		}
 		[Key]
+		[IgnoreDataMember]
 		public Guid Id { get; set; }
 		public int LevelNumber { get; set; }
 		public int MapsReqForPass { get; set; }
 		public string IconURL { get; set; }
-		public DbSet<Map> AvailableForPass { get; set; }
+		public List<Map> AvailableForPass { get; set; }
 	}
 }
