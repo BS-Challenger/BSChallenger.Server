@@ -28,7 +28,7 @@ namespace BSChallenger.Server.API
             if (code is null || state is null)
                 throw new HttpResponseException(400);
 
-            var validationResponse = await _beatleaderAPI.ValidateOAuth(code);
+            /*var validationResponse = await _beatleaderAPI.ValidateOAuth(code);
 
             if (validationResponse.error is not null)
             {
@@ -50,7 +50,7 @@ namespace BSChallenger.Server.API
             user.RefreshToken = validationResponse.refresh_token;
             user.TokenExpiry = DateTime.Now.AddSeconds(validationResponse.expires_in);
 
-            await _database.SaveChangesAsync();
+            await _database.SaveChangesAsync();*/
         }
     }
 }
