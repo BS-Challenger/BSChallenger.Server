@@ -25,6 +25,7 @@ namespace BSChallenger.Server.Models.API
 		[Key]
 		[IgnoreDataMember]
 		public Guid Id { get; set; }
+        [Key]
         public string Name { get; set; }
         public string IconURL { get; set; }
         public List<Level> Levels { get; set; }
