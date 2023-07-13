@@ -1,4 +1,5 @@
-﻿using BSChallenger.Server.Models;
+﻿using BSChallenger.Server.API.Authentication.BeatLeader;
+using BSChallenger.Server.Models;
 using BSChallenger.Server.Models.API;
 using BSChallenger.Server.Views.API;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace BSChallenger.Server.API
 {
-	[ApiController]
+    [ApiController]
 	[Route("/test")]
 	public class TestController : ControllerBase
 	{

@@ -4,7 +4,7 @@ using Serilog;
 using System;
 using System.Threading.Tasks;
 
-namespace BSChallenger.Server.API
+namespace BSChallenger.Server.API.Authentication.BeatLeader
 {
     [ApiController]
     [Route("[controller]")]
