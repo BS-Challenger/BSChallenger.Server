@@ -16,5 +16,6 @@ namespace BSChallenger.Server.Models
         public DbSet<Level> Levels { get; set; }
         public DbSet<Ranking> Rankings { get; set; }
         public DbSet<Map> Maps { get; set; }
+        public DbSet<Token> Tokens { get; set; }
 	}
 }

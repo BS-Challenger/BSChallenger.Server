@@ -8,8 +8,20 @@ namespace BSChallenger.Server.Models
         private const string BeatleaderEndpoint = "https://api.beatleader.xyz/";
 
         private readonly ILogger _logger = Log.ForContext<BeatleaderAPI>();
-        private static readonly HttpClient _httpClient = new HttpClient();
+        private readonly HttpClient _httpClient = new HttpClient();
+        private Secrets _secrets;
 
-        // TODO: figure out beatleader api, need scores and oauth2
-    }
+		public BeatleaderAPI(Secrets secrets)
+        {
+            _secrets = secrets;
+        }
+
+		// TODO: figure out beatleader api, need scores and oauth2
+
+        public int GetUserIdentity()
+        {
+
+            return 0;
+        }
+	}
 }

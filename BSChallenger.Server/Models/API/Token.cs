@@ -6,29 +6,26 @@ using System.Runtime.Serialization;
 namespace BSChallenger.Server.Models.API
 {
 	[PrimaryKey("Id")]
-	public class User
+	public class Token
 	{
-		public User(string userID)
+		public Token(User user, DateTime expiry, bool access)
 		{
-			UserId = userID;
+			UserId = user.Id;
+			isAccessToken = access;
+			expiryTime = expiry;
 			Id = Guid.NewGuid();
 		}
-		public User()
+		public Token(User user)
 		{
+			UserId = user.Id;
 			Id = Guid.NewGuid();
 		}
 		[Key]
 		[IgnoreDataMember]
 		public Guid Id { get; set; }
-
-		//Username
-		[Key]
-		public string UserId { get; set; }
-		public int BeatLeaderId;
-
-		public string PasswordHash { get; set; }
-
-		//Dynamically set
-		public DateTime LastCheckDate { get; set; }
+		public Guid UserId { get; set; }
+		public string token;
+		public DateTime expiryTime;
+		public bool isAccessToken;
 	}
 }
