@@ -12,7 +12,7 @@ namespace BSChallenger.Server.Models.API
     [PrimaryKey("Id")]
     public class Ranking
     {
-        public Ranking(string name, string iconURL)
+        public Ranking(string name, string desc, string iconURL)
         {
             Name = name;
             IconURL = iconURL;
@@ -27,7 +27,7 @@ namespace BSChallenger.Server.Models.API
 		public Guid Id { get; set; }
         [Key]
         public string Name { get; set; }
-        public string IconURL { get; set; }
-        public List<Level> Levels { get; set; }
+        public string Description { get; set; }
+		public string IconURL { get; set; }
     }
 }

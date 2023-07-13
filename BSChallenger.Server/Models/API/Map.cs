@@ -8,8 +8,9 @@ namespace BSChallenger.Server.Models.API
 	[PrimaryKey("Id")]
 	public class Map
 	{
-		public Map(string hash, string chari, string diff)
+		public Map(Level level, string hash, string chari, string diff)
 		{
+			LevelId = level.Id;
 			Hash = hash;
 			Characteristic = chari;
 			Difficulty = diff;
@@ -22,6 +23,7 @@ namespace BSChallenger.Server.Models.API
 		[Key]
 		[IgnoreDataMember]
 		public Guid Id { get; set; }
+		public Guid LevelId { get; set; }
 		public string Hash { get; set; }
 		public string Characteristic { get; set; }
 		public string Difficulty { get; set; }

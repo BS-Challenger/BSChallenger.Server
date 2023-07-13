@@ -26,7 +26,7 @@ namespace BSChallenger.Server.API
 		[HttpGet]
 		public async Task<ActionResult<IEnumerable<RankingView>>> Get()
 		{
-			return _database.Rankings.Select(x=>(RankingView)x).ToList();
+			return _database.Rankings.Select(x=>RankingView.ConvertToView(x, _database)).ToList();
 		}
 	}
 }

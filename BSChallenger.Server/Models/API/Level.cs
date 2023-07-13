@@ -10,8 +10,9 @@ namespace BSChallenger.Server.Models.API
 	[PrimaryKey("Id")]
 	public class Level
 	{
-		public Level(int level, int reqMaps, string iconURL)
+		public Level(Ranking ranking, int level, int reqMaps, string iconURL)
 		{
+			RankingId = ranking.Id;
 			LevelNumber = level;
 			MapsReqForPass = reqMaps;
 			IconURL = iconURL;
@@ -24,9 +25,9 @@ namespace BSChallenger.Server.Models.API
 		[Key]
 		[IgnoreDataMember]
 		public Guid Id { get; set; }
+		public Guid RankingId { get; set; }
 		public int LevelNumber { get; set; }
 		public int MapsReqForPass { get; set; }
 		public string IconURL { get; set; }
-		public List<Map> AvailableForPass { get; set; }
 	}
 }

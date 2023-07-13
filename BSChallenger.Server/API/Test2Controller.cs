@@ -27,7 +27,8 @@ namespace BSChallenger.Server.API
 		[HttpGet]
 		public async Task<ActionResult<IEnumerable<LevelView>>> Get()
 		{
-			return _database.Rankings.First(x => x.Name == "Poodle Saber").Levels.Select(x=>(LevelView)x).ToList();
+			var ranking = _database.Rankings.First(x => x.Name == "Poodle Saber");
+			return _database.Levels.Where(x => x.RankingId == ranking.Id).Select(x => LevelView.ConvertToView(x, _database)).ToList();
 		}
 	}
 }

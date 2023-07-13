@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BSChallenger.Server.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -21,10 +22,10 @@ namespace BSChallenger.Server.Views.API
 		public string IconURL { get; set; }
 		public List<MapView> AvailableForPass { get; set; }
 
-		public static implicit operator LevelView(Models.API.Level lvl)
+		public static LevelView ConvertToView(Models.API.Level lvl, Database Database)
 		{
 			var levelView = new LevelView(lvl.LevelNumber, lvl.MapsReqForPass, lvl.IconURL);
-			levelView.AvailableForPass = lvl.AvailableForPass?.Select(x => (MapView)x).ToList();
+			levelView.AvailableForPass = Database.Maps.Where(x => x.LevelId == lvl.Id).Select(x=>(MapView)x).ToList();
 			return levelView;
 		}
 	}
