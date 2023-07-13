@@ -27,7 +27,7 @@ namespace BSChallenger.Server.API
 		[HttpGet]
 		public async Task<ActionResult<IEnumerable<RankingView>>> Get()
 		{
-			Ranking testRanking = new Ranking("Poodle Saber", "https://cdn.assets.beatleader.xyz/PAULclan.png");
+			Ranking testRanking = new Ranking("Poodle Saber", "", "https://cdn.assets.beatleader.xyz/PAULclan.png");
 			for (int i = 1; i < 16; i++)
 			{
 				_logger.Debug(i.ToString());
