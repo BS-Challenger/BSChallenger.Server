@@ -1,29 +1,25 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SQLite;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
+using PrimaryKeyAttribute = Microsoft.EntityFrameworkCore.PrimaryKeyAttribute;
 
 namespace BSChallenger.Server.Models.API
 {
 	[PrimaryKey("Id")]
 	public class User
 	{
-		public User(string userID)
+		public User(string username)
 		{
-			UserId = userID;
-			Id = Guid.NewGuid();
+			Username = username;
 		}
 		public User()
 		{
-			Id = Guid.NewGuid();
 		}
-		[Key]
-		[IgnoreDataMember]
-		public Guid Id { get; set; }
-
-		//Username
-		[Key]
-		public string UserId { get; set; }
+		[Key, AutoIncrement]
+		public int Id { get; set; }
+		public string Username { get; set; }
 		public int BeatLeaderId;
 
 		public string PasswordHash { get; set; }

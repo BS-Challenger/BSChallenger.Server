@@ -13,19 +13,19 @@ namespace BSChallenger.Server.Models.API
 			UserId = user.Id;
 			isAccessToken = access;
 			expiryTime = expiry;
+			token = Guid.NewGuid().ToString().Replace("-", string.Empty).Replace("+", string.Empty);
 			Id = Guid.NewGuid();
 		}
-		public Token(User user)
+
+		public Token()
 		{
-			UserId = user.Id;
 			Id = Guid.NewGuid();
 		}
 		[Key]
-		[IgnoreDataMember]
 		public Guid Id { get; set; }
-		public Guid UserId { get; set; }
-		public string token;
-		public DateTime expiryTime;
-		public bool isAccessToken;
+		public int UserId { get; set; }
+		public string token { get; set; }
+		public DateTime expiryTime { get; set; }
+		public bool isAccessToken { get; private set; }
 	}
 }

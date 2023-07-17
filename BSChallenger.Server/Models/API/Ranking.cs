@@ -1,33 +1,25 @@
-﻿using static BSChallenger.Server.Models.Database;
-using System.Collections.Generic;
+﻿using SQLite;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
-using System.Drawing;
-using System.Security.Cryptography;
-using System;
-using System.Runtime.Serialization;
+using PrimaryKeyAttribute = Microsoft.EntityFrameworkCore.PrimaryKeyAttribute;
 
 namespace BSChallenger.Server.Models.API
 {
-    [PrimaryKey("Id")]
-    public class Ranking
-    {
-        public Ranking(string name, string desc, string iconURL)
-        {
-            Name = name;
-            IconURL = iconURL;
-            Id = Guid.NewGuid();
-        }
+	[PrimaryKey("Id")]
+	public class Ranking
+	{
+		public Ranking(string name, string desc, string iconURL)
+		{
+			Name = name;
+			Description = desc;
+			IconURL = iconURL;
+		}
 		public Ranking()
 		{
-			Id = Guid.NewGuid();
 		}
-		[Key]
-		[IgnoreDataMember]
-		public Guid Id { get; set; }
-        [Key]
-        public string Name { get; set; }
-        public string Description { get; set; }
+		[Key, AutoIncrement]
+		public int Id { get; set; }
+		public string Name { get; set; }
+		public string Description { get; set; }
 		public string IconURL { get; set; }
-    }
+	}
 }

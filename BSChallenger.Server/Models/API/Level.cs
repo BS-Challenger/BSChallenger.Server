@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 using System.Xml.Linq;
+using PrimaryKeyAttribute = Microsoft.EntityFrameworkCore.PrimaryKeyAttribute;
 
 namespace BSChallenger.Server.Models.API
 {
@@ -16,16 +18,13 @@ namespace BSChallenger.Server.Models.API
 			LevelNumber = level;
 			MapsReqForPass = reqMaps;
 			IconURL = iconURL;
-			Id = Guid.NewGuid();
 		}
 		public Level()
 		{
-			Id = Guid.NewGuid();
 		}
-		[Key]
-		[IgnoreDataMember]
-		public Guid Id { get; set; }
-		public Guid RankingId { get; set; }
+		[Key, AutoIncrement]
+		public int Id { get; set; }
+		public int RankingId { get; set; }
 		public int LevelNumber { get; set; }
 		public int MapsReqForPass { get; set; }
 		public string IconURL { get; set; }

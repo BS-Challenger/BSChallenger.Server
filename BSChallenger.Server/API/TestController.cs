@@ -29,11 +29,14 @@ namespace BSChallenger.Server.API
 		public async Task<ActionResult<IEnumerable<RankingView>>> Get()
 		{
 			Ranking testRanking = new Ranking("Poodle Saber", "", "https://cdn.assets.beatleader.xyz/PAULclan.png");
+			await _database.Rankings.AddAsync(testRanking);
+			await _database.SaveChangesAsync();
 			for (int i = 1; i < 16; i++)
 			{
-				_logger.Debug(i.ToString());
-				var level = new Level(testRanking, i, 1, "https://cdn.betterttv.net/emote/6097c0ef39b5010444d0e517/3x.png");
-				switch(i)
+				var level = new Level(testRanking, i, 1, "https://cdn.discordapp.com/attachments/1127020251775783052/1130510278489026640/image.png");
+				await _database.Levels.AddAsync(level);
+				await _database.SaveChangesAsync();
+				switch (i)
 				{
 					case 1:
 
@@ -170,10 +173,7 @@ namespace BSChallenger.Server.API
 						await _database.Maps.AddAsync(new Map(level, "9f9e4b05dcaf6d44332068109f36f4c9db5aa357", "Standard", "Expert"));
 						break;
 				}
-				await _database.Levels.AddAsync(level);
 			}
-			await _database.Rankings.AddAsync(testRanking);
-			await _database.SaveChangesAsync();
 			return _database.Rankings.Select(x => RankingView.ConvertToView(x, _database)).ToList();
 		}
 	}

@@ -14,7 +14,7 @@ namespace BSChallenger.Server.Views.API
 
 		public static implicit operator UserView(Models.API.User usr)
 		{
-			return new UserView(usr.UserId);
+			return new UserView(usr.Username);
 		}
 	}
 }

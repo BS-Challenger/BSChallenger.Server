@@ -22,5 +22,13 @@ namespace BSChallenger.Server.Models
 			await _database.SaveChangesAsync();
 			return token;
 		}
+
+		public async Task<Token> GetAccessToken(User user)
+		{
+			var token = new Token(user, DateTime.Now.AddMinutes(5), true);
+			await _database.Tokens.AddAsync(token);
+			await _database.SaveChangesAsync();
+			return token;
+		}
 	}
 }

@@ -31,7 +31,8 @@ namespace BSChallenger.Server
                                     options.UseSqlite(hostBuilderContext.Configuration.GetConnectionString("SqlConnection")) // TODO: change to mongodb
                                 )
                                 .AddSingleton<BeatleaderAPI>()
-                                .AddControllers(options =>
+                                .AddSingleton<TokenProvider>()
+								.AddControllers(options =>
                                     options.Filters.Add(new HttpResponseExceptionFilter())
                                 )
 

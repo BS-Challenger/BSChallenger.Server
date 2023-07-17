@@ -1,18 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BSChallenger.Server.Views.API;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BSChallenger.Server.Models.API.Authentication
 {
 	public class AuthResponse
 	{
-		public AuthResponse(string response, bool isValid, Token token)
+		public AuthResponse(string response, bool isValid, TokenView token)
 		{
 			Response = response;
 			IsValid = isValid;
-			RefreshToken = token;
+			if(token != null)
+				RefreshToken = token.Token;
 		}
 
 		public string Response { get; set; }
 		public bool IsValid { get; set; }
-		public Token RefreshToken { get; set; }
+		public string RefreshToken { get; set; }
 	}
 }

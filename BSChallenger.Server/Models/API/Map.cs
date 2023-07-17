@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SQLite;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
+using PrimaryKeyAttribute = Microsoft.EntityFrameworkCore.PrimaryKeyAttribute;
 
 namespace BSChallenger.Server.Models.API
 {
@@ -14,16 +16,13 @@ namespace BSChallenger.Server.Models.API
 			Hash = hash;
 			Characteristic = chari;
 			Difficulty = diff;
-			Id = Guid.NewGuid();
 		}
 		public Map()
 		{
-			Id = Guid.NewGuid();
 		}
-		[Key]
-		[IgnoreDataMember]
-		public Guid Id { get; set; }
-		public Guid LevelId { get; set; }
+		[Key, AutoIncrement]
+		public int Id { get; set; }
+		public int LevelId { get; set; }
 		public string Hash { get; set; }
 		public string Characteristic { get; set; }
 		public string Difficulty { get; set; }

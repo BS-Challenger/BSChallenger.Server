@@ -4,6 +4,6 @@ namespace BSChallenger.Server.Models.API.Authentication
 {
 	public class AccessTokenRequest
 	{
-		public Token RefreshToken { get; set; }
+		public string RefreshToken { get; set; }
 	}
 }
