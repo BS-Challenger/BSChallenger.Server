@@ -12,12 +12,13 @@ namespace BSChallenger.Server.Models.API
 	[PrimaryKey("Id")]
 	public class Level
 	{
-		public Level(Ranking ranking, int level, int reqMaps, string iconURL)
+		public Level(Ranking ranking, int level, int reqMaps, string iconURL, string color)
 		{
 			RankingId = ranking.Id;
 			LevelNumber = level;
 			MapsReqForPass = reqMaps;
 			IconURL = iconURL;
+			Color = color;
 		}
 		public Level()
 		{
@@ -28,5 +29,6 @@ namespace BSChallenger.Server.Models.API
 		public int LevelNumber { get; set; }
 		public int MapsReqForPass { get; set; }
 		public string IconURL { get; set; }
+		public string Color { get; set; }
 	}
 }

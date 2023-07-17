@@ -3,7 +3,8 @@ using Scrypt;
 
 namespace BSChallenger.Server.Services
 {
-	public class PasswordService
+	//TODO: Move to Argon2 or BCrypt
+	public static class PasswordService
 	{
 		private static ScryptEncoder encoder = new ScryptEncoder();
 		public static string CreateHash(string password)

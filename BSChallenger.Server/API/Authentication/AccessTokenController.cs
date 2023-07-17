@@ -26,15 +26,16 @@ namespace BSChallenger.Server.API.Authentication
 		public async Task<ActionResult<AccessTokenResponse>> Post(AccessTokenRequest request)
 		{
 			//ToList because the expression was too silly for SQL
-			var refreshToken = _database.Tokens.ToList().FirstOrDefault(x => x.token == request.RefreshToken);
+			var refreshToken = _database.Tokens.AsEnumerable().FirstOrDefault(x => x.token == request.RefreshToken);
 
 			if (refreshToken != null && !refreshToken.isAccessToken)
 			{
 				var user = _database.Users.FirstOrDefault(x => x.Id == refreshToken.UserId);
 				var token = await _tokenProvider.GetAccessToken(user);
-				return new AccessTokenResponse(token.token);
+				var newRefrshtoken = await _tokenProvider.GetRefreshToken(user);
+				return new AccessTokenResponse(token.token, newRefrshtoken.token);
 			}
-			return new AccessTokenResponse("Request Failed");
+			return new AccessTokenResponse("Request Failed", "");
 		}
 	}
 }

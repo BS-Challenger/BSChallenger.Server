@@ -22,14 +22,17 @@ namespace BSChallenger.Server.API.Authentication
 
 		//Why is this post? Idk but http client doesnt let me pass a body for get requests
 		[HttpPost]
-		public async Task<ActionResult<IdentityResponse>> Post(IdentityRequest request)
+		public ActionResult<IdentityResponse> Post(IdentityRequest request)
 		{
 			var token = _database.Tokens.FirstOrDefault(x => x.token == request.AccessToken && x.isAccessToken);
 
 			if (token != null)
 			{
 				var user = _database.Users.FirstOrDefault(x => x.Id == token.UserId);
-				return new IdentityResponse(user.Id, user.Username);
+				if (user != null)
+				{
+					return new IdentityResponse(user.Id, user.Username);
+				}
 			}
 			return new IdentityResponse(-1, "Identity Request Failed");
 		}

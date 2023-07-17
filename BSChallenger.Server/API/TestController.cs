@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using Serilog;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -31,9 +33,10 @@ namespace BSChallenger.Server.API
 			Ranking testRanking = new Ranking("Poodle Saber", "", "https://cdn.assets.beatleader.xyz/PAULclan.png");
 			await _database.Rankings.AddAsync(testRanking);
 			await _database.SaveChangesAsync();
+			var colors = GenerateDissimilarColors(16);
 			for (int i = 1; i < 16; i++)
 			{
-				var level = new Level(testRanking, i, 1, "https://cdn.discordapp.com/attachments/1127020251775783052/1130510278489026640/image.png");
+				var level = new Level(testRanking, i, 1, "Default", colors[i]);
 				await _database.Levels.AddAsync(level);
 				await _database.SaveChangesAsync();
 				switch (i)
@@ -175,6 +178,68 @@ namespace BSChallenger.Server.API
 				}
 			}
 			return _database.Rankings.Select(x => RankingView.ConvertToView(x, _database)).ToList();
+		}
+
+		//Silly color funcs, Temporary ofc
+		public static List<string> GenerateDissimilarColors(int count)
+		{
+			List<Color> colors = new List<Color>();
+			for (int i = 0; i < count; i++)
+			{
+			Generate:
+				var color = GenerateNewColor();
+				if (colors.Any(x => isClose(x, color)))
+				{
+					goto Generate;
+				}
+				else
+				{
+					colors.Add(color);
+				}
+			}
+			return colors.Select(x => x.R.ToString("X2") + x.G.ToString("X2") + x.B.ToString("X2")).ToList();
+		}
+
+		public static double map(double s, double a1, double a2, double b1, double b2)
+		{
+			return b1 + (s - a1) * (b2 - b1) / (a2 - a1);
+		}
+
+		public static Color GenerateNewColor()
+		{
+			return ColorFromHSV(Random.Shared.NextDouble() * 360f, map(Random.Shared.NextDouble(), 0f, 1f, 0.6f, 1f), map(Random.Shared.NextDouble(), 0f, 1f, 0.6f, 1f));
+		}
+
+		public static bool isClose(Color a, Color z, int threshold = 10)
+		{
+			int r = a.R - z.R,
+				g = a.G - z.G,
+				b = a.B - z.B;
+			return (r * r + g * g + b * b) <= threshold * threshold;
+		}
+		public static Color ColorFromHSV(double hue, double saturation, double value)
+		{
+			int hi = Convert.ToInt32(Math.Floor(hue / 60)) % 6;
+			double f = hue / 60 - Math.Floor(hue / 60);
+
+			value = value * 255;
+			int v = Convert.ToInt32(value);
+			int p = Convert.ToInt32(value * (1 - saturation));
+			int q = Convert.ToInt32(value * (1 - f * saturation));
+			int t = Convert.ToInt32(value * (1 - (1 - f) * saturation));
+
+			if (hi == 0)
+				return Color.FromArgb(255, v, t, p);
+			else if (hi == 1)
+				return Color.FromArgb(255, q, v, p);
+			else if (hi == 2)
+				return Color.FromArgb(255, p, v, t);
+			else if (hi == 3)
+				return Color.FromArgb(255, p, q, v);
+			else if (hi == 4)
+				return Color.FromArgb(255, t, p, v);
+			else
+				return Color.FromArgb(255, v, p, q);
 		}
 	}
 }
