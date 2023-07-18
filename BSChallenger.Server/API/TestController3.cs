@@ -3,65 +3,56 @@ using BSChallenger.Server.Models;
 using BSChallenger.Server.Models.API;
 using BSChallenger.Server.Views.API;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace BSChallenger.Server.API
 {
-	[ApiController]
-	[Route("/test")]
-	public class TestController : ControllerBase
+    [ApiController]
+	[Route("/test3")]
+	public class TestController3 : ControllerBase
 	{
 		private readonly ILogger _logger = Log.ForContext<AuthenticateController>();
 		private readonly Database _database;
+		private readonly BPListParser _parser;
 
-		public TestController(
-			Database database)
+		public TestController3(
+			Database database,
+			BPListParser parser)
 		{
 			_database = database;
+			_parser = parser;
 		}
 
 		[HttpGet]
 		public async Task<ActionResult<IEnumerable<RankingView>>> Get()
 		{
-			Ranking testRanking = new Ranking("Modifier Saber", "", "https://cdn.discordapp.com/icons/1115430594327879780/12f50ae1c875576077c0691ebf8ab40f.png");
+			Ranking testRanking = new Ranking("Ranked Saber", "", "https://cdn.discordapp.com/icons/1046997157959442533/484935f214d4705dae0df8509084b0b9.png");
 			await _database.Rankings.AddAsync(testRanking);
 			await _database.SaveChangesAsync();
-			var colors = GenerateDissimilarColors(4);
-			for (int i = 1; i < 4; i++)
+			var colors = GenerateDissimilarColors(23);
+			for (int i = 1; i < 23; i++)
 			{
 				var level = new Level(testRanking, i, 1, "Default", colors[i]);
 				await _database.Levels.AddAsync(level);
 				await _database.SaveChangesAsync();
-				switch (i)
-				{
-					case 1:
-
-						await _database.Maps.AddAsync(new Map(level, "6ee71d3d49f5c3a2b3be71dd143f93890e383870", "Standard", "ExpertPlus"));
-						await _database.Maps.AddAsync(new Map(level, "ca8f10245fdc772388d3bc6e0e956edbd791f395", "Standard", "Expert"));
-						await _database.Maps.AddAsync(new Map(level, "332a9151fa207d3a7a9da369a134cdd6f7dc20f4", "Standard", "Hard"));
-						await _database.Maps.AddAsync(new Map(level, "429ff959e81100e5afaf2019c921ef5218634bc6", "Standard", "Expert"));
-						await _database.Maps.AddAsync(new Map(level, "429ff959e81100e5afaf2019c921ef5218634bc6", "Standard", "ExpertPlus"));
-						break;
-					case 2:
-						await _database.Maps.AddAsync(new Map(level, "3f567bc5cc7ada8c9b5bc1436960c65c92355972", "Standard", "ExpertPlus"));
-						await _database.Maps.AddAsync(new Map(level, "c930e8245776f2a51de2eff0e7ba036d74068cba", "Standard", "ExpertPlus"));
-						await _database.Maps.AddAsync(new Map(level, "47d574d2274c36b45a63a7b808bcf74b49a0a3ba", "Standard", "ExpertPlus"));
-						await _database.Maps.AddAsync(new Map(level, "b4f3f4e5cacd3422eda0ef199a24ee5d957ab53f", "Standard", "ExpertPlus"));
-						break;
-					case 3:
-						await _database.Maps.AddAsync(new Map(level, "ad6c9f88d63259a95e39397c31be2981c4beb744", "Standard", "ExpertPlus"));
-						await _database.Maps.AddAsync(new Map(level, "b467c05ba4dcf28d242aca6994d1591b02eeff47", "Standard", "ExpertPlus"));
-						await _database.Maps.AddAsync(new Map(level, "eaddeb51358bbd688a57923ddc23a230ca81609c", "Standard", "ExpertPlus"));
-						break;
-				}
-				await _database.SaveChangesAsync();
+				string path = GetPath(i);
+				await _parser.Parse(level, System.IO.File.OpenRead(path));
+				_logger.Information(path);
 			}
 			return _database.Rankings.Select(x => RankingView.ConvertToView(x, _database)).ToList();
+		}
+
+		public string GetPath(int number)
+		{
+			return Path.Combine(Environment.CurrentDirectory, "Playlists", String.Format("{0:000}", number) + "_Rank Saber.bplist");
 		}
 
 		//Silly color funcs, Temporary ofc
@@ -94,7 +85,7 @@ namespace BSChallenger.Server.API
 			return ColorFromHSV(Random.Shared.NextDouble() * 360f, map(Random.Shared.NextDouble(), 0f, 1f, 0.6f, 1f), map(Random.Shared.NextDouble(), 0f, 1f, 0.6f, 1f));
 		}
 
-		public static bool isClose(Color a, Color z, int threshold = 15)
+		public static bool isClose(Color a, Color z, int threshold = 10)
 		{
 			int r = a.R - z.R,
 				g = a.G - z.G,
@@ -106,7 +97,7 @@ namespace BSChallenger.Server.API
 			int hi = Convert.ToInt32(Math.Floor(hue / 60)) % 6;
 			double f = hue / 60 - Math.Floor(hue / 60);
 
-			value *= 255;
+			value = value * 255;
 			int v = Convert.ToInt32(value);
 			int p = Convert.ToInt32(value * (1 - saturation));
 			int q = Convert.ToInt32(value * (1 - f * saturation));

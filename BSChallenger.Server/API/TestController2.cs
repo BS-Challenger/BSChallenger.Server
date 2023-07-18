@@ -15,13 +15,13 @@ using System.Threading.Tasks;
 namespace BSChallenger.Server.API
 {
     [ApiController]
-	[Route("/test")]
-	public class TestController : ControllerBase
+	[Route("/test2")]
+	public class TestController2 : ControllerBase
 	{
 		private readonly ILogger _logger = Log.ForContext<AuthenticateController>();
 		private readonly Database _database;
 
-		public TestController(
+		public TestController2(
 			Database database)
 		{
 			_database = database;

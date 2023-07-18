@@ -32,6 +32,7 @@ namespace BSChallenger.Server
                                 )
                                 .AddSingleton<BeatleaderAPI>()
                                 .AddSingleton<TokenProvider>()
+                                .AddSingleton<BPListParser>()
 								.AddControllers(options =>
                                     options.Filters.Add(new HttpResponseExceptionFilter())
                                 )
