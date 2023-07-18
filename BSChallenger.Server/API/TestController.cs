@@ -16,7 +16,7 @@ namespace BSChallenger.Server.API
 	[Route("/test")]
 	public class TestController : ControllerBase
 	{
-		private readonly ILogger _logger = Log.ForContext<AuthenticateController>();
+		private readonly ILogger _logger = Log.ForContext<BeatLeaderAuthenticateController>();
 		private readonly Database _database;
 
 		public TestController(

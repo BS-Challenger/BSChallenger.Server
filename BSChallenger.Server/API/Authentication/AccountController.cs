@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace BSChallenger.Server.API.Authentication
 {
 	[ApiController]
-	[Route("/accounts")]
+	[Route("/users")]
 	public class AccountController : ControllerBase
 	{
 		private readonly ILogger _logger = Log.ForContext<AccountController>();
