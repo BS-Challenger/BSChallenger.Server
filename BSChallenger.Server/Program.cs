@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using BSChallenger.Server.Filters;
+using Microsoft.OpenApi.Models;
 
 namespace BSChallenger.Server
 {
@@ -33,14 +34,21 @@ namespace BSChallenger.Server
                                 .AddSingleton<BeatleaderAPI>()
                                 .AddSingleton<TokenProvider>()
                                 .AddSingleton<BPListParser>()
+						        .AddSwaggerGen(c =>
+						        {
+							        c.SwaggerDoc("v1", new OpenApiInfo { Title = "Challenger API", Version = "v1" });
+						        })
 								.AddControllers(options =>
                                     options.Filters.Add(new HttpResponseExceptionFilter())
                                 )
-
-
                         )
                         .Configure(applicationBuilder =>
                             applicationBuilder
+								.UseSwagger()
+		                        .UseSwaggerUI(c =>
+                                {
+                                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Challenger API V1");
+                                })
                                 .UseRouting()
                                 .UseEndpoints(endPointRouteBuilder => endPointRouteBuilder.MapControllers())
                         )

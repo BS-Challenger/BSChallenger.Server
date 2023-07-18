@@ -50,7 +50,7 @@ namespace BSChallenger.Server.API
 			return _database.Rankings.Select(x => RankingView.ConvertToView(x, _database)).ToList();
 		}
 
-		public string GetPath(int number)
+		public static string GetPath(int number)
 		{
 			return Path.Combine(Environment.CurrentDirectory, "Playlists", String.Format("{0:000}", number) + "_Rank Saber.bplist");
 		}
