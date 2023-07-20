@@ -1,7 +1,7 @@
-﻿using BSChallenger.Server.Models;
+﻿using BSChallenger.Server.API.Authentication.BeatLeader;
+using BSChallenger.Server.Models;
 using BSChallenger.Server.Models.API;
 using BSChallenger.Server.Models.API.Authentication;
-using BSChallenger.Server.Services;
 using BSChallenger.Server.Views.API;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -10,19 +10,22 @@ using System.Threading.Tasks;
 
 namespace BSChallenger.Server.API.Authentication
 {
-	[ApiController]
+    [ApiController]
 	[Route("[controller]")]
 	public class AuthenticateController : ControllerBase
 	{
 		private readonly Database _database;
 		private readonly TokenProvider _tokenProvider;
+		private readonly PasswordProvider _passwordProvider;
 
 		public AuthenticateController(
 			Database database,
-			TokenProvider tokenProvider)
+			TokenProvider tokenProvider,
+			PasswordProvider passwordProvider)
 		{
 			_database = database;
 			_tokenProvider = tokenProvider;
+			_passwordProvider = passwordProvider;
 		}
 
 		[HttpPost("AccessToken")]
@@ -31,7 +34,7 @@ namespace BSChallenger.Server.API.Authentication
 			//ToList because the expression was too silly for SQL
 			var refreshToken = _database.Tokens.AsEnumerable().FirstOrDefault(x => x.token == request.RefreshToken);
 
-			if (refreshToken != null && !refreshToken.isAccessToken)
+			if (refreshToken != null && refreshToken.tokenType == TokenType.RefreshToken)
 			{
 				var user = _database.Users.FirstOrDefault(x => x.Id == refreshToken.UserId);
 				var token = await _tokenProvider.GetAccessToken(user);
@@ -54,7 +57,7 @@ namespace BSChallenger.Server.API.Authentication
 			}
 			var user = new User(request.Username);
 
-			user.PasswordHash = PasswordService.CreateHash(request.Password);
+			user.PasswordHash = _passwordProvider.CreateHash(request.Password);
 
 			await _database.Users.AddAsync(user);
 			await _database.SaveChangesAsync();
@@ -67,7 +70,7 @@ namespace BSChallenger.Server.API.Authentication
 			if (_database.Users.Any(x => x.Username == request.Username))
 			{
 				var user = _database.Users.First(x => x.Username == request.Username);
-				if (PasswordService.Verify(request.Password, user))
+				if (_passwordProvider.Verify(request.Password, user))
 				{
 					//Refresh tokens will last for 1 month
 					return new AuthResponse("Success", true, await _tokenProvider.GetRefreshToken(user));
@@ -76,9 +79,9 @@ namespace BSChallenger.Server.API.Authentication
 			return new AuthResponse("Username or Password is Incorrect", false, null);
 		}
 		[HttpPost("Identity")]
-		public ActionResult<IdentityResponse> PostIdentity(IdentityRequest request)
+		public ActionResult<IdentityResponse> PostIdentity(AuthenticatedRequest request)
 		{
-			var token = _database.Tokens.FirstOrDefault(x => x.token == request.AccessToken && x.isAccessToken);
+			var token = _database.Tokens.FirstOrDefault(x => x.token == request.AccessToken && x.tokenType == TokenType.AccessToken);
 
 			if (token != null)
 			{

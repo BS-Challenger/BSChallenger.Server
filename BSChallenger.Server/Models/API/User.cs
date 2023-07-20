@@ -1,8 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SQLite;
+﻿using SQLite;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
 using PrimaryKeyAttribute = Microsoft.EntityFrameworkCore.PrimaryKeyAttribute;
 
 namespace BSChallenger.Server.Models.API
@@ -20,7 +18,7 @@ namespace BSChallenger.Server.Models.API
 		[Key, AutoIncrement]
 		public int Id { get; set; }
 		public string Username { get; set; }
-		public int BeatLeaderId;
+		public string BeatLeaderId { get; set; }
 
 		public string PasswordHash { get; set; }
 

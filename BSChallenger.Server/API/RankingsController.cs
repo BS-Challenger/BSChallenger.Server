@@ -14,7 +14,6 @@ namespace BSChallenger.Server.API
 	[Route("/rankings")]
 	public class RankingsController : ControllerBase
 	{
-		private readonly ILogger _logger = Log.ForContext<RankingsController>();
 		private readonly Database _database;
 
 		public RankingsController(
@@ -24,7 +23,7 @@ namespace BSChallenger.Server.API
 		}
 
 		[HttpGet]
-		public async Task<ActionResult<IEnumerable<RankingView>>> Get()
+		public ActionResult<IEnumerable<RankingView>> Get()
 		{
 			return _database.Rankings.Select(x=>RankingView.ConvertToView(x, _database)).ToList();
 		}

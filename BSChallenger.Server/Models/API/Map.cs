@@ -1,8 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SQLite;
-using System;
+﻿using SQLite;
 using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
 using PrimaryKeyAttribute = Microsoft.EntityFrameworkCore.PrimaryKeyAttribute;
 
 namespace BSChallenger.Server.Models.API

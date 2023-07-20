@@ -13,7 +13,7 @@ using Microsoft.OpenApi.Models;
 
 namespace BSChallenger.Server
 {
-    public class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
@@ -32,9 +32,11 @@ namespace BSChallenger.Server
                                     options.UseSqlite(hostBuilderContext.Configuration.GetConnectionString("SqlConnection")) // TODO: change to mongodb
                                 )
                                 .AddSingleton<BeatleaderAPI>()
-                                .AddSingleton<TokenProvider>()
                                 .AddSingleton<BPListParser>()
-						        .AddSwaggerGen(c =>
+						        .AddSingleton<TokenProvider>()
+								.AddSingleton<SecretProvider>()
+                                .AddSingleton<PasswordProvider>()
+								.AddSwaggerGen(c =>
 						        {
 							        c.SwaggerDoc("v1", new OpenApiInfo { Title = "Challenger API", Version = "v1" });
 						        })
