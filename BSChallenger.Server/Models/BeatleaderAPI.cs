@@ -21,7 +21,7 @@ namespace BSChallenger.Server.Models
 
         public async Task<int> GetUserIdentity(string code)
         {
-			var content = new StringContent("grant_type=authorization_code&client_id=BSChallengerClientID&client_secret=" + _secrets.clientSecret + "&code=" + code + "&redirect_uri=http://localhost:8080/beatleader-callback", Encoding.UTF8, "application/json");
+			var content = new StringContent("grant_type=authorization_code&client_id=BSChallengerClientID&client_secret=" + _secrets.Secrets.BLclientSecret + "&code=" + code + "&redirect_uri=http://localhost:8080/beatleader-callback", Encoding.UTF8, "application/json");
             var res = await _httpClient.PostAsync(BeatleaderEndpoint + "oauth2/token", content);
             _logger.Information(res.Content.ToString());
 

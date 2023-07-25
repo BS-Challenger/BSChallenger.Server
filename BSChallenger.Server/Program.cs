@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using BSChallenger.Server.Filters;
 using Microsoft.OpenApi.Models;
+using BSChallenger.Server.Discord;
 
 namespace BSChallenger.Server
 {
@@ -26,6 +27,7 @@ namespace BSChallenger.Server
                     webBuilder
                         .ConfigureServices((hostBuilderContext, services) =>
                             services
+                                .AddHostedService<DiscordBot>()
                                 .AddOptions()
                                 .AddConfiguration<AppConfiguration>("App")
                                 .AddDbContext<Database>(options =>

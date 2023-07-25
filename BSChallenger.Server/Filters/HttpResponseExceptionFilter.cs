@@ -15,7 +15,6 @@ namespace BSChallenger.Server.Filters
 
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            _logger.Information(context.Exception.Message);
             if (context.Exception is HttpResponseException exception)
             {
                 context.Result = new ObjectResult(exception.Value)

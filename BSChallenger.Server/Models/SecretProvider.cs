@@ -1,14 +1,36 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.IO;
 
 namespace BSChallenger.Server.Models
 {
 	public class SecretProvider
 	{
+		public string SecretPath => Path.Combine(Environment.CurrentDirectory, "secrets");
 		public SecretProvider()
 		{
-			clientSecret = File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "blsecret"));
+			Console.WriteLine("Hi");
+			if (File.Exists(SecretPath))
+			{
+				Secrets = JsonConvert.DeserializeObject<Secrets>(File.ReadAllText(SecretPath));
+			}
+			else
+			{
+				Secrets = new Secrets();
+				Save();
+			}
 		}
-		public string clientSecret { get; set; }
+
+		public void Save()
+		{
+			File.WriteAllText(SecretPath, JsonConvert.SerializeObject(Secrets));
+		}
+		public Secrets Secrets { get; set; }
+	}
+
+	public class Secrets
+	{
+		public string BLclientSecret { get; set; }
+		public string DiscordBotToken { get; set; }
 	}
 }
