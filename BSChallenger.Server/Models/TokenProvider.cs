@@ -1,7 +1,4 @@
-﻿using BSChallenger.Server.API.Authentication.BeatLeader;
-using BSChallenger.Server.Models.API;
-using BSChallenger.Server.Models.API.Authentication;
-using Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal;
+﻿using BSChallenger.Server.Models.API;
 using Serilog;
 using System;
 using System.Linq;

@@ -30,7 +30,7 @@ namespace BSChallenger.Server.API
 		[HttpGet]
 		public async Task<ActionResult<IEnumerable<RankingView>>> Get()
 		{
-			Ranking testRanking = new Ranking("Poodle Saber", "", "https://cdn.assets.beatleader.xyz/PAULclan.png");
+			Ranking testRanking = new Ranking(0, "Poodle Saber", "", "https://cdn.assets.beatleader.xyz/PAULclan.png");
 			await _database.Rankings.AddAsync(testRanking);
 			await _database.SaveChangesAsync();
 			var colors = GenerateDissimilarColors(16);

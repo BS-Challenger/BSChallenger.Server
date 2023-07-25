@@ -9,7 +9,6 @@ namespace BSChallenger.Server.Models
 		public string SecretPath => Path.Combine(Environment.CurrentDirectory, "secrets");
 		public SecretProvider()
 		{
-			Console.WriteLine("Hi");
 			if (File.Exists(SecretPath))
 			{
 				Secrets = JsonConvert.DeserializeObject<Secrets>(File.ReadAllText(SecretPath));
