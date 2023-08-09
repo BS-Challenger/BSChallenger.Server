@@ -14,7 +14,6 @@ namespace BSChallenger.Server.Discord.Commands
 		public string GetName() => "hello";
 		public SlashCommandBuilder Build()
 		{
-			Console.WriteLine("x2");
 			return new SlashCommandBuilder()
 						.WithName("hello")
 						.WithDescription("say hello");

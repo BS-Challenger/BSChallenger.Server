@@ -11,11 +11,14 @@ using Microsoft.Extensions.Logging;
 using BSChallenger.Server.Filters;
 using Microsoft.OpenApi.Models;
 using BSChallenger.Server.Discord;
+using System.Threading;
+using System;
 
 namespace BSChallenger.Server
 {
     public static class Program
     {
+        public static Version Version = new Version(1, 0, 0);
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
@@ -30,9 +33,7 @@ namespace BSChallenger.Server
                                 .AddHostedService<DiscordBot>()
                                 .AddOptions()
                                 .AddConfiguration<AppConfiguration>("App")
-                                .AddDbContext<Database>(options =>
-                                    options.UseSqlite(hostBuilderContext.Configuration.GetConnectionString("SqlConnection")) // TODO: change to mongodb
-                                )
+                                .AddDbContext<Database>()
                                 .AddSingleton<BeatleaderAPI>()
                                 .AddSingleton<BPListParser>()
 						        .AddSingleton<TokenProvider>()

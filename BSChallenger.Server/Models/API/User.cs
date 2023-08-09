@@ -1,5 +1,4 @@
-﻿using SQLite;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using PrimaryKeyAttribute = Microsoft.EntityFrameworkCore.PrimaryKeyAttribute;
 
@@ -15,7 +14,7 @@ namespace BSChallenger.Server.Models.API
 		public User()
 		{
 		}
-		[Key, AutoIncrement]
+		[Key]
 		public int Id { get; set; }
 		public string Username { get; set; }
 		public string BeatLeaderId { get; set; }

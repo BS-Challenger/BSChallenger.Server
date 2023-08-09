@@ -1,4 +1,4 @@
-﻿using SQLite;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using PrimaryKeyAttribute = Microsoft.EntityFrameworkCore.PrimaryKeyAttribute;
 
@@ -18,12 +18,13 @@ namespace BSChallenger.Server.Models.API
 		public Level()
 		{
 		}
-		[Key, AutoIncrement]
+		[Key]
 		public int Id { get; set; }
 		public int RankingId { get; set; }
 		public int LevelNumber { get; set; }
 		public int MapsReqForPass { get; set; }
 		public string IconURL { get; set; }
 		public string Color { get; set; }
+		public List<Map> Maps { get; set; }
 	}
 }

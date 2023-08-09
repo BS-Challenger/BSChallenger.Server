@@ -31,5 +31,14 @@ namespace BSChallenger.Server.Models
 	{
 		public string BLclientSecret { get; set; }
 		public string DiscordBotToken { get; set; }
+		public DBInfo Database { get; set; }
+	}
+
+	public class DBInfo
+	{
+		public string Username { get; set; }
+		public string Password { get; set; }
+		public string DatabaseName { get; set; }
+		public string Host { get; set; }
 	}
 }

@@ -1,5 +1,4 @@
-﻿using SQLite;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using PrimaryKeyAttribute = Microsoft.EntityFrameworkCore.PrimaryKeyAttribute;
 
 namespace BSChallenger.Server.Models.Discord

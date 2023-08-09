@@ -8,10 +8,13 @@ namespace BSChallenger.Server.Models
 {
     public class Database : DbContext
     {
-        public Database(DbContextOptions<Database> options) : base(options)
+		private SecretProvider _secrets;
+
+		public Database(DbContextOptions<Database> options, SecretProvider secrets) : base(options)
         {
             Database.EnsureCreated();
-        }
+			_secrets = secrets;
+		}
 
         public DbSet<User> Users { get; set; }
         public DbSet<Level> Levels { get; set; }
@@ -20,5 +23,7 @@ namespace BSChallenger.Server.Models
         public DbSet<Token> Tokens { get; set; }
 		public DbSet<Guild> DiscordBotGuilds { get; set; }
 
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+			=> optionsBuilder.UseNpgsql(string.Format("Host={0};Database={1};Username={2};Password={3}", _secrets.Secrets.Database.Host, _secrets.Secrets.Database.DatabaseName, _secrets.Secrets.Database.Username, _secrets.Secrets.Database.Password));
 	}
 }

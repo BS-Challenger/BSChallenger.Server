@@ -36,19 +36,14 @@ namespace BSChallenger.Server.Discord
 
 			_client = new DiscordSocketClient();
 
-			Console.WriteLine("u");
 			_client.Ready += async () =>
 			{
-				Console.WriteLine("Ready");
-				Console.WriteLine(_db.DiscordBotGuilds.Count());
+				Console.WriteLine("Discord Bot Ready");
 				foreach(var guildId in _db.DiscordBotGuilds)
 				{
-					Console.WriteLine(guildId.GuildId.ToString());
 					var guild = _client.GetGuild(guildId.GuildId);
-					Console.WriteLine(guild.Name);
 					foreach (var command in commands)
 					{
-						Console.WriteLine(command.GetName());
 						await guild.CreateApplicationCommandAsync(command.Build().Build());
 					}
 				}
