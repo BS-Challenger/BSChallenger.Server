@@ -32,7 +32,7 @@ namespace BSChallenger.Server.API
 		}
 
 		[HttpGet]
-		public async Task<ActionResult<IEnumerable<RankingView>>> Get()
+		public async Task<ActionResult<IEnumerable<Ranking>>> Get()
 		{
 			Ranking testRanking = new Ranking(1127403937222369381, "Ranked Saber", "", "https://cdn.discordapp.com/icons/1046997157959442533/484935f214d4705dae0df8509084b0b9.png");
 			await _database.Rankings.AddAsync(testRanking);
@@ -40,14 +40,14 @@ namespace BSChallenger.Server.API
 			var colors = GenerateDissimilarColors(23);
 			for (int i = 1; i < 23; i++)
 			{
-				var level = new Level(testRanking, i, 1, "Default", colors[i]);
-				await _database.Levels.AddAsync(level);
+				var level = new Level(i, 1, "Default", colors[i]);
+				testRanking.Levels.Add(level);
 				await _database.SaveChangesAsync();
 				string path = GetPath(i);
 				await _parser.Parse(level, System.IO.File.OpenRead(path));
 				_logger.Information(path);
 			}
-			return _database.Rankings.Select(x => RankingView.ConvertToView(x, _database)).ToList();
+			return _database.Rankings;
 		}
 
 		public static string GetPath(int number)

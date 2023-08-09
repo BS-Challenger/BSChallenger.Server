@@ -33,7 +33,7 @@ namespace BSChallenger.Server.Discord.Embeds
 				new EmbedFieldBuilder()
 					.WithName("Levels")
 					.WithIsInline(true)
-					.WithValue(database.Levels.Where(x=>x.RankingId == ranking.Id).Count().ToString())
+					.WithValue(ranking.Levels.Count().ToString())
 			})
 			.WithFooter("v" + Program.Version)
 			.WithCurrentTimestamp()

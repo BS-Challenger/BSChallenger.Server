@@ -28,7 +28,7 @@ namespace BSChallenger.Server.Models
 			_logger.Information(x.Count.ToString());
 			foreach (var item in x)
 			{
-				await _database.Maps.AddAsync(new Map(level, item.Hash, item.Difficulties[0].Characteristic, ((BeatmapDifficulty)item.Difficulties[0].DifficultyValue).ToString()));
+				level.AvailableForPass.Add(new Map(item.Hash, item.Difficulties[0].Characteristic, ((BeatmapDifficulty)item.Difficulties[0].DifficultyValue).ToString()));
 			}
 			await _database.SaveChangesAsync();
 		}

@@ -26,7 +26,7 @@ namespace BSChallenger.Server.API
 		}
 
 		[HttpGet]
-		public async Task<ActionResult<IEnumerable<RankingView>>> Get()
+		public async Task<ActionResult<IEnumerable<Ranking>>> Get()
 		{
 			Ranking testRanking = new Ranking(1115430594327879780, "Modifier Saber", "", "https://cdn.discordapp.com/icons/1115430594327879780/12f50ae1c875576077c0691ebf8ab40f.png");
 			await _database.Rankings.AddAsync(testRanking);
@@ -34,34 +34,34 @@ namespace BSChallenger.Server.API
 			var colors = GenerateDissimilarColors(4);
 			for (int i = 1; i < 4; i++)
 			{
-				var level = new Level(testRanking, i, 1, "Default", colors[i]);
-				await _database.Levels.AddAsync(level);
+				var level = new Level(i, 1, "Default", colors[i]);
+				testRanking.Levels.Add(level);
 				await _database.SaveChangesAsync();
 				switch (i)
 				{
 					case 1:
 
-						await _database.Maps.AddAsync(new Map(level, "6ee71d3d49f5c3a2b3be71dd143f93890e383870", "Standard", "ExpertPlus"));
-						await _database.Maps.AddAsync(new Map(level, "ca8f10245fdc772388d3bc6e0e956edbd791f395", "Standard", "Expert"));
-						await _database.Maps.AddAsync(new Map(level, "332a9151fa207d3a7a9da369a134cdd6f7dc20f4", "Standard", "Hard"));
-						await _database.Maps.AddAsync(new Map(level, "429ff959e81100e5afaf2019c921ef5218634bc6", "Standard", "Expert"));
-						await _database.Maps.AddAsync(new Map(level, "429ff959e81100e5afaf2019c921ef5218634bc6", "Standard", "ExpertPlus"));
+						level.AvailableForPass.Add(new Map("6ee71d3d49f5c3a2b3be71dd143f93890e383870", "Standard", "ExpertPlus"));
+						level.AvailableForPass.Add(new Map("ca8f10245fdc772388d3bc6e0e956edbd791f395", "Standard", "Expert"));
+						level.AvailableForPass.Add(new Map("332a9151fa207d3a7a9da369a134cdd6f7dc20f4", "Standard", "Hard"));
+						level.AvailableForPass.Add(new Map("429ff959e81100e5afaf2019c921ef5218634bc6", "Standard", "Expert"));
+						level.AvailableForPass.Add(new Map("429ff959e81100e5afaf2019c921ef5218634bc6", "Standard", "ExpertPlus"));
 						break;
 					case 2:
-						await _database.Maps.AddAsync(new Map(level, "3f567bc5cc7ada8c9b5bc1436960c65c92355972", "Standard", "ExpertPlus"));
-						await _database.Maps.AddAsync(new Map(level, "c930e8245776f2a51de2eff0e7ba036d74068cba", "Standard", "ExpertPlus"));
-						await _database.Maps.AddAsync(new Map(level, "47d574d2274c36b45a63a7b808bcf74b49a0a3ba", "Standard", "ExpertPlus"));
-						await _database.Maps.AddAsync(new Map(level, "b4f3f4e5cacd3422eda0ef199a24ee5d957ab53f", "Standard", "ExpertPlus"));
+						level.AvailableForPass.Add(new Map("3f567bc5cc7ada8c9b5bc1436960c65c92355972", "Standard", "ExpertPlus"));
+						level.AvailableForPass.Add(new Map("c930e8245776f2a51de2eff0e7ba036d74068cba", "Standard", "ExpertPlus"));
+						level.AvailableForPass.Add(new Map("47d574d2274c36b45a63a7b808bcf74b49a0a3ba", "Standard", "ExpertPlus"));
+						level.AvailableForPass.Add(new Map("b4f3f4e5cacd3422eda0ef199a24ee5d957ab53f", "Standard", "ExpertPlus"));
 						break;
 					case 3:
-						await _database.Maps.AddAsync(new Map(level, "ad6c9f88d63259a95e39397c31be2981c4beb744", "Standard", "ExpertPlus"));
-						await _database.Maps.AddAsync(new Map(level, "b467c05ba4dcf28d242aca6994d1591b02eeff47", "Standard", "ExpertPlus"));
-						await _database.Maps.AddAsync(new Map(level, "eaddeb51358bbd688a57923ddc23a230ca81609c", "Standard", "ExpertPlus"));
+						level.AvailableForPass.Add(new Map("ad6c9f88d63259a95e39397c31be2981c4beb744", "Standard", "ExpertPlus"));
+						level.AvailableForPass.Add(new Map("b467c05ba4dcf28d242aca6994d1591b02eeff47", "Standard", "ExpertPlus"));
+						level.AvailableForPass.Add(new Map("eaddeb51358bbd688a57923ddc23a230ca81609c", "Standard", "ExpertPlus"));
 						break;
 				}
 				await _database.SaveChangesAsync();
 			}
-			return _database.Rankings.Select(x => RankingView.ConvertToView(x, _database)).ToList();
+			return _database.Rankings;
 		}
 
 		//Silly color funcs, Temporary ofc

@@ -28,25 +28,25 @@ namespace BSChallenger.Server
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                     webBuilder
-                        .ConfigureServices((hostBuilderContext, services) =>
-                            services
+                        .ConfigureServices((hostBuilderContext, services) => {
+                            services.AddScoped<SecretProvider, SecretProvider>();
+							services
                                 .AddHostedService<DiscordBot>()
                                 .AddOptions()
                                 .AddConfiguration<AppConfiguration>("App")
                                 .AddDbContext<Database>()
                                 .AddSingleton<BeatleaderAPI>()
                                 .AddSingleton<BPListParser>()
-						        .AddSingleton<TokenProvider>()
-								.AddSingleton<SecretProvider>()
+                                .AddSingleton<TokenProvider>()
                                 .AddSingleton<PasswordProvider>()
-								.AddSwaggerGen(c =>
-						        {
-							        c.SwaggerDoc("v1", new OpenApiInfo { Title = "Challenger API", Version = "v1" });
-						        })
-								.AddControllers(options =>
+                                .AddSwaggerGen(c =>
+                                {
+                                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Challenger API", Version = "v1" });
+                                })
+                                .AddControllers(options =>
                                     options.Filters.Add(new HttpResponseExceptionFilter())
-                                )
-                        )
+                                );
+                        })
                         .Configure(applicationBuilder =>
                             applicationBuilder
 								.UseSwagger()

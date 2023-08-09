@@ -23,9 +23,9 @@ namespace BSChallenger.Server.API
 		}
 
 		[HttpGet]
-		public ActionResult<IEnumerable<RankingView>> Get()
+		public ActionResult<IEnumerable<Ranking>> Get()
 		{
-			return _database.Rankings.Select(x=>RankingView.ConvertToView(x, _database)).ToList();
+			return _database.Rankings;
 		}
 	}
 }

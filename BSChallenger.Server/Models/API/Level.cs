@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using PrimaryKeyAttribute = Microsoft.EntityFrameworkCore.PrimaryKeyAttribute;
 
 namespace BSChallenger.Server.Models.API
@@ -7,9 +8,8 @@ namespace BSChallenger.Server.Models.API
 	[PrimaryKey("Id")]
 	public class Level
 	{
-		public Level(Ranking ranking, int level, int reqMaps, string iconURL, string color)
+		public Level(int level, int reqMaps, string iconURL, string color)
 		{
-			RankingId = ranking.Id;
 			LevelNumber = level;
 			MapsReqForPass = reqMaps;
 			IconURL = iconURL;
@@ -18,13 +18,16 @@ namespace BSChallenger.Server.Models.API
 		public Level()
 		{
 		}
-		[Key]
+		[Key, JsonIgnore]
 		public int Id { get; set; }
-		public int RankingId { get; set; }
 		public int LevelNumber { get; set; }
 		public int MapsReqForPass { get; set; }
 		public string IconURL { get; set; }
 		public string Color { get; set; }
-		public List<Map> Maps { get; set; }
+		public List<Map> AvailableForPass { get; set; } = new List<Map>();
+		[JsonIgnore]
+		public int RankingId { get; set; }
+		[JsonIgnore]
+		public Ranking Ranking { get; set; } = null!;
 	}
 }
