@@ -3,18 +3,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BSChallenger.Server.Models.API.Authentication
 {
-	public class AuthResponse
-	{
-		public AuthResponse(string response, bool isValid, TokenView token)
-		{
-			Response = response;
-			IsValid = isValid;
-			if(token != null)
-				RefreshToken = token.Token;
-		}
+    public class AuthResponse
+    {
+        public AuthResponse(string response, bool isValid, TokenView token)
+        {
+            Response = response;
+            IsValid = isValid;
+            if (token != null)
+                RefreshToken = token.Token;
+        }
 
-		public string Response { get; set; }
-		public bool IsValid { get; set; }
-		public string RefreshToken { get; set; }
-	}
+        public string Response { get; set; }
+        public bool IsValid { get; set; }
+        public string RefreshToken { get; set; }
+    }
 }

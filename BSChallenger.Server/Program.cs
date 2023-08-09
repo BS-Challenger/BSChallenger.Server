@@ -28,9 +28,10 @@ namespace BSChallenger.Server
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                     webBuilder
-                        .ConfigureServices((hostBuilderContext, services) => {
+                        .ConfigureServices((hostBuilderContext, services) =>
+                        {
                             services.AddScoped<SecretProvider, SecretProvider>();
-							services
+                            services
                                 .AddHostedService<DiscordBot>()
                                 .AddOptions()
                                 .AddConfiguration<AppConfiguration>("App")
@@ -49,8 +50,8 @@ namespace BSChallenger.Server
                         })
                         .Configure(applicationBuilder =>
                             applicationBuilder
-								.UseSwagger()
-		                        .UseSwaggerUI(c =>
+                                .UseSwagger()
+                                .UseSwaggerUI(c =>
                                 {
                                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Challenger API V1");
                                 })

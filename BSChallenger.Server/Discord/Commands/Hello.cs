@@ -9,19 +9,19 @@ using System.Threading.Tasks;
 
 namespace BSChallenger.Server.Discord.Commands
 {
-	public class Hello : ICommand
-	{
-		public string GetName() => "hello";
-		public SlashCommandBuilder Build()
-		{
-			return new SlashCommandBuilder()
-						.WithName("hello")
-						.WithDescription("say hello");
-		}
+    public class Hello : ICommand
+    {
+        public string GetName() => "hello";
+        public SlashCommandBuilder Build()
+        {
+            return new SlashCommandBuilder()
+                        .WithName("hello")
+                        .WithDescription("say hello");
+        }
 
-		public async Task Executed(SocketSlashCommand command, Database database)
-		{
-			await command.RespondAsync($"Hello {command.User.GlobalName}");
-		}
-	}
+        public async Task Executed(SocketSlashCommand command, Database database)
+        {
+            await command.RespondAsync($"Hello {command.User.GlobalName}");
+        }
+    }
 }

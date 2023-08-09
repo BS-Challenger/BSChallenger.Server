@@ -8,8 +8,8 @@ namespace BSChallenger.Server.Filters
 {
     public class HttpResponseExceptionFilter : IActionFilter, IOrderedFilter
     {
-		private readonly ILogger _logger = Log.ForContext<HttpResponseExceptionFilter>();
-		public int Order { get; } = int.MaxValue - 10;
+        private readonly ILogger _logger = Log.ForContext<HttpResponseExceptionFilter>();
+        public int Order { get; } = int.MaxValue - 10;
 
         public void OnActionExecuting(ActionExecutingContext context) { }
 

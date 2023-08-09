@@ -3,56 +3,62 @@ using BSChallenger.Server.Models;
 using BSChallenger.Server.Models.API;
 using BSChallenger.Server.Views.API;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace BSChallenger.Server.API
 {
     [ApiController]
-    [Route("/test3")]
-    public class TestController3 : ControllerBase
+    [Route("/test4")]
+    public class TestController4 : ControllerBase
     {
-        private readonly ILogger _logger = Log.ForContext<BeatLeaderAuthenticateController>();
+        private readonly ILogger _logger = Log.ForContext<TestController4>();
         private readonly Database _database;
-        private readonly BPListParser _parser;
 
-        public TestController3(
-            Database database,
-            BPListParser parser)
+        public TestController4(
+            Database database)
         {
             _database = database;
-            _parser = parser;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Ranking>>> Get()
         {
-            Ranking testRanking = new Ranking(1127403937222369381, "Ranked Saber", "", "https://cdn.discordapp.com/icons/1046997157959442533/484935f214d4705dae0df8509084b0b9.png");
+            Ranking testRanking = new Ranking(1115430594327879780, "Test Saber", "", "https://cdn.discordapp.com/icons/1115430594327879780/12f50ae1c875576077c0691ebf8ab40f.png");
             await _database.Rankings.AddAsync(testRanking);
             await _database.SaveChangesAsync();
-            var colors = GenerateDissimilarColors(23);
-            for (int i = 1; i < 23; i++)
+            var colors = GenerateDissimilarColors(4);
+            for (int i = 1; i < 4; i++)
             {
                 var level = new Level(i, 1, "Default", colors[i]);
                 testRanking.Levels.Add(level);
                 await _database.SaveChangesAsync();
-                string path = GetPath(i);
-                await _parser.Parse(level, System.IO.File.OpenRead(path));
-                _logger.Information(path);
+                switch (i)
+                {
+                    case 1:
+
+                        level.AvailableForPass.Add(new Map("3058599E74E63E2F2100B802C2A85B5EAB330FCE", "Standard", "ExpertPlus"));
+                        level.AvailableForPass.Add(new Map("625642cf98cd718dc2835882c227ed983fc65c6b", "Standard", "Normal"));
+                        break;
+                    case 2:
+                        level.AvailableForPass.Add(new Map("68C3F1BF45263E8B4AE195E2402F2140B794B78C", "Standard", "ExpertPlus"));
+                        level.AvailableForPass.Add(new Map("c930e8245776f2a51de2eff0e7ba036d74068cba", "Standard", "ExpertPlus"));
+                        level.AvailableForPass.Add(new Map("47d574d2274c36b45a63a7b808bcf74b49a0a3ba", "Standard", "ExpertPlus"));
+                        level.AvailableForPass.Add(new Map("b4f3f4e5cacd3422eda0ef199a24ee5d957ab53f", "Standard", "ExpertPlus"));
+                        break;
+                    case 3:
+                        level.AvailableForPass.Add(new Map("ad6c9f88d63259a95e39397c31be2981c4beb744", "Standard", "ExpertPlus"));
+                        level.AvailableForPass.Add(new Map("b467c05ba4dcf28d242aca6994d1591b02eeff47", "Standard", "ExpertPlus"));
+                        level.AvailableForPass.Add(new Map("eaddeb51358bbd688a57923ddc23a230ca81609c", "Standard", "ExpertPlus"));
+                        break;
+                }
+                await _database.SaveChangesAsync();
             }
             return _database.Rankings;
-        }
-
-        public static string GetPath(int number)
-        {
-            return Path.Combine(Environment.CurrentDirectory, "Playlists", String.Format("{0:000}", number) + "_Rank Saber.bplist");
         }
 
         //Silly color funcs, Temporary ofc
@@ -85,7 +91,7 @@ namespace BSChallenger.Server.API
             return ColorFromHSV(Random.Shared.NextDouble() * 360f, map(Random.Shared.NextDouble(), 0f, 1f, 0.6f, 1f), map(Random.Shared.NextDouble(), 0f, 1f, 0.6f, 1f));
         }
 
-        public static bool isClose(Color a, Color z, int threshold = 10)
+        public static bool isClose(Color a, Color z, int threshold = 15)
         {
             int r = a.R - z.R,
                 g = a.G - z.G,
@@ -97,7 +103,7 @@ namespace BSChallenger.Server.API
             int hi = Convert.ToInt32(Math.Floor(hue / 60)) % 6;
             double f = hue / 60 - Math.Floor(hue / 60);
 
-            value = value * 255;
+            value *= 255;
             int v = Convert.ToInt32(value);
             int p = Convert.ToInt32(value * (1 - saturation));
             int q = Convert.ToInt32(value * (1 - f * saturation));

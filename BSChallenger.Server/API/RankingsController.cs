@@ -10,22 +10,22 @@ using System.Threading.Tasks;
 
 namespace BSChallenger.Server.API
 {
-	[ApiController]
-	[Route("/rankings")]
-	public class RankingsController : ControllerBase
-	{
-		private readonly Database _database;
+    [ApiController]
+    [Route("/rankings")]
+    public class RankingsController : ControllerBase
+    {
+        private readonly Database _database;
 
-		public RankingsController(
-			Database database)
-		{
-			_database = database;
-		}
+        public RankingsController(
+            Database database)
+        {
+            _database = database;
+        }
 
-		[HttpGet]
-		public ActionResult<IEnumerable<Ranking>> Get()
-		{
-			return _database.Rankings;
-		}
-	}
+        [HttpGet]
+        public ActionResult<IEnumerable<Ranking>> Get()
+        {
+            return _database.Rankings;
+        }
+    }
 }
