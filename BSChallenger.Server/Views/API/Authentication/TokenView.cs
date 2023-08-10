@@ -14,7 +14,7 @@ namespace BSChallenger.Server.Views.API
 
         public static implicit operator TokenView(Token tkn)
         {
-            return new TokenView(tkn.token, tkn.tokenType.ToString());
+            return new TokenView(tkn.TokenValue, tkn.TokenType.ToString());
         }
     }
 }

@@ -25,9 +25,10 @@ namespace BSChallenger.Server.Models.API
         public string IconURL { get; set; }
         public string Color { get; set; }
         public List<Map> AvailableForPass { get; set; } = new List<Map>();
+
         [JsonIgnore]
         public int RankingId { get; set; }
         [JsonIgnore]
-        public Ranking Ranking { get; set; } = null!;
+        public Ranking Ranking { get; set; }
     }
 }

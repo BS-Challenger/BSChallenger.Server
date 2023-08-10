@@ -15,7 +15,8 @@ namespace BSChallenger.Server.API.Authentication
     [Route("[controller]")]
     public class AuthenticateController : ControllerBase
     {
-        private readonly Database _database;
+		private readonly ILogger _logger = Log.ForContext<AuthenticateController>();
+		private readonly Database _database;
         private readonly TokenProvider _tokenProvider;
         private readonly PasswordProvider _passwordProvider;
 
@@ -32,16 +33,14 @@ namespace BSChallenger.Server.API.Authentication
         [HttpPost("AccessToken")]
         public async Task<ActionResult<AccessTokenResponse>> PostGenerateAccessToken(AccessTokenRequest request)
         {
-            var refreshToken = _database.Tokens.AsEnumerable().FirstOrDefault(x => x.token == request.RefreshToken);
+            var refreshToken = _database.Tokens.AsEnumerable().FirstOrDefault(x => x.TokenValue == request.RefreshToken);
 
-            if (refreshToken != null && refreshToken.tokenType == TokenType.RefreshToken && refreshToken.expiryTime > DateTime.UtcNow)
+            if (refreshToken != null && refreshToken.TokenType == TokenType.RefreshToken && refreshToken.ExpiryTime > DateTime.UtcNow)
             {
-                Console.WriteLine(refreshToken.UserId);
-                Console.WriteLine(refreshToken.User == null);
-                var user = refreshToken.User;
+                var user = _database.Users.Find(refreshToken.UserId);
                 var token = await _tokenProvider.GetAccessToken(user);
                 var newRefrshtoken = await _tokenProvider.GetRefreshToken(user);
-                return new AccessTokenResponse(token.token, newRefrshtoken.token);
+                return new AccessTokenResponse(token.TokenValue, newRefrshtoken.TokenValue);
             }
             return new AccessTokenResponse("Request Failed", "");
         }
@@ -81,9 +80,9 @@ namespace BSChallenger.Server.API.Authentication
         [HttpPost("Identity")]
         public ActionResult<IdentityResponse> PostIdentity(AuthenticatedRequest request)
         {
-            var token = _database.Tokens.FirstOrDefault(x => x.token == request.AccessToken && x.tokenType == TokenType.AccessToken);
+            var token = _database.Tokens.FirstOrDefault(x => x.TokenValue == request.AccessToken && x.TokenType == TokenType.AccessToken);
 
-            if (token != null && token.expiryTime > DateTime.UtcNow)
+            if (token != null && token.ExpiryTime > DateTime.UtcNow)
             {
                 var user = token.User;
                 if (user != null)

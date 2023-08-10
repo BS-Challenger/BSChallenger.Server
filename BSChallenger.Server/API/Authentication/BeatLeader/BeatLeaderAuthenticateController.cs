@@ -33,14 +33,14 @@ namespace BSChallenger.Server.API.Authentication.BeatLeader
         public async Task<ActionResult<BLTokenResponse>> PostGetToken(AuthenticatedRequest request)
         {
             _logger.Information(request.AccessToken);
-            var token = _database.Tokens.FirstOrDefault(x => x.token == request.AccessToken && x.tokenType == TokenType.AccessToken);
+            var token = _database.Tokens.FirstOrDefault(x => x.TokenValue == request.AccessToken && x.TokenType == TokenType.AccessToken);
 
             if (token != null)
             {
                 var user = token.User;
                 if (user != null)
                 {
-                    return new BLTokenResponse((await _tokenProvider.GetBLAuthToken(user)).token);
+                    return new BLTokenResponse((await _tokenProvider.GetBLAuthToken(user)).TokenValue);
                 }
             }
             return new BLTokenResponse("Failed");
@@ -53,9 +53,9 @@ namespace BSChallenger.Server.API.Authentication.BeatLeader
             _logger.Information(request.GeneratedCode);
             if (request.BLCode is null)
                 throw new HttpResponseException(400);
-            var blAuthToken = _database.Tokens.AsEnumerable().FirstOrDefault(x => x.token == request.GeneratedCode);
+            var blAuthToken = _database.Tokens.AsEnumerable().FirstOrDefault(x => x.TokenValue == request.GeneratedCode);
 
-            if (blAuthToken?.tokenType == TokenType.BLAuthToken)
+            if (blAuthToken?.TokenType == TokenType.BLAuthToken)
             {
                 var user = blAuthToken.User;
                 if (user != null)

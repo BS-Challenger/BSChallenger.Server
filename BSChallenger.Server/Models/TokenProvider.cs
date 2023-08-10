@@ -50,10 +50,10 @@ namespace BSChallenger.Server.Models
 
         private async Task RemoveOldToken(User user, TokenType type)
         {
-            if (user?.Tokens?.Any(x => x?.tokenType == type) == true)
+            if (user?.Tokens?.Any(x => x?.TokenType == type) == true)
             {
-                var oldToken = user.Tokens.First(x => x?.tokenType == type);
-                _database.Tokens.Remove(oldToken);
+                var oldToken = user.Tokens.First(x => x?.TokenType == type);
+                //_database.Tokens.Remove(oldToken);
                 user.Tokens.Remove(oldToken);
                 await _database.SaveChangesAsync();
             }

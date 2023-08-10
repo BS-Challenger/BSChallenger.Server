@@ -2,6 +2,7 @@
 using BSChallenger.Server.Models.API;
 using BSChallenger.Server.Views.API;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using Serilog;
 using System.Collections.Generic;
@@ -25,7 +26,10 @@ namespace BSChallenger.Server.API
         [HttpGet]
         public ActionResult<IEnumerable<Ranking>> Get()
         {
-            return _database.Rankings;
+            return _database.Rankings
+                                .Include(x => x.Levels)
+                                .ThenInclude(x => x.AvailableForPass)
+                                .ToList();
         }
     }
 }

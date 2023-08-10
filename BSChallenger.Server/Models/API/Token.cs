@@ -11,9 +11,9 @@ namespace BSChallenger.Server.Models.API
         public Token(User user, DateTime expiry, TokenType type)
         {
             UserId = user.Id;
-            tokenType = type;
-            expiryTime = expiry;
-            token = type == TokenType.BLAuthToken ?
+            TokenType = type;
+            ExpiryTime = expiry;
+            TokenValue = type == TokenType.BLAuthToken ?
                     GenerateAuthToken() :
                     Guid.NewGuid().ToString().Replace("-", string.Empty).Replace("+", string.Empty);
             Id = Guid.NewGuid();
@@ -26,9 +26,9 @@ namespace BSChallenger.Server.Models.API
 
         [Key]
         public Guid Id { get; set; }
-        public string token { get; set; }
-        public DateTime expiryTime { get; set; }
-        public TokenType tokenType { get; private set; }
+        public string TokenValue { get; set; }
+        public DateTime ExpiryTime { get; set; }
+        public TokenType TokenType { get; private set; }
         public int UserId { get; set; }
         public User User { get; set; }
 

@@ -1,8 +1,10 @@
-﻿using BSChallenger.Server.Models;
+﻿using BSChallenger.Server.API.Authentication.BeatLeader;
+using BSChallenger.Server.Models;
 using BSChallenger.Server.Models.API;
 using BSChallenger.Server.Models.API.Authentication;
 using BSChallenger.Server.Models.API.Scan;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,7 +17,7 @@ namespace BSChallenger.Server.API
     [Route("[controller]")]
     public class ScanController : ControllerBase
     {
-        private readonly Database _database;
+		private readonly Database _database;
         private readonly BeatleaderAPI _beatleaderAPI;
 
         public ScanController(
@@ -31,9 +33,9 @@ namespace BSChallenger.Server.API
         {
             Stopwatch test = new();
             test.Start();
-            var token = _database.Tokens.FirstOrDefault(x => x.token == request.AccessToken && x.tokenType == TokenType.AccessToken);
+            var token = _database.Tokens.FirstOrDefault(x => x.TokenValue == request.AccessToken && x.TokenType == TokenType.AccessToken);
 
-            if (token != null && token.expiryTime > DateTime.UtcNow)
+            if (token != null && token.ExpiryTime > DateTime.UtcNow)
             {
                 var user = token.User;
                 if (user != null)

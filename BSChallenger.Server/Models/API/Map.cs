@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using PrimaryKeyAttribute = Microsoft.EntityFrameworkCore.PrimaryKeyAttribute;
 
 namespace BSChallenger.Server.Models.API
@@ -31,6 +32,11 @@ namespace BSChallenger.Server.Models.API
         public string Hash { get; set; }
         public string Characteristic { get; set; }
         public string Difficulty { get; set; }
-        public List<string> Features { get; set; } = new();
-    }
+        public virtual List<string> Features { get; set; } = new();
+
+		[JsonIgnore]
+		public int LevelId { get; set; }
+		[JsonIgnore]
+		public Level Level { get; set; }
+	}
 }
