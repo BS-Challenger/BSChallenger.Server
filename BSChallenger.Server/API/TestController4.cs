@@ -41,7 +41,7 @@ namespace BSChallenger.Server.API
                 {
                     case 1:
 
-                        level.AvailableForPass.Add(new Map("3058599E74E63E2F2100B802C2A85B5EAB330FCE", "Standard", "ExpertPlus"));
+                        level.AvailableForPass.Add(new Map("3058599E74E63E2F2100B802C2A85B5EAB330FCE", "Standard", "Hard"));
                         level.AvailableForPass.Add(new Map("625642cf98cd718dc2835882c227ed983fc65c6b", "Standard", "Normal"));
                         break;
                     case 2:

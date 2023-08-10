@@ -34,14 +34,13 @@ namespace BSChallenger.Server.Models
         {
             TimeSpan t = date - new DateTime(1970, 1, 1);
             int secondsSinceEpoch = (int)t.TotalSeconds;
-            var res = await _httpClient.GetAsync(BeatleaderEndpoint + string.Format("player/{0}/scores?sortBy=date&page=1&count=100&time_from={1}", userId, secondsSinceEpoch));
+            var res = await _httpClient.GetAsync(BeatleaderEndpoint + string.Format("player/{0}/scores?sortBy=date&page=1&count=550", userId, secondsSinceEpoch));
             return JsonConvert.DeserializeObject<Root>(await res.Content.ReadAsStringAsync());
         }
     }
     public class Datum
     {
         public Leaderboard Leaderboard { get; set; }
-        public int Weight { get; set; }
         public double AccLeft { get; set; }
         public double AccRight { get; set; }
         public int Id { get; set; }
@@ -49,15 +48,9 @@ namespace BSChallenger.Server.Models
         public int ModifiedScore { get; set; }
         public double Accuracy { get; set; }
         public string PlayerId { get; set; }
-        public int Pp { get; set; }
-        public int BonusPp { get; set; }
-        public int PassPP { get; set; }
-        public int AccPP { get; set; }
-        public int TechPP { get; set; }
         public int Rank { get; set; }
         public string Country { get; set; }
         public double FcAccuracy { get; set; }
-        public int FcPp { get; set; }
         public string Modifiers { get; set; }
         public int BadCuts { get; set; }
         public int MissedNotes { get; set; }
@@ -83,14 +76,9 @@ namespace BSChallenger.Server.Models
         public string DifficultyName { get; set; }
         public string ModeName { get; set; }
         public int Status { get; set; }
-        public object Stars { get; set; }
-        public object PredictedAcc { get; set; }
-        public object PassRating { get; set; }
-        public object AccRating { get; set; }
-        public object TechRating { get; set; }
         public int Type { get; set; }
-        public int Njs { get; set; }
-        public double Nps { get; set; }
+        public float Njs { get; set; }
+        public float Nps { get; set; }
         public int Notes { get; set; }
         public int Bombs { get; set; }
         public int Walls { get; set; }

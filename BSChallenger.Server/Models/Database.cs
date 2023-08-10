@@ -3,6 +3,7 @@ using BSChallenger.Server.Models.Discord;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BSChallenger.Server.Models
 {
@@ -20,6 +21,14 @@ namespace BSChallenger.Server.Models
         public DbSet<Ranking> Rankings { get; set; }
         public DbSet<Token> Tokens { get; set; }
         public DbSet<Guild> DiscordBotGuilds { get; set; }
+
+        public List<Ranking> EagerLoadRankings()
+        {
+			return Rankings
+                    .Include(x => x.Levels)
+					.ThenInclude(x => x.AvailableForPass)
+					.ToList();
+		}
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
