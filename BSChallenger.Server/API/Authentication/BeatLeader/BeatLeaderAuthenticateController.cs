@@ -60,7 +60,7 @@ namespace BSChallenger.Server.API.Authentication.BeatLeader
                 var user = blAuthToken.User;
                 if (user != null)
                 {
-                    var identity = await _beatleaderAPI.GetUserIdentity(request.BLCode);
+                    var identity = await _beatleaderAPI.GetBLUserIdentity(request.BLCode);
                     user.BeatLeaderId = identity.ToString();
                     await _database.SaveChangesAsync();
                 }

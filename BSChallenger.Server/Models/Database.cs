@@ -22,12 +22,21 @@ namespace BSChallenger.Server.Models
         public DbSet<Token> Tokens { get; set; }
         public DbSet<Guild> DiscordBotGuilds { get; set; }
 
-        public List<Ranking> EagerLoadRankings()
+        public List<Ranking> EagerLoadRankings(bool loadPasses = false)
         {
-			return Rankings
-                    .Include(x => x.Levels)
+            if(loadPasses)
+            {
+                return Rankings
+                    .Include(x=> x.Levels)
 					.ThenInclude(x => x.AvailableForPass)
+                    .ToList();
+			}
+            else
+            {
+				return Rankings
+					.Include(x => x.Levels)
 					.ToList();
+			}
 		}
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

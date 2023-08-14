@@ -21,7 +21,7 @@ namespace BSChallenger.Server.Models
             _secrets = secrets;
         }
 
-        public async Task<int> GetUserIdentity(string code)
+        public async Task<int> GetBLUserIdentity(string code)
         {
             var content = new StringContent("grant_type=authorization_code&client_id=BSChallengerClientID&client_secret=" + _secrets.Secrets.BLclientSecret + "&code=" + code + "&redirect_uri=http://localhost:8080/beatleader-callback", Encoding.UTF8, "application/json");
             var res = await _httpClient.PostAsync(BeatleaderEndpoint + "oauth2/token", content);
@@ -30,12 +30,26 @@ namespace BSChallenger.Server.Models
             return 0;
         }
 
-        public async Task<Root> GetSinceDateScores(string userId, DateTime date)
+        public async Task<List<Datum>> GetSinceDateScores(string userId, DateTime date)
         {
             TimeSpan t = date - new DateTime(1970, 1, 1);
             int secondsSinceEpoch = (int)t.TotalSeconds;
-            var res = await _httpClient.GetAsync(BeatleaderEndpoint + string.Format("player/{0}/scores?sortBy=date&page=1&count=550", userId, secondsSinceEpoch));
-            return JsonConvert.DeserializeObject<Root>(await res.Content.ReadAsStringAsync());
+            int AmountLeft = 100000000;
+            int page = 1;
+            List<Datum> scores = new();
+            while (AmountLeft > 0)
+            {
+				var res = await _httpClient.GetAsync(BeatleaderEndpoint + string.Format("player/{0}/scores?sortBy=date&page={1}&count=300", userId, page, secondsSinceEpoch));
+                var obj = JsonConvert.DeserializeObject<Root>(await res.Content.ReadAsStringAsync());
+                if(AmountLeft == 100000000)
+                {
+                    AmountLeft = obj.Metadata.Total;
+                }
+                AmountLeft -= 100;
+                scores.AddRange(obj.Data);
+                page++;
+			}
+            return scores;
         }
     }
     public class Datum

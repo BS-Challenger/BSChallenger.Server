@@ -34,11 +34,11 @@ namespace BSChallenger.Server.API
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Ranking>>> Get()
         {
-            Ranking testRanking = new Ranking(1127403937222369381, "Ranked Saber", "", "https://cdn.discordapp.com/icons/1046997157959442533/484935f214d4705dae0df8509084b0b9.png");
+            Ranking testRanking = new Ranking(1127403937222369381, "Challenge Community", "", "https://cdn.discordapp.com/icons/1046997157959442533/484935f214d4705dae0df8509084b0b9.png");
             await _database.Rankings.AddAsync(testRanking);
             await _database.SaveChangesAsync();
-            var colors = GenerateDissimilarColors(23);
-            for (int i = 1; i < 23; i++)
+            var colors = GenerateDissimilarColors(32);
+            for (int i = 1; i < 32; i++)
             {
                 var level = new Level(i, 1, "Default", colors[i]);
                 testRanking.Levels.Add(level);
@@ -52,8 +52,9 @@ namespace BSChallenger.Server.API
 
         public static string GetPath(int number)
         {
-            return Path.Combine(Environment.CurrentDirectory, "Playlists", String.Format("{0:000}", number) + "_Rank Saber.bplist");
-        }
+            return Path.Combine(Environment.CurrentDirectory, "playlists", String.Format("{0:000}", number) + "_Beat Saber Challenge Community.bplist");
+
+		}
 
         //Silly color funcs, Temporary ofc
         public static List<string> GenerateDissimilarColors(int count)

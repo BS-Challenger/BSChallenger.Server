@@ -12,12 +12,7 @@ namespace BSChallenger.Server.Discord.Embeds
 {
     public static class RankingEmbed
     {
-        public static Embed Build(Ranking ranking, SocketSlashCommand command, Database database) => new EmbedBuilder()
-            .WithAuthor(
-                new EmbedAuthorBuilder()
-                .WithIconUrl(command.User.GetAvatarUrl())
-                .WithName(command.User.GlobalName)
-            )
+        public static Embed Build(Ranking ranking, Database database) => new EmbedBuilder()
             .WithTitle(ranking.Name)
             .WithColor(new Color(114, 75, 27))
             .WithThumbnailUrl(ranking.IconURL)

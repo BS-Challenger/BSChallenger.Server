@@ -2,11 +2,14 @@
 using BSChallenger.Server.Models;
 using BSChallenger.Server.Models.Discord;
 using Discord;
+using Discord.Interactions;
 using Discord.WebSocket;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,17 +20,14 @@ namespace BSChallenger.Server.Discord
         private DiscordSocketClient _client;
         private readonly SecretProvider _secrets;
         private readonly Database _db;
+		private InteractionService _interactions;
+		private readonly IServiceProvider _services;
 
-        private readonly List<ICommand> commands = new()
-        {
-            new Hello(),
-            new Ranking()
-        };
-
-        public DiscordBot(SecretProvider provider, Database db)
+        public DiscordBot(SecretProvider provider, Database db, IServiceProvider services)
         {
             _secrets = provider;
             _db = db;
+            _services = services;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -36,32 +36,28 @@ namespace BSChallenger.Server.Discord
 
             _client = new DiscordSocketClient();
 
+			await _client.LoginAsync(TokenType.Bot, token);
+			await _client.StartAsync();
+
             _client.Ready += async () =>
             {
                 Console.WriteLine("Discord Bot Ready");
-                foreach (var guildId in _db.DiscordBotGuilds)
+
+                _interactions = new InteractionService(_client);
+                await _interactions.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
+
+                foreach (var guildId in _client.Guilds.Select(x=>x.Id))
                 {
-                    var guild = _client.GetGuild(guildId.GuildId);
-                    foreach (var command in commands)
-                    {
-                        await guild.CreateApplicationCommandAsync(command.Build().Build());
-                    }
+                    await _interactions.RegisterCommandsToGuildAsync(guildId);
                 }
+
+                _client.InteractionCreated += async interaction =>
+                {
+                    var scope = _services.CreateScope();
+                    var ctx = new SocketInteractionContext(_client, interaction);
+                    await _interactions.ExecuteCommandAsync(ctx, scope.ServiceProvider);
+                };
             };
-
-            _client.SlashCommandExecuted += SlashCommandHandler;
-
-            await _client.LoginAsync(TokenType.Bot, token);
-            await _client.StartAsync();
-        }
-
-        private async Task SlashCommandHandler(SocketSlashCommand command)
-        {
-            var localCommand = commands.Find(x => x.GetName() == command.Data.Name);
-            if (localCommand != null)
-            {
-                await localCommand.Executed(command, _db);
-            }
         }
 
         public async Task StopAsync(CancellationToken cancellationToken)
