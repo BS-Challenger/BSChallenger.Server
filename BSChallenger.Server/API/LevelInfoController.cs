@@ -29,10 +29,15 @@ namespace BSChallenger.Server.API
 		}
 
 		[HttpGet("/GetInfo")]
-		public async Task<ActionResult<Level>> GetInfo([FromQuery(Name = "ranking")] string rankingName, [FromQuery(Name = "level")] int level)
+		public IActionResult GetInfo([FromQuery(Name = "ranking")] string rankingName, [FromQuery(Name = "level")] int level)
 		{
+			_logger.Information(rankingName);
 			var ranking = _database.EagerLoadRankings(true).Find(x => x.Name == rankingName);
-			return ranking.Levels.ElementAt(level-1);
+			if (ranking == null)
+			{
+				return NotFound();
+			}
+			return Ok(ranking.Levels.ElementAt(level-1));
 		}
 	}
 }

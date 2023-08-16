@@ -15,7 +15,7 @@ namespace BSChallenger.Server.Models.API
             Difficulty = diff;
         }
 
-        public Map(string hash, string chari, string diff, List<string> features)
+        public Map(string hash, string chari, string diff, List<MapFeature> features)
         {
             Hash = hash;
             Characteristic = chari;
@@ -27,12 +27,12 @@ namespace BSChallenger.Server.Models.API
         {
         }
 
-        [Key]
+        [Key, JsonIgnore]
         public int Id { get; set; }
         public string Hash { get; set; }
         public string Characteristic { get; set; }
         public string Difficulty { get; set; }
-        public virtual List<string> Features { get; set; } = new();
+        public virtual List<MapFeature> Features { get; set; } = new();
 
 		[JsonIgnore]
 		public int LevelId { get; set; }

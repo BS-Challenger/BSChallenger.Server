@@ -6,7 +6,7 @@ namespace BSChallenger.Server.Models
 {
     public class SecretProvider
     {
-        public string SecretPath => Path.Combine(Environment.CurrentDirectory, "secrets");
+        public string SecretPath => Path.Combine(Environment.CurrentDirectory, "secrets.json");
         public SecretProvider()
         {
             if (File.Exists(SecretPath))
