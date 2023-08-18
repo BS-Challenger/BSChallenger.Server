@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using PrimaryKeyAttribute = Microsoft.EntityFrameworkCore.PrimaryKeyAttribute;
 
@@ -17,9 +18,11 @@ namespace BSChallenger.Server.Models.API
         public Ranking()
         {
         }
-        [Key]
+        [Key, JsonIgnore]
         public int Id { get; set; }
-        public ulong GuildId { get; set; }
+        [Key]
+		public string Identifier => IDGenerator.GenerateID(IDType.Ranking, Id);
+		public ulong GuildId { get; set; }
         [Key]
         public string Name { get; set; }
         public string Description { get; set; }

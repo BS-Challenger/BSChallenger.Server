@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Sqids;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using PrimaryKeyAttribute = Microsoft.EntityFrameworkCore.PrimaryKeyAttribute;
@@ -17,10 +18,13 @@ namespace BSChallenger.Server.Models.API
         }
         public Level()
         {
+
         }
         [Key, JsonIgnore]
         public int Id { get; set; }
-        public int LevelNumber { get; set; }
+		[Key]
+		public string Identifier => IDGenerator.GenerateID(IDType.Level, Id);
+		public int LevelNumber { get; set; }
         public int MapsReqForPass { get; set; }
         public string IconURL { get; set; }
         public string Color { get; set; }
