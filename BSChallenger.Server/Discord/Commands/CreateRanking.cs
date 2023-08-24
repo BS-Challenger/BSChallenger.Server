@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 
 namespace BSChallenger.Server.Discord.Commands
 {
-	public class CreateRanking : InteractionModuleBase<SocketInteractionContext>
-	{
+    public class CreateRanking : InteractionModuleBase<SocketInteractionContext>
+    {
 
-		[SlashCommand("createRanking", "Create Ranking")]
-		public async Task Create()
-		{
-			await RespondWithModalAsync(new ModalBuilder()
-											.WithTitle("Create Ranking")
-											.Build());
-		}
-	}
+        [SlashCommand("createRanking", "Create Ranking")]
+        public async Task Create()
+        {
+            await RespondWithModalAsync(new ModalBuilder()
+                                            .WithTitle("Create Ranking")
+                                            .Build());
+        }
+    }
 }

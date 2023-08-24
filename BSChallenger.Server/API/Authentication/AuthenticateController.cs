@@ -15,8 +15,8 @@ namespace BSChallenger.Server.API.Authentication
     [Route("[controller]")]
     public class AuthenticateController : ControllerBase
     {
-		private readonly ILogger _logger = Log.ForContext<AuthenticateController>();
-		private readonly Database _database;
+        private readonly ILogger _logger = Log.ForContext<AuthenticateController>();
+        private readonly Database _database;
         private readonly TokenProvider _tokenProvider;
         private readonly PasswordProvider _passwordProvider;
 

@@ -15,29 +15,29 @@ using System.Threading.Tasks;
 
 namespace BSChallenger.Server.API
 {
-	[ApiController]
-	[Route("[controller]")]
-	public class LevelInfoController : ControllerBase
-	{
-		private readonly ILogger _logger = Log.ForContext<LevelInfoController>();
-		private readonly Database _database;
+    [ApiController]
+    [Route("[controller]")]
+    public class LevelInfoController : ControllerBase
+    {
+        private readonly ILogger _logger = Log.ForContext<LevelInfoController>();
+        private readonly Database _database;
 
-		public LevelInfoController(
-			Database database)
-		{
-			_database = database;
-		}
+        public LevelInfoController(
+            Database database)
+        {
+            _database = database;
+        }
 
-		[HttpGet("/GetInfo")]
-		public IActionResult GetInfo([FromQuery(Name = "ranking")] string rankingName, [FromQuery(Name = "level")] int level)
-		{
-			_logger.Information(rankingName);
-			var ranking = _database.EagerLoadRankings(true).Find(x => x.Name == rankingName);
-			if (ranking == null)
-			{
-				return NotFound();
-			}
-			return Ok(ranking.Levels.ElementAt(level-1));
-		}
-	}
+        [HttpGet("/GetInfo")]
+        public IActionResult GetInfo([FromQuery(Name = "ranking")] string rankingName, [FromQuery(Name = "level")] int level)
+        {
+            _logger.Information(rankingName);
+            var ranking = _database.EagerLoadRankings(true).Find(x => x.Name == rankingName);
+            if (ranking == null)
+            {
+                return NotFound();
+            }
+            return Ok(ranking.Levels.ElementAt(level - 1));
+        }
+    }
 }

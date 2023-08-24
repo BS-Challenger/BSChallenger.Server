@@ -29,16 +29,16 @@ namespace BSChallenger.Server.Models.API
 
         [Key, JsonIgnore]
         public int Id { get; set; }
-		[Key]
-		public string Identifier => IDGenerator.GenerateID(IDType.Map, Id);
-		public string Hash { get; set; }
+        [Key]
+        public string Identifier => IDGenerator.GenerateID(IDType.Map, Id);
+        public string Hash { get; set; }
         public string Characteristic { get; set; }
         public string Difficulty { get; set; }
         public virtual List<MapFeature> Features { get; set; } = new();
 
-		[JsonIgnore]
-		public int LevelId { get; set; }
-		[JsonIgnore]
-		public Level Level { get; set; }
-	}
+        [JsonIgnore]
+        public int LevelId { get; set; }
+        [JsonIgnore]
+        public Level Level { get; set; }
+    }
 }

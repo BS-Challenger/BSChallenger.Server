@@ -18,9 +18,9 @@ namespace BSChallenger.Server.Models.API
         }
         [Key, JsonIgnore]
         public int Id { get; set; }
-		[Key]
-		public string Identifier => IDGenerator.GenerateID(IDType.User, Id);
-		public string Username { get; set; }
+        [Key]
+        public string Identifier => IDGenerator.GenerateID(IDType.User, Id);
+        public string Username { get; set; }
         public string BeatLeaderId { get; set; }
         public string PasswordHash { get; set; }
         //Dynamically set

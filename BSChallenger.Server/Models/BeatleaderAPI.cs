@@ -39,16 +39,16 @@ namespace BSChallenger.Server.Models
             List<BeatLeaderScore> scores = new();
             while (AmountLeft > 0)
             {
-				var res = await _httpClient.GetAsync(BeatleaderEndpoint + string.Format("player/{0}/scores?sortBy=date&page={1}&count=300", userId, page, secondsSinceEpoch));
+                var res = await _httpClient.GetAsync(BeatleaderEndpoint + string.Format("player/{0}/scores?sortBy=date&page={1}&count=300", userId, page, secondsSinceEpoch));
                 var obj = JsonConvert.DeserializeObject<Root>(await res.Content.ReadAsStringAsync());
-                if(AmountLeft == 100000000)
+                if (AmountLeft == 100000000)
                 {
                     AmountLeft = obj.Metadata.Total;
                 }
                 AmountLeft -= 100;
                 scores.AddRange(obj.Data);
                 page++;
-			}
+            }
             return scores;
         }
     }

@@ -54,7 +54,7 @@ namespace BSChallenger.Server.API
         {
             return Path.Combine(Environment.CurrentDirectory, "playlists", String.Format("{0:000}", number) + "_Beat Saber Challenge Community.bplist");
 
-		}
+        }
 
         //Silly color funcs, Temporary ofc
         public static List<string> GenerateDissimilarColors(int count)

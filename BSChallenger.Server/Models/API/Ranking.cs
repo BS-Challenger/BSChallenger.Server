@@ -21,8 +21,8 @@ namespace BSChallenger.Server.Models.API
         [Key, JsonIgnore]
         public int Id { get; set; }
         [Key]
-		public string Identifier => IDGenerator.GenerateID(IDType.Ranking, Id);
-		public ulong GuildId { get; set; }
+        public string Identifier => IDGenerator.GenerateID(IDType.Ranking, Id);
+        public ulong GuildId { get; set; }
         [Key]
         public string Name { get; set; }
         public string Description { get; set; }

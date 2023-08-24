@@ -20,8 +20,8 @@ namespace BSChallenger.Server.Discord
         private DiscordSocketClient _client;
         private readonly SecretProvider _secrets;
         private readonly Database _db;
-		private InteractionService _interactions;
-		private readonly IServiceProvider _services;
+        private InteractionService _interactions;
+        private readonly IServiceProvider _services;
 
         public DiscordBot(SecretProvider provider, DiscordSocketClient client, InteractionService interactions, Database db, IServiceProvider services)
         {
@@ -36,20 +36,20 @@ namespace BSChallenger.Server.Discord
         {
             var token = _secrets.Secrets.DiscordBotToken;
 
-			await _client.LoginAsync(TokenType.Bot, token);
-			await _client.StartAsync();
+            await _client.LoginAsync(TokenType.Bot, token);
+            await _client.StartAsync();
 
-			await _interactions.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
+            await _interactions.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
 
             _interactions.Modules.ToList().ForEach((x) => { Console.WriteLine(x.Name); });
 
-			_client.Ready += async () =>
+            _client.Ready += async () =>
             {
                 Console.WriteLine("Discord Bot Ready");
 
-				await _interactions.RegisterCommandsGloballyAsync(true);
+                await _interactions.RegisterCommandsGloballyAsync(true);
 
-				_client.InteractionCreated += async interaction =>
+                _client.InteractionCreated += async interaction =>
                 {
                     var scope = _services.CreateScope();
                     var ctx = new SocketInteractionContext(_client, interaction);

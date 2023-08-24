@@ -19,8 +19,8 @@ namespace BSChallenger.Server.API
     [Route("[controller]")]
     public class ScanController : ControllerBase
     {
-		private readonly ILogger _logger = Log.ForContext<ScanController>();
-		private readonly Database _database;
+        private readonly ILogger _logger = Log.ForContext<ScanController>();
+        private readonly Database _database;
         private readonly BeatleaderAPI _beatleaderAPI;
 
         private List<IMapFeature> _features = MapFeatureFactory.CreateInstancesFromCurrentAssembly();
@@ -33,35 +33,37 @@ namespace BSChallenger.Server.API
             _beatleaderAPI = beatleaderAPI;
         }
 
-		//TODO: Split this up into seperate methods
-		[HttpPost("/scan")]
+        //TODO: Split this up into seperate methods
+        [HttpPost("/scan")]
         public async Task<ActionResult<ScanResponse>> PostScan(ScanRequest request)
         {
-			Stopwatch test = new();
+            Stopwatch test = new();
             test.Start();
             var token = _database.Tokens
-                .Include(x=>x.User)
+                .Include(x => x.User)
                 .FirstOrDefault(x => x.TokenValue == request.AccessToken && x.TokenType == TokenType.AccessToken);
-			if (token != null && token.ExpiryTime > DateTime.UtcNow)
+            if (token != null && token.ExpiryTime > DateTime.UtcNow)
             {
-				var user = token.User;
+                var user = token.User;
                 if (user != null)
                 {
-					var scores = await _beatleaderAPI.GetSinceDateScores(user.BeatLeaderId, user.LastCheckDate);
+                    var scores = await _beatleaderAPI.GetSinceDateScores(user.BeatLeaderId, user.LastCheckDate);
                     var ranking = _database.EagerLoadRankings(true).Find(x => x.Name == request.Ranking);
-					_logger.Information(scores.Count().ToString());
-					Level latestLevelPassed = null;
+                    _logger.Information(scores.Count().ToString());
+                    Level latestLevelPassed = null;
                     foreach (var level in ranking.Levels.OrderBy(x => x.LevelNumber))
                     {
                         //Amount of Linq nesting is insane
-                        var validScores = scores.Where(x => {
-                            return level.AvailableForPass.Any(y => {
+                        var validScores = scores.Where(x =>
+                        {
+                            return level.AvailableForPass.Any(y =>
+                            {
                                 bool isMatching = string.Equals(x.Leaderboard.Song.Hash, y.Hash, StringComparison.OrdinalIgnoreCase) && x.Leaderboard.Difficulty.DifficultyName == y.Difficulty && x.Leaderboard.Difficulty.ModeName.Replace("-PinkPlay_Controllable", "") == y.Characteristic;
-                                var featuresToCheck = _features.Where(x=>y.Features.Any(z=>z.Type==x.GetName())).ToList();
+                                var featuresToCheck = _features.Where(x => y.Features.Any(z => z.Type == x.GetName())).ToList();
                                 //TODO: Error Checking
                                 featuresToCheck.ForEach(z => { isMatching &= z.GetValid(x, y.Features.First(x => x.Type == z.GetName()).Data) == MapFeatureResult.Pass; });
-								return isMatching;
-							});
+                                return isMatching;
+                            });
                         });
                         if (validScores != null && validScores.Count() > 0)
                         {

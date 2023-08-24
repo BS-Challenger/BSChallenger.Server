@@ -24,20 +24,20 @@ namespace BSChallenger.Server.Models
 
         public List<Ranking> EagerLoadRankings(bool loadPasses = false)
         {
-            if(loadPasses)
+            if (loadPasses)
             {
                 return Rankings
-                    .Include(x=> x.Levels)
-					.ThenInclude(x => x.AvailableForPass)
+                    .Include(x => x.Levels)
+                    .ThenInclude(x => x.AvailableForPass)
                     .ToList();
-			}
+            }
             else
             {
-				return Rankings
-					.Include(x => x.Levels)
-					.ToList();
-			}
-		}
+                return Rankings
+                    .Include(x => x.Levels)
+                    .ToList();
+            }
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
