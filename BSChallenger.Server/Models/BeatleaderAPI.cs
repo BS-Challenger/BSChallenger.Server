@@ -30,13 +30,13 @@ namespace BSChallenger.Server.Models
             return 0;
         }
 
-        public async Task<List<Datum>> GetSinceDateScores(string userId, DateTime date)
+        public async Task<List<BeatLeaderScore>> GetSinceDateScores(string userId, DateTime date)
         {
             TimeSpan t = date - new DateTime(1970, 1, 1);
             int secondsSinceEpoch = (int)t.TotalSeconds;
             int AmountLeft = 100000000;
             int page = 1;
-            List<Datum> scores = new();
+            List<BeatLeaderScore> scores = new();
             while (AmountLeft > 0)
             {
 				var res = await _httpClient.GetAsync(BeatleaderEndpoint + string.Format("player/{0}/scores?sortBy=date&page={1}&count=300", userId, page, secondsSinceEpoch));
@@ -52,7 +52,7 @@ namespace BSChallenger.Server.Models
             return scores;
         }
     }
-    public class Datum
+    public class BeatLeaderScore
     {
         public Leaderboard Leaderboard { get; set; }
         public double AccLeft { get; set; }
@@ -118,7 +118,7 @@ namespace BSChallenger.Server.Models
     public class Root
     {
         public Metadata Metadata { get; set; }
-        public List<Datum> Data { get; set; }
+        public List<BeatLeaderScore> Data { get; set; }
     }
 
     public class Song

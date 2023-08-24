@@ -23,35 +23,33 @@ namespace BSChallenger.Server.Discord
 		private InteractionService _interactions;
 		private readonly IServiceProvider _services;
 
-        public DiscordBot(SecretProvider provider, Database db, IServiceProvider services)
+        public DiscordBot(SecretProvider provider, DiscordSocketClient client, InteractionService interactions, Database db, IServiceProvider services)
         {
             _secrets = provider;
             _db = db;
             _services = services;
+            _interactions = interactions;
+            _client = client;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             var token = _secrets.Secrets.DiscordBotToken;
 
-            _client = new DiscordSocketClient();
-
 			await _client.LoginAsync(TokenType.Bot, token);
 			await _client.StartAsync();
 
-            _client.Ready += async () =>
+			await _interactions.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
+
+            _interactions.Modules.ToList().ForEach((x) => { Console.WriteLine(x.Name); });
+
+			_client.Ready += async () =>
             {
                 Console.WriteLine("Discord Bot Ready");
 
-                _interactions = new InteractionService(_client);
-                await _interactions.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
+				await _interactions.RegisterCommandsGloballyAsync(true);
 
-                foreach (var guildId in _client.Guilds.Select(x=>x.Id))
-                {
-                    await _interactions.RegisterCommandsToGuildAsync(guildId);
-                }
-
-                _client.InteractionCreated += async interaction =>
+				_client.InteractionCreated += async interaction =>
                 {
                     var scope = _services.CreateScope();
                     var ctx = new SocketInteractionContext(_client, interaction);

@@ -13,6 +13,8 @@ using Microsoft.OpenApi.Models;
 using BSChallenger.Server.Discord;
 using System.Threading;
 using System;
+using Discord.Interactions;
+using Discord.WebSocket;
 
 namespace BSChallenger.Server
 {
@@ -32,7 +34,9 @@ namespace BSChallenger.Server
                         {
                             services.AddScoped<SecretProvider, SecretProvider>();
                             services
-                                .AddHostedService<DiscordBot>()
+							    .AddSingleton<DiscordSocketClient>()
+							    .AddSingleton<InteractionService>()
+								.AddHostedService<DiscordBot>()
                                 .AddOptions()
                                 .AddConfiguration<AppConfiguration>("App")
                                 .AddDbContext<Database>()

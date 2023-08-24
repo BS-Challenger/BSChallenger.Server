@@ -1,4 +1,5 @@
 ﻿using BSChallenger.Server.API.Authentication.BeatLeader;
+using BSChallenger.Server.MapFeatures;
 using BSChallenger.Server.Models;
 using BSChallenger.Server.Models.API;
 using BSChallenger.Server.Models.API.Authentication;
@@ -22,6 +23,8 @@ namespace BSChallenger.Server.API
 		private readonly Database _database;
         private readonly BeatleaderAPI _beatleaderAPI;
 
+        private List<IMapFeature> _features = MapFeatureFactory.CreateInstancesFromCurrentAssembly();
+
         public ScanController(
             Database database,
             BeatleaderAPI beatleaderAPI)
@@ -30,7 +33,8 @@ namespace BSChallenger.Server.API
             _beatleaderAPI = beatleaderAPI;
         }
 
-        [HttpPost("/scan")]
+		//TODO: Split this up into seperate methods
+		[HttpPost("/scan")]
         public async Task<ActionResult<ScanResponse>> PostScan(ScanRequest request)
         {
 			Stopwatch test = new();
@@ -49,11 +53,15 @@ namespace BSChallenger.Server.API
 					Level latestLevelPassed = null;
                     foreach (var level in ranking.Levels.OrderBy(x => x.LevelNumber))
                     {
+                        //Amount of Linq nesting is insane
                         var validScores = scores.Where(x => {
-                            bool ret = level.AvailableForPass.Any(y => {
-                                return string.Equals(x.Leaderboard.Song.Hash, y.Hash, StringComparison.OrdinalIgnoreCase) && x.Leaderboard.Difficulty.DifficultyName == y.Difficulty && x.Leaderboard.Difficulty.ModeName.Replace("-PinkPlay_Controllable", "") == y.Characteristic;
-                            });
-                            return ret;
+                            return level.AvailableForPass.Any(y => {
+                                bool isMatching = string.Equals(x.Leaderboard.Song.Hash, y.Hash, StringComparison.OrdinalIgnoreCase) && x.Leaderboard.Difficulty.DifficultyName == y.Difficulty && x.Leaderboard.Difficulty.ModeName.Replace("-PinkPlay_Controllable", "") == y.Characteristic;
+                                var featuresToCheck = _features.Where(x=>y.Features.Any(z=>z.Type==x.GetName())).ToList();
+                                //TODO: Error Checking
+                                featuresToCheck.ForEach(z => { isMatching &= z.GetValid(x, y.Features.First(x => x.Type == z.GetName()).Data) == MapFeatureResult.Pass; });
+								return isMatching;
+							});
                         });
                         if (validScores != null && validScores.Count() > 0)
                         {

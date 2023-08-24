@@ -5,6 +5,13 @@ namespace BSChallenger.Server.MapFeatures
 	public interface IMapFeature
 	{
 		public string GetName();
-		public bool GetValid(Datum score, string feature);
+		public MapFeatureResult GetValid(BeatLeaderScore score, string featureData);
+	}
+
+	public enum MapFeatureResult
+	{
+		Pass,
+		Fail,
+		Error
 	}
 }
