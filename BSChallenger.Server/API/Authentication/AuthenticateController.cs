@@ -31,7 +31,8 @@ namespace BSChallenger.Server.API.Authentication
         }
 
         [HttpPost("AccessToken")]
-        public async Task<ActionResult<AccessTokenResponse>> PostGenerateAccessToken(AccessTokenRequest request)
+		[RequireHttps]
+		public async Task<ActionResult<AccessTokenResponse>> PostGenerateAccessToken(AccessTokenRequest request)
         {
             var refreshToken = _database.Tokens.AsEnumerable().FirstOrDefault(x => x.TokenValue == request.RefreshToken);
 
@@ -46,6 +47,7 @@ namespace BSChallenger.Server.API.Authentication
         }
 
         [HttpPost("Signup")]
+        [RequireHttps]
         public async Task<ActionResult<AuthResponse>> PostSignup(NamePasswordRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.Password) || string.IsNullOrWhiteSpace(request.Username))
@@ -66,7 +68,8 @@ namespace BSChallenger.Server.API.Authentication
         }
 
         [HttpPost("Login")]
-        public async Task<ActionResult<AuthResponse>> PostLogin(NamePasswordRequest request)
+		[RequireHttps]
+		public async Task<ActionResult<AuthResponse>> PostLogin(NamePasswordRequest request)
         {
             var user = _database.Users.FirstOrDefault(x => x.Username == request.Username);
 
@@ -78,7 +81,8 @@ namespace BSChallenger.Server.API.Authentication
             return new AuthResponse("Username or Password is Incorrect", false, null);
         }
         [HttpPost("Identity")]
-        public ActionResult<IdentityResponse> PostIdentity(AuthenticatedRequest request)
+		[RequireHttps]
+		public ActionResult<IdentityResponse> PostIdentity(AuthenticatedRequest request)
         {
             var token = _database.Tokens.FirstOrDefault(x => x.TokenValue == request.AccessToken && x.TokenType == TokenType.AccessToken);
 

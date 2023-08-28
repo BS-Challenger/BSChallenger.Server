@@ -13,7 +13,7 @@ namespace BSChallenger.Server.Configuration
 
         public class FileConfiguration
         {
-            public string? Path { get; set; }
+            public string Path { get; set; }
             public long FileSizeLimitBytes { get; set; } = 1073741824;
             public int RetainedFileCountLimit { get; set; } = 31;
             public bool Buffered { get; set; } = false;
@@ -21,6 +21,6 @@ namespace BSChallenger.Server.Configuration
 
         public MinimumLevelConfiguration MinimumLevel { get; set; } = new();
         public bool WriteToConsole { get; set; } = true;
-        public FileConfiguration? File { get; set; }
+        public FileConfiguration File { get; set; }
     }
 }

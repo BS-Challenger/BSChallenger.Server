@@ -7,7 +7,7 @@ namespace BSChallenger.Server.Extensions
     {
         public static IServiceCollection AddConfiguration<T>(
             this IServiceCollection services,
-            string? sectionKey = null)
+            string sectionKey = null)
             where T : class, new() =>
             services.AddSingleton(serviceProvider =>
             {

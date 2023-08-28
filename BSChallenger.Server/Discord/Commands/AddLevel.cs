@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 
 namespace BSChallenger.Server.Discord.Commands
 {
-    public class CreateRanking : InteractionModuleBase<SocketInteractionContext>
+    public class AddLevel : InteractionModuleBase<SocketInteractionContext>
     {
-        [SlashCommand("create-ranking", "Create Ranking")]
+        [SlashCommand("add-level", "Create Ranking")]
         [RequireRole("Ranking Owners")]
-        public async Task Create()
+        [RequireRole("Rank Team")]
+		public async Task Create()
         {
             Console.WriteLine("x");
             var builder = new ModalBuilder()

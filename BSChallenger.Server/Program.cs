@@ -36,7 +36,7 @@ namespace BSChallenger.Server
                                 .AddRateLimiter(_ => _
                                     .AddSlidingWindowLimiter("slidingPolicy", options =>
                                     {
-                                        options.PermitLimit = 60;
+                                        options.PermitLimit = 50;
                                         options.Window = TimeSpan.FromSeconds(10);
                                         options.SegmentsPerWindow = 4;
                                         options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
@@ -62,7 +62,6 @@ namespace BSChallenger.Server
                         })
                         .Configure(applicationBuilder =>
                             applicationBuilder
-                                .UseRateLimiter()
                                 .UseSwagger()
                                 .UseSwaggerUI(c =>
                                 {
@@ -70,6 +69,8 @@ namespace BSChallenger.Server
                                 })
                                 .UseRouting()
                                 .UseEndpoints(endPointRouteBuilder => endPointRouteBuilder.MapControllers())
+                                .UseRateLimiter()
+                                .UseForwardedHeaders()
                         )
                 )
                 .UseSerilog();

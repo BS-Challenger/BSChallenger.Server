@@ -35,7 +35,8 @@ namespace BSChallenger.Server.API
 
         //TODO: Split this up into seperate methods
         [HttpPost("/scan")]
-        public async Task<ActionResult<ScanResponse>> PostScan(ScanRequest request)
+		[RequireHttps]
+		public async Task<ActionResult<ScanResponse>> PostScan(ScanRequest request)
         {
             Stopwatch test = new();
             test.Start();
@@ -61,11 +62,11 @@ namespace BSChallenger.Server.API
                                 bool isMatching = string.Equals(x.Leaderboard.Song.Hash, y.Hash, StringComparison.OrdinalIgnoreCase) && x.Leaderboard.Difficulty.DifficultyName == y.Difficulty && x.Leaderboard.Difficulty.ModeName.Replace("-PinkPlay_Controllable", "") == y.Characteristic;
                                 var featuresToCheck = _features.Where(x => y.Features.Any(z => z.Type == x.GetName())).ToList();
                                 //TODO: Error Checking
-                                featuresToCheck.ForEach(z => { isMatching &= z.GetValid(x, y.Features.First(x => x.Type == z.GetName()).Data) == MapFeatureResult.Pass; });
+                                featuresToCheck.ForEach(z => isMatching &= z.GetValid(x, y.Features.First(x => x.Type == z.GetName()).Data) == MapFeatureResult.Pass);
                                 return isMatching;
                             });
                         });
-                        if (validScores != null && validScores.Count() > 0)
+                        if (validScores != null && validScores.Any())
                         {
                             //Check for map features here
                             latestLevelPassed = level;
