@@ -12,7 +12,8 @@ namespace BSChallenger.Server.Discord.Commands
     {
         [SlashCommand("create-ranking", "Create Ranking")]
         [RequireRole("Ranking Owners")]
-        public async Task Create()
+		[RequireRole("Ranking Admin")]
+		public async Task Create()
         {
             Console.WriteLine("x");
             var builder = new ModalBuilder()
