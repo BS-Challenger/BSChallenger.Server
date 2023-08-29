@@ -1,7 +1,7 @@
 ﻿using BSChallenger.Server.Providers;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using PrimaryKeyAttribute = Microsoft.EntityFrameworkCore.PrimaryKeyAttribute;
 
 namespace BSChallenger.Server.Models.API

@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace BSChallenger.Server.Models.API
 {
     [PrimaryKey("Id")]
     public class MapFeature
     {
-        [Key]
+        [Key, JsonIgnore]
         public int Id { get; set; }
         public string Type { get; set; }
         public string Data { get; set; }
