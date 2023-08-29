@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BSChallenger.Server.Models.API.Authentication.Beatleader;
 using BSChallenger.Server.Providers;
+using Microsoft.EntityFrameworkCore;
 
 namespace BSChallenger.Server.API.Authentication.BeatLeader
 {
@@ -34,7 +35,9 @@ namespace BSChallenger.Server.API.Authentication.BeatLeader
         public async Task<ActionResult<BLTokenResponse>> PostGetToken(AuthenticatedRequest request)
         {
             _logger.Information(request.AccessToken);
-            var token = _database.Tokens.FirstOrDefault(x => x.TokenValue == request.AccessToken && x.TokenType == TokenType.AccessToken);
+            var token = _database.Tokens
+				.Include(x => x.User)
+				.FirstOrDefault(x => x.TokenValue == request.AccessToken && x.TokenType == TokenType.AccessToken);
 
             if (token != null)
             {
@@ -54,7 +57,9 @@ namespace BSChallenger.Server.API.Authentication.BeatLeader
             _logger.Information(request.GeneratedCode);
             if (request.BLCode is null)
                 throw new HttpResponseException(400);
-            var blAuthToken = _database.Tokens.AsEnumerable().FirstOrDefault(x => x.TokenValue == request.GeneratedCode);
+            var blAuthToken = _database.Tokens
+				.Include(x => x.User)
+				.FirstOrDefault(x => x.TokenValue == request.GeneratedCode);
 
             if (blAuthToken?.TokenType == TokenType.BLAuthToken)
             {
