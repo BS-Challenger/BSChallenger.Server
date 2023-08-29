@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using BSChallenger.Server.Providers;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using PrimaryKeyAttribute = Microsoft.EntityFrameworkCore.PrimaryKeyAttribute;
@@ -28,5 +29,6 @@ namespace BSChallenger.Server.Models.API
         public string Description { get; set; }
         public string IconURL { get; set; }
         public ICollection<Level> Levels { get; set; } = new List<Level>();
-    }
+        public ICollection<ScanHistory> History { get; set; } = new List<ScanHistory>();
+	}
 }

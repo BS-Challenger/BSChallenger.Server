@@ -1,5 +1,6 @@
 ﻿using BSChallenger.Server.Models.API;
 using BSChallenger.Server.Models.Discord;
+using BSChallenger.Server.Providers;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,6 @@ namespace BSChallenger.Server.Models
         public DbSet<User> Users { get; set; }
         public DbSet<Ranking> Rankings { get; set; }
         public DbSet<Token> Tokens { get; set; }
-        public DbSet<Guild> DiscordBotGuilds { get; set; }
 
         public List<Ranking> EagerLoadRankings(bool loadPasses = false)
         {

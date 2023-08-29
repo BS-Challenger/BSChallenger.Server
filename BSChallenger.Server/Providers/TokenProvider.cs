@@ -9,7 +9,6 @@ namespace BSChallenger.Server.Providers
 {
     public class TokenProvider
     {
-        private readonly ILogger _logger = Log.ForContext<TokenProvider>();
         private readonly Database _database;
 
         public TokenProvider(

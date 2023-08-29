@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 
 namespace BSChallenger.Server.Providers
 {
-    public class BeatleaderAPI
+    public class BeatleaderAPIProvider
     {
         private const string BeatleaderEndpoint = "https://api.beatleader.xyz/";
 
-        private readonly ILogger _logger = Log.ForContext<BeatleaderAPI>();
+        private readonly ILogger _logger = Log.ForContext<BeatleaderAPIProvider>();
         private readonly HttpClient _httpClient = new HttpClient();
         private SecretProvider _secrets;
 
-        public BeatleaderAPI(SecretProvider secrets)
+        public BeatleaderAPIProvider(SecretProvider secrets)
         {
             _secrets = secrets;
         }
@@ -41,6 +41,7 @@ namespace BSChallenger.Server.Providers
             {
                 var res = await _httpClient.GetAsync(BeatleaderEndpoint + string.Format("player/{0}/scores?sortBy=date&page={1}&count=300", userId, page, secondsSinceEpoch));
                 var obj = JsonConvert.DeserializeObject<Root>(await res.Content.ReadAsStringAsync());
+                //If this is first iteration then set the real total
                 if (AmountLeft == 100000000)
                 {
                     AmountLeft = obj.Metadata.Total;
@@ -52,6 +53,7 @@ namespace BSChallenger.Server.Providers
             return scores;
         }
     }
+    //TODO: Move to interface based for scoresaber support
     public class BeatLeaderScore
     {
         public Leaderboard Leaderboard { get; set; }

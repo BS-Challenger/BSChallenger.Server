@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using BSChallenger.Server.Providers;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -26,7 +27,5 @@ namespace BSChallenger.Server.Models.API
         //Dynamically set
         public DateTime LastCheckDate { get; set; }
         public List<Token> Tokens { get; set; } = new();
-
-        public Dictionary<string, int> ranks = new();
     }
 }
