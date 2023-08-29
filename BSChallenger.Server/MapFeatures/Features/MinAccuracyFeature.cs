@@ -1,4 +1,4 @@
-﻿using BSChallenger.Server.Models;
+﻿using BSChallenger.Server.Providers;
 
 namespace BSChallenger.Server.MapFeatures.Features
 {

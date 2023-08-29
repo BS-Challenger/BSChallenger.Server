@@ -2,6 +2,7 @@
 using BSChallenger.Server.Models;
 using BSChallenger.Server.Models.API;
 using BSChallenger.Server.Models.API.Authentication;
+using BSChallenger.Server.Providers;
 using BSChallenger.Server.Views.API;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -15,7 +16,6 @@ namespace BSChallenger.Server.API.Authentication
     [Route("[controller]")]
     public class AuthenticateController : ControllerBase
     {
-        private readonly ILogger _logger = Log.ForContext<AuthenticateController>();
         private readonly Database _database;
         private readonly TokenProvider _tokenProvider;
         private readonly PasswordProvider _passwordProvider;
@@ -31,7 +31,6 @@ namespace BSChallenger.Server.API.Authentication
         }
 
         [HttpPost("AccessToken")]
-		[RequireHttps]
 		public async Task<ActionResult<AccessTokenResponse>> PostGenerateAccessToken(AccessTokenRequest request)
         {
             var refreshToken = _database.Tokens.AsEnumerable().FirstOrDefault(x => x.TokenValue == request.RefreshToken);
@@ -47,7 +46,6 @@ namespace BSChallenger.Server.API.Authentication
         }
 
         [HttpPost("Signup")]
-        [RequireHttps]
         public async Task<ActionResult<AuthResponse>> PostSignup(NamePasswordRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.Password) || string.IsNullOrWhiteSpace(request.Username))
@@ -68,7 +66,6 @@ namespace BSChallenger.Server.API.Authentication
         }
 
         [HttpPost("Login")]
-		[RequireHttps]
 		public async Task<ActionResult<AuthResponse>> PostLogin(NamePasswordRequest request)
         {
             var user = _database.Users.FirstOrDefault(x => x.Username == request.Username);
@@ -81,7 +78,6 @@ namespace BSChallenger.Server.API.Authentication
             return new AuthResponse("Username or Password is Incorrect", false, null);
         }
         [HttpPost("Identity")]
-		[RequireHttps]
 		public ActionResult<IdentityResponse> PostIdentity(AuthenticatedRequest request)
         {
             var token = _database.Tokens.FirstOrDefault(x => x.TokenValue == request.AccessToken && x.TokenType == TokenType.AccessToken);

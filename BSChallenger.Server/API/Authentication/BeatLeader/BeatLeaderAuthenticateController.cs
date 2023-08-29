@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using BSChallenger.Server.Models.API.Authentication.Beatleader;
+using BSChallenger.Server.Providers;
 
 namespace BSChallenger.Server.API.Authentication.BeatLeader
 {
@@ -16,12 +17,12 @@ namespace BSChallenger.Server.API.Authentication.BeatLeader
     {
         private readonly ILogger _logger = Log.ForContext<BeatLeaderAuthenticateController>();
         private readonly Database _database;
-        private readonly BeatleaderAPI _beatleaderAPI;
+        private readonly BeatleaderAPIProvider _beatleaderAPI;
         private readonly TokenProvider _tokenProvider;
 
         public BeatLeaderAuthenticateController(
             Database database,
-            BeatleaderAPI beatleaderAPI,
+            BeatleaderAPIProvider beatleaderAPI,
             TokenProvider tokenProvider)
         {
             _database = database;

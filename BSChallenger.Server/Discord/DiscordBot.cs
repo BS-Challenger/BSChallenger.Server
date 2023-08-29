@@ -1,5 +1,6 @@
 ﻿using BSChallenger.Server.Models;
 using BSChallenger.Server.Models.API;
+using BSChallenger.Server.Providers;
 using Discord;
 using Discord.Interactions;
 using Discord.WebSocket;
@@ -70,6 +71,7 @@ namespace BSChallenger.Server.Discord
 
             _client.ModalSubmitted += async (x) =>
             {
+                //TODO: Seperate this into classes
                 if (x.Data.CustomId == "create_ranking")
                 {
                     List<SocketMessageComponentData> components = x.Data.Components.ToList();
@@ -77,7 +79,6 @@ namespace BSChallenger.Server.Discord
                     string desc = GetModalItem(components, "desc");
                     string iconURL = GetModalItem(components, "icon_url");
                     string guildId = GetModalItem(components, "server_id");
-
 
                     if (ulong.TryParse(guildId, out var id))
                     {
