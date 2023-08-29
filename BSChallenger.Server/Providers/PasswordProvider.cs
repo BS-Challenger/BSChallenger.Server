@@ -1,7 +1,7 @@
 ﻿using BSChallenger.Server.Models.API;
 using Scrypt;
 
-namespace BSChallenger.Server.Models
+namespace BSChallenger.Server.Providers
 {
     //TODO: Move to Argon2 or BCrypt
     public class PasswordProvider

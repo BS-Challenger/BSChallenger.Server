@@ -1,10 +1,11 @@
-﻿using BSChallenger.Server.Models.API;
+﻿using BSChallenger.Server.Models;
+using BSChallenger.Server.Models.API;
 using Serilog;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BSChallenger.Server.Models
+namespace BSChallenger.Server.Providers
 {
     public class TokenProvider
     {

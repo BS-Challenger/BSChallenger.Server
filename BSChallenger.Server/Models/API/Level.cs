@@ -23,7 +23,7 @@ namespace BSChallenger.Server.Models.API
         [Key, JsonIgnore]
         public int Id { get; set; }
         [Key]
-        public string Identifier => IDGenerator.GenerateID(IDType.Level, Id);
+        public string Identifier => SqidProvider.GenerateID(IDType.Level, Id);
         public int LevelNumber { get; set; }
         public int MapsReqForPass { get; set; }
         public string IconURL { get; set; }

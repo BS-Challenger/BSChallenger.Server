@@ -1,4 +1,5 @@
 ﻿using BeatSaberPlaylistsLib.Legacy;
+using BSChallenger.Server.Models;
 using BSChallenger.Server.Models.API;
 using Serilog;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BSChallenger.Server.Models
+namespace BSChallenger.Server.Providers
 {
     //Used for quick importing bplist for levels
     public class BPListParser

@@ -2,9 +2,9 @@
 using Sqids;
 using System.Linq;
 
-namespace BSChallenger.Server.Models
+namespace BSChallenger.Server.Providers
 {
-    public static class IDGenerator
+    public static class SqidProvider
     {
         private static SqidsEncoder encoder = new SqidsEncoder(new SqidsOptions() { MinLength = 5 });
         public static string GenerateID(IDType type, int id)

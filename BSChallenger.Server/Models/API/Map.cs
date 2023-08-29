@@ -30,7 +30,7 @@ namespace BSChallenger.Server.Models.API
         [Key, JsonIgnore]
         public int Id { get; set; }
         [Key]
-        public string Identifier => IDGenerator.GenerateID(IDType.Map, Id);
+        public string Identifier => SqidProvider.GenerateID(IDType.Map, Id);
         public string Hash { get; set; }
         public string Characteristic { get; set; }
         public string Difficulty { get; set; }

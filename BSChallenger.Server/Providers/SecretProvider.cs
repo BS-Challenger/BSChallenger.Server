@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 
-namespace BSChallenger.Server.Models
+namespace BSChallenger.Server.Providers
 {
     public class SecretProvider
     {
