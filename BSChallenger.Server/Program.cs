@@ -68,7 +68,7 @@ namespace BSChallenger.Server
 									q.AddTrigger(opts => opts
 										.ForJob(jobKey)
 										.WithIdentity("WeeklyScanHistoryJob-trigger")
-										.WithCronSchedule("0 0 * * 0"));
+										.WithCronSchedule("0 0 0 ? * SUN *"));
 								})
 								.AddQuartzHostedService(q => q.WaitForJobsToComplete = true)
                                 .AddControllers(options =>
