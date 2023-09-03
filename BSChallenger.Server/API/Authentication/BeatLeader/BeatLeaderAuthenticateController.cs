@@ -18,12 +18,12 @@ namespace BSChallenger.Server.API.Authentication.BeatLeader
     {
         private readonly ILogger _logger = Log.ForContext<BeatLeaderAuthenticateController>();
         private readonly Database _database;
-        private readonly BeatleaderAPIProvider _beatleaderAPI;
+        private readonly BeatLeaderApiProvider _beatleaderAPI;
         private readonly TokenProvider _tokenProvider;
 
         public BeatLeaderAuthenticateController(
             Database database,
-            BeatleaderAPIProvider beatleaderAPI,
+            BeatLeaderApiProvider beatleaderAPI,
             TokenProvider tokenProvider)
         {
             _database = database;
@@ -53,8 +53,6 @@ namespace BSChallenger.Server.API.Authentication.BeatLeader
         [HttpPost("BLAuthenticate")]
         public async Task<ActionResult<BLAuthenticateResponse>> PostAuthenticate(BLAuthenticateRequest request)
         {
-            _logger.Information(request.BLCode);
-            _logger.Information(request.GeneratedCode);
             if (request.BLCode is null)
                 throw new HttpResponseException(400);
             var blAuthToken = _database.Tokens

@@ -11,7 +11,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BSChallenger.Server.Discord.Commands
+namespace BSChallenger.Server.Discord.Commands.Global
 {
     public class Ranking : InteractionModuleBase<SocketInteractionContext>
     {
@@ -24,7 +24,7 @@ namespace BSChallenger.Server.Discord.Commands
         [SlashCommand("ranking", "Get the ranking for this server")]
         public async Task Executed()
         {
-            var ranking = _database.Rankings.FirstOrDefault(x => x.GuildId == this.Context.Guild.Id);
+            var ranking = _database.Rankings.FirstOrDefault(x => x.GuildId == Context.Guild.Id);
             await RespondAsync($"", new Embed[] { RankingEmbed.Build(ranking, _database) });
         }
     }

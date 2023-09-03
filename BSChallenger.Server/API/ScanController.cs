@@ -20,13 +20,13 @@ namespace BSChallenger.Server.API
 	{
 		private readonly ILogger _logger = Log.ForContext<ScanController>();
 		private readonly Database _database;
-		private readonly BeatleaderAPIProvider _beatleaderAPI;
+		private readonly BeatLeaderApiProvider _beatleaderAPI;
 
-		private List<IMapFeature> _features = MapFeatureFactory.CreateInstancesFromCurrentAssembly();
+		private readonly List<IMapFeature> _features = MapFeatureFactory.CreateInstancesFromCurrentAssembly();
 
 		public ScanController(
 			Database database,
-			BeatleaderAPIProvider beatleaderAPI)
+			BeatLeaderApiProvider beatleaderAPI)
 		{
 			_database = database;
 			_beatleaderAPI = beatleaderAPI;
@@ -48,7 +48,7 @@ namespace BSChallenger.Server.API
 				if (user != null)
 				{
 					var scores = await _beatleaderAPI.GetSinceDateScores(user.BeatLeaderId, user.LastCheckDate);
-					var ranking = _database.EagerLoadRankings(true).Find(x => x.Name == request.Ranking);
+					var ranking = _database.EagerLoadRankings().Find(x => x.Name == request.Ranking);
 					_logger.Information(scores.Count().ToString());
 					Level latestLevelPassed = null;
 					foreach (var level in ranking.Levels.OrderBy(x => x.LevelNumber))

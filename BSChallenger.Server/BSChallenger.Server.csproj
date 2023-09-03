@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
+    <UserSecretsId>1b2bdf10-0305-487a-851d-7e88a964d692</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,7 +16,9 @@
     <PackageReference Include="BeatSaberPlaylistsLib" Version="1.6.6" />
     <PackageReference Include="Discord.Net" Version="3.11.0" />
     <PackageReference Include="Discord.Net.Core" Version="3.11.0" />
+    <PackageReference Include="FusionAuth.Client" Version="1.47.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.18" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.18">

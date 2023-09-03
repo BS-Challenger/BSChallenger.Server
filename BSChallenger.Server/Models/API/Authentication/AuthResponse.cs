@@ -5,12 +5,12 @@ namespace BSChallenger.Server.Models.API.Authentication
 {
     public class AuthResponse
     {
-        public AuthResponse(string response, bool isValid, TokenView token)
+        public AuthResponse(string response, bool isValid, Token token)
         {
             Response = response;
             IsValid = isValid;
             if (token != null)
-                RefreshToken = token.Token;
+                RefreshToken = token.TokenValue;
         }
 
         public string Response { get; set; }

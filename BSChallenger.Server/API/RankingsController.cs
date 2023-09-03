@@ -26,7 +26,7 @@ namespace BSChallenger.Server.API
         [HttpGet]
         public ActionResult<IEnumerable<Ranking>> Get()
         {
-            return _database.EagerLoadRankings(true);
+            return Ok(_database.EagerLoadRankings().Where(x=>!x.Private));
         }
     }
 }

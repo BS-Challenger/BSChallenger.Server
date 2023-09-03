@@ -6,13 +6,13 @@ using Discord.WebSocket;
 using System;
 using System.Threading.Tasks;
 
-namespace BSChallenger.Server.Discord.Commands
+namespace BSChallenger.Server.Discord.Commands.Private
 {
     public class CreateRanking : InteractionModuleBase<SocketInteractionContext>
     {
         [SlashCommand("create-ranking", "Create Ranking")]
         [RequireRole("OneTimeRankingCreation")]
-		public async Task Create()
+        public async Task Create()
         {
             var builder = new ModalBuilder()
                             .WithCustomId("create_ranking")
@@ -21,7 +21,7 @@ namespace BSChallenger.Server.Discord.Commands
                             .AddTextInput("Description", "desc", required: true, placeholder: "Detail what your ranking contains and map styles", minLength: 10, maxLength: 40)
                             .AddTextInput("IconURL", "icon_url", required: true, placeholder: "URL to an image of your icon", minLength: 15)
                             .AddTextInput("Discord Server ID", "server_id", required: true, placeholder: "ID of your discord server", minLength: 15);
-			await RespondWithModalAsync(builder.Build());
-		}
+            await RespondWithModalAsync(builder.Build());
+        }
     }
 }

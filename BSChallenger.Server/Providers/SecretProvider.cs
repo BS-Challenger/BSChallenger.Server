@@ -4,6 +4,8 @@ using System.IO;
 
 namespace BSChallenger.Server.Providers
 {
+    //I don't care
+    //IConfiguration made me want to rip my hair out
     public class SecretProvider
     {
         public string SecretPath => Path.Combine(Environment.CurrentDirectory, "secrets.json");
@@ -32,7 +34,8 @@ namespace BSChallenger.Server.Providers
         public string BLclientSecret { get; set; } = "";
         public string DiscordBotToken { get; set; } = "";
         public DBInfo Database { get; set; } = new DBInfo();
-    }
+        public JWTInfo Jwt { get; set; } = new JWTInfo();
+	}
 
     public class DBInfo
     {
@@ -41,4 +44,11 @@ namespace BSChallenger.Server.Providers
         public string DatabaseName { get; set; } = "";
         public string Host { get; set; } = "";
     }
+
+    public class JWTInfo
+    {
+		public string Issuer { get; set; } = "";
+		public string Audience { get; set; } = "";
+		public string Key { get; set; } = "";
+	}
 }

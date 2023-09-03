@@ -62,7 +62,7 @@ namespace BSChallenger.Server.API.Authentication
 
             await _database.Users.AddAsync(user);
             await _database.SaveChangesAsync();
-            return new AuthResponse("Success", true, (TokenView)await _tokenProvider.GetRefreshToken(user));
+            return new AuthResponse("Success", true, await _tokenProvider.GetRefreshToken(user));
         }
 
         [HttpPost("Login")]

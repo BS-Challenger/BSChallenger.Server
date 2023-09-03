@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 
 namespace BSChallenger.Server.Providers
 {
-    public class BeatleaderAPIProvider
-    {
+    public class BeatLeaderApiProvider
+	{
         private const string BeatleaderEndpoint = "https://api.beatleader.xyz/";
 
-        private readonly ILogger _logger = Log.ForContext<BeatleaderAPIProvider>();
+        private readonly ILogger _logger = Log.ForContext<BeatLeaderApiProvider>();
         private readonly HttpClient _httpClient = new HttpClient();
         private SecretProvider _secrets;
 
-        public BeatleaderAPIProvider(SecretProvider secrets)
+        public BeatLeaderApiProvider(SecretProvider secrets)
         {
             _secrets = secrets;
         }

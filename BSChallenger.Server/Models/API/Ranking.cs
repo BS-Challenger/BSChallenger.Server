@@ -28,7 +28,10 @@ namespace BSChallenger.Server.Models.API
         public string Name { get; set; }
         public string Description { get; set; }
         public string IconURL { get; set; }
-        public ICollection<Level> Levels { get; set; } = new List<Level>();
-        public ICollection<ScanHistory> History { get; set; } = new List<ScanHistory>();
+        public bool Private { get; set; }
+        public bool Partnered { get; set; }
+		public ICollection<Level> Levels { get; set; } = new List<Level>();
+		public ICollection<User> RankTeam { get; set; } = new List<User>();
+		public ICollection<ScanHistory> History { get; set; } = new List<ScanHistory>();
 	}
 }
