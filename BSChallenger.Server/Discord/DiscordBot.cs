@@ -70,8 +70,8 @@ namespace BSChallenger.Server.Discord
                 //TODO: Seperate this into classes
                 if (x.Data.CustomId == "create_ranking")
                 {
-
-                    List<SocketMessageComponentData> components = x.Data.Components.ToList();
+					await (x.User as SocketGuildUser).RemoveRoleAsync(1147688876106842193);
+					List<SocketMessageComponentData> components = x.Data.Components.ToList();
                     string name = GetModalItem(components, "name");
                     string desc = GetModalItem(components, "desc");
                     string iconURL = GetModalItem(components, "icon_url");

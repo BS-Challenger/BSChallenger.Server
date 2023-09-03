@@ -16,8 +16,8 @@ namespace BSChallenger.Server.Discord.Commands
         public async Task Create([Autocomplete(typeof(RankingIdentifierAutoComplete))] string ranking, string map, string feature)
         {
             var builder = new ModalBuilder()
-                            .WithCustomId("add_map")
-                            .WithTitle("Add level to ranking")
+                            .WithCustomId("add_feature")
+                            .WithTitle("Add feature to map")
                             .AddTextInput("Ranking ID", "ranking", required: true, value: ranking)
                             .AddTextInput("Map ID", "map", required: true, value: map)
                             .AddTextInput("Featue Name", "feature", required: true, value: feature)
