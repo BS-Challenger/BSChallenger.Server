@@ -9,20 +9,19 @@ using System.Threading.Tasks;
 
 namespace BSChallenger.Server.Discord.Commands
 {
-	public class AddMap : InteractionModuleBase<SocketInteractionContext>
+	public class AddFeature : InteractionModuleBase<SocketInteractionContext>
 	{
-		[SlashCommand("add-map", "Add Map to Ranking")]
+		[SlashCommand("add-feature", "Add Feature to Map")]
 		[RequireRole("Rank Team")]
-		public async Task Create([Autocomplete(typeof(RankingIdentifierAutoComplete))] string map, [Autocomplete(typeof(LevelNumberAutoComplete))] int level)
+		public async Task Create([Autocomplete(typeof(RankingIdentifierAutoComplete))] string ranking, string map, string feature)
 		{
 			var builder = new ModalBuilder()
 							.WithCustomId("add_map")
 							.WithTitle("Add level to ranking")
 							.AddTextInput("Ranking ID", "ranking", required: true, value: ranking)
-							.AddTextInput("Level Number", "level", required: true, value: level.ToString())
-							.AddTextInput("Hash", "hash", required: true, minLength: 15)
-							.AddTextInput("Characteristic", "char", required: true, minLength: 5)
-							.AddTextInput("Difficulty", "difficulty", required: true, placeholder: "Easy, Normal, Hard, Expert, Expert+", minLength: 4);
+							.AddTextInput("Map ID", "map", required: true, value: map)
+							.AddTextInput("Featue Name", "feature", required: true, value: feature)
+							.AddTextInput("Feature Data", "data", required: true);
 			await RespondWithModalAsync(builder.Build());
 		}
 	}
