@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using PrimaryKeyAttribute = Microsoft.EntityFrameworkCore.PrimaryKeyAttribute;
 
-namespace BSChallenger.Server.Models.API
+namespace BSChallenger.Server.Models.API.Rankings
 {
     [PrimaryKey("Id")]
     public class Ranking
@@ -30,8 +30,8 @@ namespace BSChallenger.Server.Models.API
         public string IconURL { get; set; }
         public bool Private { get; set; }
         public bool Partnered { get; set; }
-		public ICollection<Level> Levels { get; set; } = new List<Level>();
-		public ICollection<User> RankTeam { get; set; } = new List<User>();
-		public ICollection<ScanHistory> History { get; set; } = new List<ScanHistory>();
-	}
+        public ICollection<Level> Levels { get; set; } = new List<Level>();
+        public ICollection<RankTeamMember> RankTeamMembers { get; set; } = new List<RankTeamMember>();
+        public ICollection<ScanHistory> History { get; set; } = new List<ScanHistory>();
+    }
 }

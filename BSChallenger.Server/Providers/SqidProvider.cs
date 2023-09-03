@@ -24,10 +24,10 @@ namespace BSChallenger.Server.Providers
                 case IDType.User:
                     sqid = "usr_" + sqid;
                     break;
-				case IDType.ScanHistory:
-					sqid = "scn_" + sqid;
-					break;
-			}
+                case IDType.ScanHistory:
+                    sqid = "scn_" + sqid;
+                    break;
+            }
             return sqid;
         }
     }

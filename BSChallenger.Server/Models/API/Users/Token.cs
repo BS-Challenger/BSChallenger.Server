@@ -3,7 +3,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
-namespace BSChallenger.Server.Models.API
+namespace BSChallenger.Server.Models.API.Users
 {
     [PrimaryKey("Id")]
     public class Token

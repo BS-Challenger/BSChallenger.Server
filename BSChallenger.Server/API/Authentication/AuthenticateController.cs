@@ -1,11 +1,8 @@
-﻿using BSChallenger.Server.API.Authentication.BeatLeader;
-using BSChallenger.Server.Models;
-using BSChallenger.Server.Models.API;
+﻿using BSChallenger.Server.Models;
 using BSChallenger.Server.Models.API.Authentication;
+using BSChallenger.Server.Models.API.Users;
 using BSChallenger.Server.Providers;
-using BSChallenger.Server.Views.API;
 using Microsoft.AspNetCore.Mvc;
-using Serilog;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,7 +28,7 @@ namespace BSChallenger.Server.API.Authentication
         }
 
         [HttpPost("AccessToken")]
-		public async Task<ActionResult<AccessTokenResponse>> PostGenerateAccessToken(AccessTokenRequest request)
+        public async Task<ActionResult<AccessTokenResponse>> PostGenerateAccessToken(AccessTokenRequest request)
         {
             var refreshToken = _database.Tokens.AsEnumerable().FirstOrDefault(x => x.TokenValue == request.RefreshToken);
 
@@ -66,7 +63,7 @@ namespace BSChallenger.Server.API.Authentication
         }
 
         [HttpPost("Login")]
-		public async Task<ActionResult<AuthResponse>> PostLogin(NamePasswordRequest request)
+        public async Task<ActionResult<AuthResponse>> PostLogin(NamePasswordRequest request)
         {
             var user = _database.Users.FirstOrDefault(x => x.Username == request.Username);
 
@@ -78,7 +75,7 @@ namespace BSChallenger.Server.API.Authentication
             return new AuthResponse("Username or Password is Incorrect", false, null);
         }
         [HttpPost("Identity")]
-		public ActionResult<IdentityResponse> PostIdentity(AuthenticatedRequest request)
+        public ActionResult<IdentityResponse> PostIdentity(AuthenticatedRequest request)
         {
             var token = _database.Tokens.FirstOrDefault(x => x.TokenValue == request.AccessToken && x.TokenType == TokenType.AccessToken);
 

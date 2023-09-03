@@ -40,18 +40,18 @@ namespace BSChallenger.Server
                     webBuilder
                         .ConfigureServices((hostBuilderContext, services) =>
                         {
-							services.AddSingleton<SecretProvider>();
-							services
-								.AddRateLimiter(_ => _
-									.AddSlidingWindowLimiter("slidingPolicy", options =>
-									{
-										options.PermitLimit = 50;
-										options.Window = TimeSpan.FromSeconds(10);
-										options.SegmentsPerWindow = 4;
-										options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
-										options.QueueLimit = 5;
-									}))
-								.AddSingleton<DiscordSocketClient>()
+                            services.AddSingleton<SecretProvider>();
+                            services
+                                .AddRateLimiter(_ => _
+                                    .AddSlidingWindowLimiter("slidingPolicy", options =>
+                                    {
+                                        options.PermitLimit = 50;
+                                        options.Window = TimeSpan.FromSeconds(10);
+                                        options.SegmentsPerWindow = 4;
+                                        options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+                                        options.QueueLimit = 5;
+                                    }))
+                                .AddSingleton<DiscordSocketClient>()
                                 .AddSingleton<InteractionService>()
                                 .AddHostedService<DiscordBot>()
                                 .AddOptions()
@@ -67,15 +67,15 @@ namespace BSChallenger.Server
                                 })
                                 .AddQuartz(q =>
                                 {
-									var jobKey = new JobKey("WeeklyScanHistoryJob");
-									q.AddJob<WeeklyScanHistoryJob>(opts => opts.WithIdentity(jobKey));
+                                    var jobKey = new JobKey("WeeklyScanHistoryJob");
+                                    q.AddJob<WeeklyScanHistoryJob>(opts => opts.WithIdentity(jobKey));
 
-									q.AddTrigger(opts => opts
-										.ForJob(jobKey)
-										.WithIdentity("WeeklyScanHistoryJob-trigger")
-										.WithCronSchedule("0 0 0 ? * SUN *"));
-								})
-								.AddQuartzHostedService(q => q.WaitForJobsToComplete = true)
+                                    q.AddTrigger(opts => opts
+                                        .ForJob(jobKey)
+                                        .WithIdentity("WeeklyScanHistoryJob-trigger")
+                                        .WithCronSchedule("0 0 0 ? * SUN *"));
+                                })
+                                .AddQuartzHostedService(q => q.WaitForJobsToComplete = true)
                                 .AddControllers(options =>
                                     options.Filters.Add(new HttpResponseExceptionFilter())
                                 );

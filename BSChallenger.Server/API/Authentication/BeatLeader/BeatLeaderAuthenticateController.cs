@@ -1,6 +1,5 @@
 ﻿using BSChallenger.Server.Models;
 using BSChallenger.Server.Models.API.Authentication;
-using BSChallenger.Server.Models.API;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System;
@@ -36,8 +35,8 @@ namespace BSChallenger.Server.API.Authentication.BeatLeader
         {
             _logger.Information(request.AccessToken);
             var token = _database.Tokens
-				.Include(x => x.User)
-				.FirstOrDefault(x => x.TokenValue == request.AccessToken && x.TokenType == TokenType.AccessToken);
+                .Include(x => x.User)
+                .FirstOrDefault(x => x.TokenValue == request.AccessToken && x.TokenType == TokenType.AccessToken);
 
             if (token != null)
             {
@@ -56,8 +55,8 @@ namespace BSChallenger.Server.API.Authentication.BeatLeader
             if (request.BLCode is null)
                 throw new HttpResponseException(400);
             var blAuthToken = _database.Tokens
-				.Include(x => x.User)
-				.FirstOrDefault(x => x.TokenValue == request.GeneratedCode);
+                .Include(x => x.User)
+                .FirstOrDefault(x => x.TokenValue == request.GeneratedCode);
 
             if (blAuthToken?.TokenType == TokenType.BLAuthToken)
             {

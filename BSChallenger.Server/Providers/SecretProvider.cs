@@ -35,7 +35,7 @@ namespace BSChallenger.Server.Providers
         public string DiscordBotToken { get; set; } = "";
         public DBInfo Database { get; set; } = new DBInfo();
         public JWTInfo Jwt { get; set; } = new JWTInfo();
-	}
+    }
 
     public class DBInfo
     {
@@ -47,8 +47,8 @@ namespace BSChallenger.Server.Providers
 
     public class JWTInfo
     {
-		public string Issuer { get; set; } = "";
-		public string Audience { get; set; } = "";
-		public string Key { get; set; } = "";
-	}
+        public string Issuer { get; set; } = "";
+        public string Audience { get; set; } = "";
+        public string Key { get; set; } = "";
+    }
 }

@@ -1,4 +1,6 @@
-﻿using BSChallenger.Server.Providers;
+﻿using BSChallenger.Server.Models.API.Maps;
+using BSChallenger.Server.Models.API.Rankings;
+using BSChallenger.Server.Providers;
 using Sqids;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

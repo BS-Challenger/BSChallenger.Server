@@ -1,5 +1,6 @@
 ﻿using BSChallenger.Server.Models;
 using BSChallenger.Server.Models.API;
+using BSChallenger.Server.Models.API.Users;
 using Serilog;
 using System;
 using System.Linq;

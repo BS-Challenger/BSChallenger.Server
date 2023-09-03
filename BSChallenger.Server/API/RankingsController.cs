@@ -1,13 +1,8 @@
 ﻿using BSChallenger.Server.Models;
-using BSChallenger.Server.Models.API;
-using BSChallenger.Server.Views.API;
+using BSChallenger.Server.Models.API.Rankings;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
-using Serilog;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace BSChallenger.Server.API
 {
@@ -26,7 +21,7 @@ namespace BSChallenger.Server.API
         [HttpGet]
         public ActionResult<IEnumerable<Ranking>> Get()
         {
-            return Ok(_database.EagerLoadRankings().Where(x=>!x.Private));
+            return Ok(_database.EagerLoadRankings().Where(x => !x.Private));
         }
     }
 }

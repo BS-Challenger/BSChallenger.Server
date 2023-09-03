@@ -1,4 +1,4 @@
-﻿using BSChallenger.Server.Models.API;
+﻿using BSChallenger.Server.Models.API.Users;
 using Scrypt;
 
 namespace BSChallenger.Server.Providers

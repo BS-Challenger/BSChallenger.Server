@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace BSChallenger.Server.Providers
 {
     public class BeatLeaderApiProvider
-	{
+    {
         private const string BeatleaderEndpoint = "https://api.beatleader.xyz/";
 
         private readonly ILogger _logger = Log.ForContext<BeatLeaderApiProvider>();

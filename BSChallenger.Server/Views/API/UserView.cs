@@ -14,7 +14,7 @@ namespace BSChallenger.Server.Views.API
         public string UserId { get; set; }
         public string BeatLeaderId { get; set; }
 
-        public static implicit operator UserView(Models.API.User usr)
+        public static implicit operator UserView(Models.API.Users.User usr)
         {
             return new UserView(usr.Username, usr.BeatLeaderId);
         }

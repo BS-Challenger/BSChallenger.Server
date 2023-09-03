@@ -1,10 +1,8 @@
 ﻿using BSChallenger.Server.Models;
-using BSChallenger.Server.Models.API;
+using BSChallenger.Server.Models.API.Rankings;
 using BSChallenger.Server.Providers;
-using Discord;
 using Discord.Interactions;
 using Discord.WebSocket;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
@@ -38,12 +36,12 @@ namespace BSChallenger.Server.Discord
                 return Task.CompletedTask;
             };
 
-			_client.Log += (x) =>
-			{
-				Console.WriteLine(x);
-				return Task.CompletedTask;
-			};
-		}
+            _client.Log += (x) =>
+            {
+                Console.WriteLine(x);
+                return Task.CompletedTask;
+            };
+        }
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
@@ -53,8 +51,6 @@ namespace BSChallenger.Server.Discord
             await _client.StartAsync();
 
             await _interactions.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
-
-            _interactions.Modules.ToList().ForEach((x) => { Console.WriteLine(x.Name); });
 
             _client.Ready += async () =>
             {
@@ -74,6 +70,7 @@ namespace BSChallenger.Server.Discord
                 //TODO: Seperate this into classes
                 if (x.Data.CustomId == "create_ranking")
                 {
+
                     List<SocketMessageComponentData> components = x.Data.Components.ToList();
                     string name = GetModalItem(components, "name");
                     string desc = GetModalItem(components, "desc");
@@ -88,13 +85,17 @@ namespace BSChallenger.Server.Discord
 
                         await x.RespondAsync("Successfully created ranking!", ephemeral: true);
                     }
+                    else
+                    {
+                        await x.RespondAsync("GuildID is in incorrect format", ephemeral: true);
+                    }
                 }
-			};
+            };
         }
 
         private string GetModalItem(List<SocketMessageComponentData> components, string id) => components.First(x => x.CustomId == id).Value;
 
-		public async Task StopAsync(CancellationToken cancellationToken)
+        public async Task StopAsync(CancellationToken cancellationToken)
         {
             await _client.DisposeAsync();
         }

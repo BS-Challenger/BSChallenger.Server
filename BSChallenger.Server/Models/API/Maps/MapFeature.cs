@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace BSChallenger.Server.Models.API
+namespace BSChallenger.Server.Models.API.Maps
 {
     [PrimaryKey("Id")]
     public class MapFeature

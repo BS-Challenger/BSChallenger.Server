@@ -1,6 +1,7 @@
 ﻿using BeatSaberPlaylistsLib.Legacy;
 using BSChallenger.Server.Models;
 using BSChallenger.Server.Models.API;
+using BSChallenger.Server.Models.API.Maps;
 using Serilog;
 using System.Collections.Generic;
 using System.IO;

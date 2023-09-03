@@ -1,5 +1,4 @@
-﻿using BSChallenger.Server.Views.API;
-using Microsoft.AspNetCore.Mvc;
+﻿using BSChallenger.Server.Models.API.Users;
 
 namespace BSChallenger.Server.Models.API.Authentication
 {
