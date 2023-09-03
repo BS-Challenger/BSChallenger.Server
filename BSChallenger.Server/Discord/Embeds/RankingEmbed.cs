@@ -10,19 +10,26 @@ using Color = Discord.Color;
 
 namespace BSChallenger.Server.Discord.Embeds
 {
-    public static class RankingsEmbed
+    public static class RankingEmbed
     {
-        public static Embed Build(Database database) => new EmbedBuilder()
-            .WithTitle("All Rankings")
+        public static Embed Build(Ranking ranking, Database database) => new EmbedBuilder()
+            .WithTitle(ranking.Name)
             .WithColor(new Color(114, 75, 27))
-            .WithFields(
-                database.EagerLoadRankings().Select((x) =>
-                {
-                    return new EmbedFieldBuilder()
-                        .WithName(x.Name)
-                        .WithValue("Levels: " + x.Levels.Count);
-                })
-            )
+            .WithThumbnailUrl(ranking.IconURL)
+            .WithFields(new List<EmbedFieldBuilder>() {
+                new EmbedFieldBuilder()
+                    .WithName("Active Users")
+                    .WithIsInline(true)
+                    .WithValue("45"),
+                new EmbedFieldBuilder()
+                    .WithName("Weekly Scores")
+                    .WithIsInline(true)
+                    .WithValue("15"),
+                new EmbedFieldBuilder()
+                    .WithName("Levels")
+                    .WithIsInline(true)
+                    .WithValue(database.EagerLoadRankings().Find(x=>x.Identifier==ranking.Identifier).Levels.Count().ToString())
+            })
             .WithFooter("v" + Program.Version)
             .WithCurrentTimestamp()
             .Build();

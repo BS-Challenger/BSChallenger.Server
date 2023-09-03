@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using BSChallenger.Server.Models.API.Authentication.Beatleader;
 using BSChallenger.Server.Providers;
 using Microsoft.EntityFrameworkCore;
+using BSChallenger.Server.Models.API.Users;
 
 namespace BSChallenger.Server.API.Authentication.BeatLeader
 {
@@ -38,7 +39,7 @@ namespace BSChallenger.Server.API.Authentication.BeatLeader
                 .Include(x => x.User)
                 .FirstOrDefault(x => x.TokenValue == request.AccessToken && x.TokenType == TokenType.AccessToken);
 
-            if (token != null)
+            if (token != null && token.ExpiryTime > DateTime.UtcNow)
             {
                 var user = token.User;
                 if (user != null)
@@ -58,7 +59,7 @@ namespace BSChallenger.Server.API.Authentication.BeatLeader
                 .Include(x => x.User)
                 .FirstOrDefault(x => x.TokenValue == request.GeneratedCode);
 
-            if (blAuthToken?.TokenType == TokenType.BLAuthToken)
+            if (blAuthToken?.TokenType == TokenType.BLAuthToken && blAuthToken.ExpiryTime > DateTime.UtcNow)
             {
                 var user = blAuthToken.User;
                 if (user != null)

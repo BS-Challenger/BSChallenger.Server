@@ -9,7 +9,7 @@ namespace BSChallenger.Server.Models
 {
     public class Database : DbContext
     {
-        private SecretProvider _secrets;
+        private readonly SecretProvider _secrets;
 
         public Database(DbContextOptions<Database> options, SecretProvider secrets) : base(options)
         {
