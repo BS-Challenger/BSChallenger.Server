@@ -1,11 +1,14 @@
 ﻿using BSChallenger.Server.Models.API.Users;
+using Microsoft.EntityFrameworkCore;
 
 namespace BSChallenger.Server.Models.API.Rankings
 {
-    public class RankTeamMember
+	[PrimaryKey("Id")]
+	public class RankTeamMember
     {
+        public int Id { get; set; }
         public int RankingId { get; set; }
-        public Ranking Ranking { get; set; }
+		public Ranking Ranking { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
     }
