@@ -21,22 +21,15 @@ namespace BSChallenger.Server.Models
         public DbSet<Ranking> Rankings { get; set; }
         public DbSet<Token> Tokens { get; set; }
 
-        public List<Ranking> EagerLoadRankings(bool loadPasses = false)
+        public List<Ranking> EagerLoadRankings()
         {
-            if (loadPasses)
-            {
-                return Rankings
+            return Rankings
                     .Include(x => x.Levels)
                     .ThenInclude(x => x.AvailableForPass)
-                    .ToList();
-            }
-            else
-            {
-                return Rankings
-                    .Include(x => x.Levels)
-                    .ToList();
-            }
-        }
+                    .Include(x => x.History)
+                    .Include(x => x.RankTeamMembers)
+					.ToList();
+		}
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
