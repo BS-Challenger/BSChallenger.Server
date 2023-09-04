@@ -14,7 +14,6 @@ namespace BSChallenger.Server.Models
         public Database(DbContextOptions<Database> options, SecretProvider secrets) : base(options)
         {
             _secrets = secrets;
-            Database.EnsureCreated();
         }
 
         public DbSet<User> Users { get; set; }
