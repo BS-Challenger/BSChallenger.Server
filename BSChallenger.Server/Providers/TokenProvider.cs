@@ -54,7 +54,8 @@ namespace BSChallenger.Server.Providers
             if (user?.Tokens?.Any(x => x?.TokenType == type) == true)
             {
                 var oldToken = user.Tokens.First(x => x?.TokenType == type);
-                //_database.Tokens.Remove(oldToken);
+                //TODO: actually remove old token from db???
+                //database.Tokens.Remove(oldToken);
                 user.Tokens.Remove(oldToken);
                 await _database.SaveChangesAsync();
             }

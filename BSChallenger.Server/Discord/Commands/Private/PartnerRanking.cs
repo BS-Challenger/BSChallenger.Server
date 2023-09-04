@@ -1,6 +1,7 @@
 ﻿using BSChallenger.Server.Discord.Autocompletes;
 using BSChallenger.Server.Models;
 using Discord.Interactions;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BSChallenger.Server.Discord.Commands.Private
@@ -17,7 +18,7 @@ namespace BSChallenger.Server.Discord.Commands.Private
 		[RequireOwner]
 		public async Task Create([Autocomplete(typeof(RankingIdentifierAutoComplete))] string ranking)
 		{
-			var rankingObj = _database.Rankings.Find(ranking);
+			var rankingObj = _database.Rankings.FirstOrDefault(x=>x.Name==ranking);
 			rankingObj.Partnered = true;
 			await _database.SaveChangesAsync();
 			await RespondAsync("Server Partnered!", ephemeral: true);

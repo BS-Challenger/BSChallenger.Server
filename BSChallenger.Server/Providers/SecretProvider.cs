@@ -11,12 +11,16 @@ namespace BSChallenger.Server.Providers
         public string SecretPath => Path.Combine(Environment.CurrentDirectory, "secrets.json");
         public SecretProvider()
         {
+            Console.WriteLine(Environment.CurrentDirectory);
             if (File.Exists(SecretPath))
             {
-                Secrets = JsonConvert.DeserializeObject<Secrets>(File.ReadAllText(SecretPath));
-            }
-            else
+				Console.WriteLine("aaaa");
+				Secrets = JsonConvert.DeserializeObject<Secrets>(File.ReadAllText(SecretPath));
+				Console.WriteLine(Secrets.Database.Host);
+			}
+			else
             {
+                Console.WriteLine("dddd");
                 Secrets = new Secrets();
                 Save();
             }

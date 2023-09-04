@@ -6,7 +6,7 @@ namespace BSChallenger.Server.Providers
 {
     public static class SqidProvider
     {
-        private static SqidsEncoder encoder = new SqidsEncoder(new SqidsOptions() { MinLength = 5 });
+        private static SqidsEncoder<int> encoder = new SqidsEncoder<int>(new SqidsOptions() { MinLength = 5 });
         public static string GenerateID(IDType type, int id)
         {
             var sqid = encoder.Encode(id);

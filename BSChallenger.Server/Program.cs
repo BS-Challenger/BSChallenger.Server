@@ -42,7 +42,8 @@ namespace BSChallenger.Server
                         {
                             services.AddSingleton<SecretProvider>();
                             services
-                                .AddRateLimiter(_ => _
+							    .AddDbContext<Database>(contextLifetime: ServiceLifetime.Singleton, optionsLifetime: ServiceLifetime.Singleton)
+								.AddRateLimiter(_ => _
                                     .AddSlidingWindowLimiter("slidingPolicy", options =>
                                     {
                                         options.PermitLimit = 50;
@@ -56,7 +57,6 @@ namespace BSChallenger.Server
                                 .AddHostedService<DiscordBot>()
                                 .AddOptions()
                                 .AddConfiguration<AppConfiguration>("App")
-                                .AddDbContext<Database>()
                                 .AddSingleton<BeatLeaderApiProvider>()
                                 .AddSingleton<BPListParserProvider>()
                                 .AddSingleton<TokenProvider>()

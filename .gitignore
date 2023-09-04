@@ -354,3 +354,4 @@ MigrationBackup/
 *.sqlite
 *.sqlite-shm
 *.sqlite-wal
+BSChallenger.Server/secrets.json
