@@ -52,8 +52,9 @@ namespace BSChallenger.Server
                                         options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
                                         options.QueueLimit = 5;
                                     }))
+                                .AddSingleton<JWTProvider>()
                                 .AddSingleton<DiscordSocketClient>()
-                                .AddSingleton<InteractionService>()
+								.AddSingleton<InteractionService>()
                                 .AddHostedService<DiscordBot>()
                                 .AddOptions()
                                 .AddConfiguration<AppConfiguration>("App")
