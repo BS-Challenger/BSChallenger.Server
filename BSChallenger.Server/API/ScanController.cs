@@ -38,7 +38,6 @@ namespace BSChallenger.Server.API
 
         //TODO: Split this up into seperate methods
         [HttpPost("/scan")]
-        [RequireHttps]
         public async Task<ActionResult<ScanResponse>> PostScan(ScanRequest request)
         {
             Stopwatch test = new();

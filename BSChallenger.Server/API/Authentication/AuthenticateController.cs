@@ -30,11 +30,13 @@ namespace BSChallenger.Server.API.Authentication
 		}
 
 		[HttpPost("/login")]
-		[RequireHttps]
 		public async Task<ActionResult<LoginResponse>> LoginAsync(LoginRequest request)
 		{
+			Console.WriteLine(request.BeatLeaderToken);
 			var identity = await _beatleaderAPI.GetUserIdentityAsync(request.BeatLeaderToken);
+			Console.WriteLine(identity);
 			var user = _database.Users.FirstOrDefault(x => x.BeatLeaderId == identity);
+			Console.WriteLine(user == null);
 			if (user != null)
 			{
 				user = new User();
