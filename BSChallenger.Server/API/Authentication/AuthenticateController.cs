@@ -5,6 +5,7 @@ using BSChallenger.Server.Models.API.Users;
 using BSChallenger.Server.Providers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Elfie.Serialization;
+using Serilog;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ namespace BSChallenger.Server.API.Authentication
 	[Route("[controller]")]
 	public class AuthenticateController : ControllerBase
 	{
+		private readonly ILogger _logger = Log.ForContext<ScanController>();
 		private readonly BeatLeaderApiProvider _beatleaderAPI;
 		private readonly JWTProvider _jwtProvider;
 		private readonly Database _database;
@@ -32,11 +34,11 @@ namespace BSChallenger.Server.API.Authentication
 		[HttpPost("/login")]
 		public async Task<ActionResult<LoginResponse>> LoginAsync(LoginRequest request)
 		{
-			Console.WriteLine(request.BeatLeaderToken);
+			_logger.Information(request.BeatLeaderToken);
 			var identity = await _beatleaderAPI.GetUserIdentityAsync(request.BeatLeaderToken);
-			Console.WriteLine(identity);
+			_logger.Information(identity.ToString());
 			var user = _database.Users.FirstOrDefault(x => x.BeatLeaderId == identity);
-			Console.WriteLine(user == null);
+			_logger.Information((user == null).ToString());
 			if (user != null)
 			{
 				user = new User();
@@ -61,7 +63,7 @@ namespace BSChallenger.Server.API.Authentication
 				await _database.SaveChangesAsync();
 			}
 
-			return Ok(_jwtProvider.GenerateJWT(user.BeatLeaderId));
+			return Ok(new LoginResponse(_jwtProvider.GenerateJWT(user.BeatLeaderId)));
 		}
 	}
 }

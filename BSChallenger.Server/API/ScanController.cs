@@ -40,8 +40,6 @@ namespace BSChallenger.Server.API
         [HttpPost("/scan")]
         public async Task<ActionResult<ScanResponse>> PostScan(ScanRequest request)
         {
-            Stopwatch test = new();
-            test.Start();
             var token = _jwtProvider.GetUserToken(request.JWTToken);
             if (token != null && token.Exp > DateTimeOffset.UtcNow.ToUnixTimeSeconds())
             {
@@ -50,7 +48,6 @@ namespace BSChallenger.Server.API
                 {
                     var scores = await _beatleaderAPI.GetScoresAsync(user.BeatLeaderId, user.LastScanDate);
                     var ranking = _database.EagerLoadRankings().Find(x => x.Name == request.Ranking);
-                    _logger.Information(scores.Count().ToString());
                     Level latestLevelPassed = null;
                     foreach (var level in ranking.Levels.OrderBy(x => x.LevelNumber))
                     {
@@ -77,7 +74,6 @@ namespace BSChallenger.Server.API
                             break;
                         }
                     }
-                    test.Stop();
 
                     return new ScanResponse("Scan Request Passed");
                 }
