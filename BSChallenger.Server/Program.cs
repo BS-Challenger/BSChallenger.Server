@@ -59,8 +59,6 @@ namespace BSChallenger.Server
                                 .AddConfiguration<AppConfiguration>("App")
                                 .AddSingleton<BeatLeaderApiProvider>()
                                 .AddSingleton<BPListParserProvider>()
-                                .AddSingleton<TokenProvider>()
-                                .AddSingleton<PasswordProvider>()
                                 .AddSwaggerGen(c =>
                                 {
                                     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Challenger API", Version = "v1" });

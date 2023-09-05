@@ -1,4 +1,4 @@
-﻿namespace BSChallenger.Server.Models.API.Authentication.Beatleader
+﻿namespace BSChallenger.Server.Models.BeatLeader.Authentication
 {
     public class BLAuthenticateRequest
     {

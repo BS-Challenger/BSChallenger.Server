@@ -18,16 +18,25 @@ namespace BSChallenger.Server.Models.API.Users
         public User()
         {
         }
+
+        //ID
         [Key, JsonIgnore]
         public int Id { get; set; }
         [Key]
         public string Identifier => SqidProvider.GenerateID(IDType.User, Id);
+
+        //Player Info
         public string Username { get; set; }
-        public string BeatLeaderId { get; set; }
-        public string PasswordHash { get; set; }
-        //Dynamically set
-        public DateTime LastCheckDate { get; set; }
-        public List<Token> Tokens { get; set; } = new();
+        public string Avatar { get; set; }
+        public string Country { get; set; }
+        public string Platform { get; set; }
+
+		//Links
+		public int BeatLeaderId { get; set; }
+        public int DiscordId { get; set; }
+
+        //Extras
+        public DateTime LastScanDate { get; set; }
         public List<RankTeamMember> AssignedRankings { get; set; } = new();
     }
 }

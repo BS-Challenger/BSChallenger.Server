@@ -1,4 +1,4 @@
-﻿using BSChallenger.Server.Providers;
+﻿using BSChallenger.Server.Models.BeatLeader.Scores;
 
 namespace BSChallenger.Server.MapFeatures.Features
 {

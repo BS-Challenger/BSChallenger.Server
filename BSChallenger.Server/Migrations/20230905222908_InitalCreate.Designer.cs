@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BSChallenger.Server.Migrations
 {
     [DbContext(typeof(Database))]
-    [Migration("20230904193430_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230905222908_InitalCreate")]
+    partial class InitalCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,206 +29,239 @@ namespace BSChallenger.Server.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Color")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("color");
 
                     b.Property<string>("IconURL")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("icon_url");
 
                     b.Property<int>("LevelNumber")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("level_number");
 
                     b.Property<int>("MapsReqForPass")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("maps_req_for_pass");
 
                     b.Property<int>("RankingId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("ranking_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_level");
 
-                    b.HasIndex("RankingId");
+                    b.HasIndex("RankingId")
+                        .HasDatabaseName("ix_level_ranking_id");
 
-                    b.ToTable("Level");
+                    b.ToTable("level", (string)null);
                 });
 
             modelBuilder.Entity("BSChallenger.Server.Models.API.Maps.Map", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Characteristic")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("characteristic");
 
                     b.Property<string>("Difficulty")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("difficulty");
 
                     b.Property<string>("Hash")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("hash");
 
                     b.Property<int>("LevelId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("level_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_map");
 
-                    b.HasIndex("LevelId");
+                    b.HasIndex("LevelId")
+                        .HasDatabaseName("ix_map_level_id");
 
-                    b.ToTable("Map");
+                    b.ToTable("map", (string)null);
                 });
 
             modelBuilder.Entity("BSChallenger.Server.Models.API.Maps.MapFeature", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Data")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("data");
 
                     b.Property<int?>("MapId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("map_id");
 
                     b.Property<string>("Type")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("type");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_map_feature");
 
-                    b.HasIndex("MapId");
+                    b.HasIndex("MapId")
+                        .HasDatabaseName("ix_map_feature_map_id");
 
-                    b.ToTable("MapFeature");
+                    b.ToTable("map_feature", (string)null);
                 });
 
             modelBuilder.Entity("BSChallenger.Server.Models.API.Rankings.RankTeamMember", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("RankingId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("ranking_id");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_rank_team_member");
 
-                    b.HasIndex("RankingId");
+                    b.HasIndex("RankingId")
+                        .HasDatabaseName("ix_rank_team_member_ranking_id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_rank_team_member_user_id");
 
-                    b.ToTable("RankTeamMember");
+                    b.ToTable("rank_team_member", (string)null);
                 });
 
             modelBuilder.Entity("BSChallenger.Server.Models.API.Rankings.Ranking", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("description");
 
                     b.Property<decimal>("GuildId")
-                        .HasColumnType("numeric(20,0)");
+                        .HasColumnType("numeric(20,0)")
+                        .HasColumnName("guild_id");
 
                     b.Property<string>("IconURL")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("icon_url");
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("name");
 
                     b.Property<bool>("Partnered")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("partnered");
 
                     b.Property<bool>("Private")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("private");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_rankings");
 
-                    b.ToTable("Rankings");
+                    b.ToTable("rankings", (string)null);
                 });
 
             modelBuilder.Entity("BSChallenger.Server.Models.API.Rankings.ScanHistory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("RankingId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("ranking_id");
 
                     b.Property<DateTime>("Time")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("time");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_scan_history");
 
-                    b.HasIndex("RankingId");
+                    b.HasIndex("RankingId")
+                        .HasDatabaseName("ix_scan_history_ranking_id");
 
-                    b.ToTable("ScanHistory");
-                });
-
-            modelBuilder.Entity("BSChallenger.Server.Models.API.Users.Token", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("ExpiryTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("TokenType")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("TokenValue")
-                        .HasColumnType("text");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Tokens");
+                    b.ToTable("scan_history", (string)null);
                 });
 
             modelBuilder.Entity("BSChallenger.Server.Models.API.Users.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("BeatLeaderId")
-                        .HasColumnType("text");
+                    b.Property<string>("Avatar")
+                        .HasColumnType("text")
+                        .HasColumnName("avatar");
 
-                    b.Property<DateTime>("LastCheckDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<int>("BeatLeaderId")
+                        .HasColumnType("integer")
+                        .HasColumnName("beat_leader_id");
 
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("text");
+                    b.Property<string>("Country")
+                        .HasColumnType("text")
+                        .HasColumnName("country");
+
+                    b.Property<int>("DiscordId")
+                        .HasColumnType("integer")
+                        .HasColumnName("discord_id");
+
+                    b.Property<DateTime>("LastScanDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_scan_date");
+
+                    b.Property<string>("Platform")
+                        .HasColumnType("text")
+                        .HasColumnName("platform");
 
                     b.Property<string>("Username")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("username");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_users");
 
-                    b.ToTable("Users");
+                    b.ToTable("users", (string)null);
                 });
 
             modelBuilder.Entity("BSChallenger.Server.Models.API.Level", b =>
@@ -237,7 +270,8 @@ namespace BSChallenger.Server.Migrations
                         .WithMany("Levels")
                         .HasForeignKey("RankingId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_level_rankings_ranking_id");
 
                     b.Navigation("Ranking");
                 });
@@ -248,7 +282,8 @@ namespace BSChallenger.Server.Migrations
                         .WithMany("AvailableForPass")
                         .HasForeignKey("LevelId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_map_level_level_id");
 
                     b.Navigation("Level");
                 });
@@ -257,7 +292,8 @@ namespace BSChallenger.Server.Migrations
                 {
                     b.HasOne("BSChallenger.Server.Models.API.Maps.Map", null)
                         .WithMany("Features")
-                        .HasForeignKey("MapId");
+                        .HasForeignKey("MapId")
+                        .HasConstraintName("fk_map_feature_map_map_id");
                 });
 
             modelBuilder.Entity("BSChallenger.Server.Models.API.Rankings.RankTeamMember", b =>
@@ -266,13 +302,15 @@ namespace BSChallenger.Server.Migrations
                         .WithMany("RankTeamMembers")
                         .HasForeignKey("RankingId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_rank_team_member_rankings_ranking_id");
 
                     b.HasOne("BSChallenger.Server.Models.API.Users.User", "User")
                         .WithMany("AssignedRankings")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_rank_team_member_users_user_id");
 
                     b.Navigation("Ranking");
 
@@ -285,20 +323,10 @@ namespace BSChallenger.Server.Migrations
                         .WithMany("History")
                         .HasForeignKey("RankingId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_scan_history_rankings_ranking_id");
 
                     b.Navigation("Ranking");
-                });
-
-            modelBuilder.Entity("BSChallenger.Server.Models.API.Users.Token", b =>
-                {
-                    b.HasOne("BSChallenger.Server.Models.API.Users.User", "User")
-                        .WithMany("Tokens")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BSChallenger.Server.Models.API.Level", b =>
@@ -323,8 +351,6 @@ namespace BSChallenger.Server.Migrations
             modelBuilder.Entity("BSChallenger.Server.Models.API.Users.User", b =>
                 {
                     b.Navigation("AssignedRankings");
-
-                    b.Navigation("Tokens");
                 });
 #pragma warning restore 612, 618
         }

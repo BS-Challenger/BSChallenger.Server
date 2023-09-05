@@ -1,5 +1,4 @@
-﻿using BSChallenger.Server.API.Authentication.BeatLeader;
-using BSChallenger.Server.Models;
+﻿using BSChallenger.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Serilog;

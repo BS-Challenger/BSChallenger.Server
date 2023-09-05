@@ -1,93 +1,65 @@
 ﻿using BSChallenger.Server.Models;
 using BSChallenger.Server.Models.API.Authentication;
+using BSChallenger.Server.Models.API.Scan;
 using BSChallenger.Server.Models.API.Users;
 using BSChallenger.Server.Providers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Elfie.Serialization;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace BSChallenger.Server.API.Authentication
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class AuthenticateController : ControllerBase
-    {
-        private readonly Database _database;
-        private readonly TokenProvider _tokenProvider;
-        private readonly PasswordProvider _passwordProvider;
+	[ApiController]
+	[Route("[controller]")]
+	public class AuthenticateController : ControllerBase
+	{
+		private readonly BeatLeaderApiProvider _beatleaderAPI;
+		private readonly JWTProvider _jwtProvider;
+		private readonly Database _database;
 
-        public AuthenticateController(
-            Database database,
-            TokenProvider tokenProvider,
-            PasswordProvider passwordProvider)
-        {
-            _database = database;
-            _tokenProvider = tokenProvider;
-            _passwordProvider = passwordProvider;
-        }
+		public AuthenticateController(
+			BeatLeaderApiProvider beatleaderAPI,
+			JWTProvider jwtProvider,
+			Database database)
+		{
+			_beatleaderAPI = beatleaderAPI;
+			_jwtProvider = jwtProvider;
+			_database = database;
+		}
 
-        [HttpPost("AccessToken")]
-        public async Task<ActionResult<AccessTokenResponse>> PostGenerateAccessToken(AccessTokenRequest request)
-        {
-            var refreshToken = _database.Tokens.AsEnumerable().FirstOrDefault(x => x.TokenValue == request.RefreshToken);
+		[HttpPost("/login")]
+		[RequireHttps]
+		public async Task<ActionResult<LoginResponse>> LoginAsync(LoginRequest request)
+		{
+			var identity = await _beatleaderAPI.GetUserIdentityAsync(request.BeatLeaderToken);
+			var user = _database.Users.FirstOrDefault(x => x.BeatLeaderId == identity);
+			if (user != null)
+			{
+				user = new User();
+				user.BeatLeaderId = identity;
+				var playerInfo = await _beatleaderAPI.GetPlayerInfoAsync(identity);
+				//Migrate existing socials
+				if(playerInfo.Socials != null)
+				{
+					var discord = playerInfo.Socials.FirstOrDefault(x => x.Service == "Discord");
+					if(discord != null)
+					{
+						user.DiscordId = discord.Id;
+					}
+				}
 
-            if (refreshToken != null && refreshToken.TokenType == TokenType.RefreshToken && refreshToken.ExpiryTime > DateTime.UtcNow)
-            {
-                var user = _database.Users.Find(refreshToken.UserId);
-                var token = await _tokenProvider.GetAccessToken(user);
-                var newRefrshtoken = await _tokenProvider.GetRefreshToken(user);
-                return new AccessTokenResponse(token.TokenValue, newRefrshtoken.TokenValue);
-            }
-            return new AccessTokenResponse("Request Failed", "");
-        }
+				user.Username = playerInfo.Name;
+				user.Avatar = playerInfo.Avatar;
+				user.Platform = playerInfo.Platform;
+				user.Country = playerInfo.Country;
 
-        [HttpPost("Signup")]
-        public async Task<ActionResult<AuthResponse>> PostSignup(NamePasswordRequest request)
-        {
-            if (string.IsNullOrWhiteSpace(request.Password) || string.IsNullOrWhiteSpace(request.Username))
-            {
-                return new AuthResponse("Username Or Password is empty", false, null);
-            }
-            if (_database.Users.Any(x => x.Username == request.Username))
-            {
-                return new AuthResponse("Username Already Exists", false, null);
-            }
-            var user = new User(request.Username);
+				await _database.Users.AddAsync(user);
+				await _database.SaveChangesAsync();
+			}
 
-            user.PasswordHash = _passwordProvider.CreateHash(request.Password);
-
-            await _database.Users.AddAsync(user);
-            await _database.SaveChangesAsync();
-            return new AuthResponse("Success", true, await _tokenProvider.GetRefreshToken(user));
-        }
-
-        [HttpPost("Login")]
-        public async Task<ActionResult<AuthResponse>> PostLogin(NamePasswordRequest request)
-        {
-            var user = _database.Users.FirstOrDefault(x => x.Username == request.Username);
-
-            if (user != null && _passwordProvider.Verify(request.Password, user))
-            {
-                //Refresh tokens will last for 1 month
-                return new AuthResponse("Success", true, await _tokenProvider.GetRefreshToken(user));
-            }
-            return new AuthResponse("Username or Password is Incorrect", false, null);
-        }
-        [HttpPost("Identity")]
-        public ActionResult<IdentityResponse> PostIdentity(AuthenticatedRequest request)
-        {
-            var token = _database.Tokens.FirstOrDefault(x => x.TokenValue == request.AccessToken && x.TokenType == TokenType.AccessToken);
-
-            if (token != null && token.ExpiryTime > DateTime.UtcNow)
-            {
-                var user = token.User;
-                if (user != null)
-                {
-                    return new IdentityResponse(user.Id, user.Username);
-                }
-            }
-            return new IdentityResponse(-1, "Identity Request Failed");
-        }
-    }
+			return Ok(_jwtProvider.GenerateJWT(user.BeatLeaderId));
+		}
+	}
 }
