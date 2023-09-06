@@ -26,13 +26,16 @@ namespace BSChallenger.Server.Providers
 
         public async Task<int> GetUserIdentityAsync(string code)
         {
-            var content = new StringContent("grant_type=authorization_code&client_id=BSChallengerClientID&client_secret=" + _secrets.Secrets.BLclientSecret + "&code=" + code + "&redirect_uri=http://localhost:8080/beatleader-callback", Encoding.UTF8, "application/json");
-            var res = await _httpClient.PostAsync(BeatleaderEndpoint + "oauth2/token", content);
+            var content = new StringContent("grant_type=authorization_code&client_id=BSChallengerClientID&client_secret=" + _secrets.Secrets.BLclientSecret + "&code=" + code + "&redirect_uri=https://localhost:8080/beatleader-callback", Encoding.UTF8, "application/x-www-form-urlencoded");
+			Console.WriteLine(content.Headers.ToString());
+			Console.WriteLine(await content.ReadAsStringAsync());
+			var res = await _httpClient.PostAsync(BeatleaderEndpoint + "oauth2/token", content);
+            Console.WriteLine(res);
             if (int.TryParse(await res.Content.ReadAsStringAsync(), out var identity))
             {
                 return identity;
 			}
-            return 0;
+            return -1;
         }
 
         public async Task<List<BeatLeaderScore>> GetScoresAsync(int userId, DateTime date)

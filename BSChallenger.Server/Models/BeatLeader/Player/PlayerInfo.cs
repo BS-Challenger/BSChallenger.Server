@@ -6,7 +6,7 @@ namespace BSChallenger.Server.Models.BeatLeader.Player
 	{
 		public int MapperId { get; set; }
 		public string ExternalProfileUrl { get; set; }
-		public int LastWeekPp { get; set; }
+		public float LastWeekPp { get; set; }
 		public int LastWeekRank { get; set; }
 		public int LastWeekCountryRank { get; set; }
 		public object EventsParticipating { get; set; }
@@ -16,7 +16,7 @@ namespace BSChallenger.Server.Models.BeatLeader.Player
 		public string Avatar { get; set; }
 		public string Country { get; set; }
 		public bool Bot { get; set; }
-		public int Pp { get; set; }
+		public float Pp { get; set; }
 		public int Rank { get; set; }
 		public int CountryRank { get; set; }
 		public string Role { get; set; }

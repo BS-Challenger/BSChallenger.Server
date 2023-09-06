@@ -13,6 +13,12 @@ using NuGet.Common;
 using BSChallenger.Server.Models.API.Users;
 using BSChallenger.Server.Models;
 using System.Linq;
+using System.IO;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.IdentityModel.Tokens;
+using System.Net.Sockets;
+using System.Security.Claims;
+using System.Text;
 
 namespace BSChallenger.Server.Providers
 {
@@ -29,30 +35,31 @@ namespace BSChallenger.Server.Providers
 		}
 		public string GenerateJWT(int BLId)
 		{
-			using (var priv = RSA.Create())
+			var token = new JwtSecurityTokenHandler().CreateJwtSecurityToken(new SecurityTokenDescriptor()
 			{
-				priv.ImportFromPem(_secretProvider.Secrets.Jwt.Key);
-				using (var pub = RSA.Create())
+				Claims = new Dictionary<string, object?>()
 				{
-					pub.ImportFromPem("BSChallenger");
-					return JwtBuilder.Create()
-						  .WithAlgorithm(new RS256Algorithm(priv, pub))
-						  .AddClaim("exp", DateTimeOffset.UtcNow.AddMonths(1).ToUnixTimeSeconds())
-						  .AddClaim("iat", DateTimeOffset.UtcNow.ToUnixTimeSeconds())
-						  .AddClaim("beatLeaderId", BLId)
-						  .Encode();
-				}
-			}
+					[ClaimTypes.NameIdentifier] = BLId,
+				},
+				Expires = DateTime.UtcNow.AddMonths(1),
+				IssuedAt = DateTime.UtcNow,
+				SigningCredentials = new(
+				new SymmetricSecurityKey(
+					Encoding.ASCII.GetBytes(_secretProvider.Secrets.Jwt.Key)),
+				SecurityAlgorithms.HmacSha256Signature)
+			});
+
+			return token.RawData;
 		}
 
 		public UserToken GetUserToken(string jwt)
 		{
 			using (var priv = RSA.Create())
 			{
-				priv.ImportFromPem(_secretProvider.Secrets.Jwt.Key);
+				priv.ImportFromPem(File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "private.pem")));
 				using (var pub = RSA.Create())
 				{
-					pub.ImportFromPem("BSChallenger");
+					pub.ImportFromPem(File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "public.pem")));
 					return JwtBuilder.Create()
 						.WithAlgorithm(new RS256Algorithm(priv, pub))
 						.MustVerifySignature()

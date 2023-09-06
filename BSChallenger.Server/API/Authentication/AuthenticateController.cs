@@ -3,11 +3,13 @@ using BSChallenger.Server.Models.API.Authentication;
 using BSChallenger.Server.Models.API.Scan;
 using BSChallenger.Server.Models.API.Users;
 using BSChallenger.Server.Providers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Elfie.Serialization;
 using Serilog;
 using System;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace BSChallenger.Server.API.Authentication
@@ -31,15 +33,27 @@ namespace BSChallenger.Server.API.Authentication
 			_database = database;
 		}
 
+		[HttpGet("/identity")]
+		[Authorize]
+		public async Task<ActionResult<IdentityResponse>> IdentityAsync()
+		{
+			var thingy = HttpContext.User.Identities;
+			thingy.ToList().ForEach(x => {
+				Console.WriteLine(x.Name);
+				x.Claims.ToList().ForEach(x=>Console.WriteLine(" - " + x.Type + ": " + x.Value));
+				});
+			return new IdentityResponse(5, "hi");
+		}
+
 		[HttpPost("/login")]
-		public async Task<ActionResult<LoginResponse>> LoginAsync(LoginRequest request)
+		public async Task<ActionResult<LoginResponse>> LoginAsync([FromBody] LoginRequest request)
 		{
 			_logger.Information(request.BeatLeaderToken);
 			var identity = await _beatleaderAPI.GetUserIdentityAsync(request.BeatLeaderToken);
 			_logger.Information(identity.ToString());
 			var user = _database.Users.FirstOrDefault(x => x.BeatLeaderId == identity);
 			_logger.Information((user == null).ToString());
-			if (user != null)
+			if (user == null)
 			{
 				user = new User();
 				user.BeatLeaderId = identity;
