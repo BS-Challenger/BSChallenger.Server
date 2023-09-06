@@ -17,6 +17,8 @@
     <PackageReference Include="BeatSaberPlaylistsLib" Version="1.6.6" />
     <PackageReference Include="Discord.Net" Version="3.12.0" />
     <PackageReference Include="Discord.Net.Core" Version="3.12.0" />
+    <PackageReference Include="EFCore.NamingConventions" Version="7.0.2" />
+    <PackageReference Include="JWT" Version="10.1.0" />
     <PackageReference Include="Microsoft.AspNet.Identity.EntityFramework" Version="2.2.4" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.9" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.10" />
@@ -54,7 +56,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\BeatLeader\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

@@ -20,7 +20,8 @@ namespace BSChallenger.Server.Discord.Embeds
             .WithFields(
                 MapFeatureFactory.CreateInstancesFromCurrentAssembly().Select(x => {
                     return new EmbedFieldBuilder()
-                        .WithName(x.GetName());
+                        .WithName(x.GetName())
+                        .WithValue($"{x.GetDesc()} Example: \"{x.GetExample()}\"");
                 })
             )
             .WithFooter("v" + Program.Version)

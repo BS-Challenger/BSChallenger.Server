@@ -21,36 +21,33 @@ namespace BSChallenger.Server.API
     {
         private readonly ILogger _logger = Log.ForContext<ScanController>();
         private readonly Database _database;
+        private readonly JWTProvider _jwtProvider;
         private readonly BeatLeaderApiProvider _beatleaderAPI;
 
-        private readonly List<IMapFeature> _features = MapFeatureFactory.CreateInstancesFromCurrentAssembly();
+		private readonly List<IMapFeature> _features = MapFeatureFactory.CreateInstancesFromCurrentAssembly();
 
         public ScanController(
             Database database,
-            BeatLeaderApiProvider beatleaderAPI)
+			JWTProvider jwtProvider,
+			BeatLeaderApiProvider beatleaderAPI)
         {
             _database = database;
+            _jwtProvider = jwtProvider;
             _beatleaderAPI = beatleaderAPI;
         }
 
         //TODO: Split this up into seperate methods
         [HttpPost("/scan")]
-        [RequireHttps]
         public async Task<ActionResult<ScanResponse>> PostScan(ScanRequest request)
         {
-            Stopwatch test = new();
-            test.Start();
-            var token = _database.Tokens
-                .Include(x => x.User)
-                .FirstOrDefault(x => x.TokenValue == request.AccessToken && x.TokenType == TokenType.AccessToken);
-            if (token != null && token.ExpiryTime > DateTime.UtcNow)
+            var token = _jwtProvider.GetUserToken(request.JWTToken);
+            if (token != null && token.Exp > DateTimeOffset.UtcNow.ToUnixTimeSeconds())
             {
-                var user = token.User;
+                var user = _database.Users.FirstOrDefault(x=>x.BeatLeaderId==token.BeatLeaderId);
                 if (user != null)
                 {
-                    var scores = await _beatleaderAPI.GetSinceDateScores(user.BeatLeaderId, user.LastCheckDate);
+                    var scores = await _beatleaderAPI.GetScoresAsync(user.BeatLeaderId, user.LastScanDate);
                     var ranking = _database.EagerLoadRankings().Find(x => x.Name == request.Ranking);
-                    _logger.Information(scores.Count().ToString());
                     Level latestLevelPassed = null;
                     foreach (var level in ranking.Levels.OrderBy(x => x.LevelNumber))
                     {
@@ -77,7 +74,6 @@ namespace BSChallenger.Server.API
                             break;
                         }
                     }
-                    test.Stop();
 
                     return new ScanResponse("Scan Request Passed");
                 }

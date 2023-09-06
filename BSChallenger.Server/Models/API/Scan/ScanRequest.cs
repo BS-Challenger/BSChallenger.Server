@@ -2,7 +2,7 @@
 {
     public class ScanRequest
     {
-        public string AccessToken { get; set; }
+        public string JWTToken { get; set; }
         public string Ranking { get; set; }
     }
 }

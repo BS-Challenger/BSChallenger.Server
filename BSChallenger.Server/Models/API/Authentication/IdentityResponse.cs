@@ -2,13 +2,13 @@
 {
     public class IdentityResponse
     {
-        public IdentityResponse(int Id, string username)
+        public IdentityResponse(string Id, string username)
         {
             ID = Id;
             Username = username;
         }
 
-        public int ID { get; set; }
+        public string ID { get; set; }
         public string Username { get; set; }
     }
 }

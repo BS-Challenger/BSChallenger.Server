@@ -1,5 +1,5 @@
 ﻿using BSChallenger.Server.Models;
-using BSChallenger.Server.Views.API;
+using BSChallenger.Server.Models.API.Users;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System.Collections.Generic;
@@ -21,9 +21,9 @@ namespace BSChallenger.Server.API
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<UserView>> Get()
+        public ActionResult<IEnumerable<User>> Get()
         {
-            return _database.Users.Select(x => (UserView)x).ToList();
+            return _database.Users.Select(x => x).ToList();
         }
     }
 }
