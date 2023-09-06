@@ -40,8 +40,12 @@ namespace BSChallenger.Server
 							var secretProvider = new SecretProvider();
 							services.AddSingleton(secretProvider);
 							services
-								.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-									.AddJwtBearer(options =>
+								.AddAuthentication(options =>
+								{
+									options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+									options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+									options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+								}).AddJwtBearer(options =>
 									{
 										options.TokenValidationParameters = new TokenValidationParameters
 										{

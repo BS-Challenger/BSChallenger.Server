@@ -12,13 +12,15 @@ namespace BSChallenger.Server.MapFeatures
         {
             if (_features == null)
             {
-                List<IMapFeature> instances = new List<IMapFeature>();
+                List<IMapFeature> instances = new();
 
                 // Get the current assembly
                 Assembly assembly = Assembly.GetExecutingAssembly();
 
+                var featureType = typeof(IMapFeature);
+
                 // Get all types in the assembly that implement the IMapFeature interface
-                var types = assembly.GetTypes().Where(t => typeof(IMapFeature).IsAssignableFrom(t));
+                var types = assembly.GetTypes().Where(t => featureType.IsAssignableFrom(t) && t != featureType);
 
                 // Create an instance of each type and add it to the list
                 foreach (Type type in types)

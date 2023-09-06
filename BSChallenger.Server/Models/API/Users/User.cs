@@ -32,7 +32,7 @@ namespace BSChallenger.Server.Models.API.Users
         public string Platform { get; set; }
 
 		//Links
-		public int BeatLeaderId { get; set; }
+		public string BeatLeaderId { get; set; }
         public int DiscordId { get; set; }
 
         //Extras

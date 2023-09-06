@@ -33,7 +33,7 @@ namespace BSChallenger.Server.Providers
 			_database = database;
 			_secretProvider = provider;
 		}
-		public string GenerateJWT(int BLId)
+		public string GenerateJWT(string BLId)
 		{
 			var token = new JwtSecurityTokenHandler().CreateJwtSecurityToken(new SecurityTokenDescriptor()
 			{

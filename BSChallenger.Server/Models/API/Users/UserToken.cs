@@ -4,6 +4,6 @@
 	{
 		public int Exp { get; set; }
 		public int Iat { get; set; }
-		public int BeatLeaderId { get; set; }
+		public string BeatLeaderId { get; set; }
 	}
 }
