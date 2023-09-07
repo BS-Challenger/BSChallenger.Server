@@ -17,7 +17,15 @@ namespace BSChallenger.Server.Migrations
                 nullable: true,
                 oldClrType: typeof(int),
                 oldType: "integer");
-        }
+
+			migrationBuilder.AlterColumn<string>(
+				name: "discord_id",
+				table: "users",
+				type: "text",
+				nullable: true,
+				oldClrType: typeof(int),
+				oldType: "integer");
+		}
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -31,6 +39,14 @@ namespace BSChallenger.Server.Migrations
                 oldClrType: typeof(string),
                 oldType: "text",
                 oldNullable: true);
-        }
+
+			migrationBuilder.AlterColumn<string>(
+				name: "discord_id",
+				table: "users",
+				type: "text",
+				nullable: true,
+				oldClrType: typeof(int),
+				oldType: "integer");
+		}
     }
 }

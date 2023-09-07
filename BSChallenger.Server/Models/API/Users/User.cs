@@ -33,7 +33,7 @@ namespace BSChallenger.Server.Models.API.Users
 
 		//Links
 		public string BeatLeaderId { get; set; }
-        public int DiscordId { get; set; }
+        public string DiscordId { get; set; }
 
         //Extras
         public DateTime LastScanDate { get; set; }

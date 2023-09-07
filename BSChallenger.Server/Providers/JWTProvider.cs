@@ -43,10 +43,7 @@ namespace BSChallenger.Server.Providers
 				},
 				Expires = DateTime.UtcNow.AddMonths(1),
 				IssuedAt = DateTime.UtcNow,
-				SigningCredentials = new(
-				new SymmetricSecurityKey(
-					Encoding.ASCII.GetBytes(_secretProvider.Secrets.Jwt.Key)),
-				SecurityAlgorithms.HmacSha256Signature)
+				SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_secretProvider.Secrets.Jwt.Key)), SecurityAlgorithms.HmacSha256Signature)
 			});
 
 			return token.RawData;

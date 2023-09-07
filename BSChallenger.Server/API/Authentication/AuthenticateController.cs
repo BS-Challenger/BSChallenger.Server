@@ -5,6 +5,7 @@ using BSChallenger.Server.Models.API.Users;
 using BSChallenger.Server.Providers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Elfie.Serialization;
 using Serilog;
@@ -37,11 +38,15 @@ namespace BSChallenger.Server.API.Authentication
 
 		[HttpGet("/identity")]
 		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+		[EnableCors(PolicyName = "website")]
 		public async Task<ActionResult<IdentityResponse>> IdentityAsync()
 		{
 			var Identities = HttpContext.User.Identities;
 
+			Console.WriteLine(Identities.Count());
+
 			var IdIdentity = Identities.SelectMany(x => x.Claims).FirstOrDefault(x => {
+				Console.WriteLine(x.Type);
 				return x.Type.Contains("nameidentifier");
 			});
 			if(IdIdentity != null)
@@ -53,6 +58,7 @@ namespace BSChallenger.Server.API.Authentication
 		}
 
 		[HttpPost("/login")]
+		[EnableCors(PolicyName = "website")]
 		public async Task<ActionResult<LoginResponse>> LoginAsync([FromBody] LoginRequest request)
 		{
 			var identity = await _beatleaderAPI.GetUserIdentityAsync(request.BeatLeaderToken);
@@ -68,7 +74,7 @@ namespace BSChallenger.Server.API.Authentication
 					var discord = playerInfo.Socials.FirstOrDefault(x => x.Service == "Discord");
 					if(discord != null)
 					{
-						user.DiscordId = discord.Id;
+						user.DiscordId = discord.UserId;
 					}
 				}
 

@@ -18,6 +18,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Quartz;
 using System;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.RateLimiting;
 
@@ -40,6 +41,7 @@ namespace BSChallenger.Server
 							var secretProvider = new SecretProvider();
 							services.AddSingleton(secretProvider);
 							services
+								.AddAuthorization()
 								.AddAuthentication(options =>
 								{
 									options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -53,10 +55,21 @@ namespace BSChallenger.Server
 											ValidateAudience = false,
 											ValidateLifetime = true,
 											ValidateIssuerSigningKey = true,
-											IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretProvider.Secrets.Jwt.Key))
+											IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretProvider.Secrets.Jwt.Key)),
 										};
 									});
 							services.AddDbContext<Database>(contextLifetime: ServiceLifetime.Singleton, optionsLifetime: ServiceLifetime.Singleton)
+								.AddCors(options =>
+								{
+									options.AddPolicy(name: "website",
+													  policy =>
+													  {
+														  policy.WithOrigins("http://localhost:8080",
+																			  "http://bschallenger.xyz");
+														  policy.AllowAnyHeader();
+														  policy.AllowAnyMethod();
+													  });
+								})
 								.AddRateLimiter(_ => _
 									.AddSlidingWindowLimiter("slidingPolicy", options =>
 									{
@@ -90,7 +103,9 @@ namespace BSChallenger.Server
 								})
 								.AddQuartzHostedService(q => q.WaitForJobsToComplete = true)
 								.AddControllers(options =>
-									options.Filters.Add(new HttpResponseExceptionFilter())
+									{
+										options.Filters.Add(new HttpResponseExceptionFilter());
+									}
 								);
 						})
 						.Configure(applicationBuilder =>
@@ -103,6 +118,7 @@ namespace BSChallenger.Server
 								.UseRouting()
 								.UseAuthentication()
 								.UseAuthorization()
+								.UseCors("website")
 								.UseEndpoints(endPointRouteBuilder => endPointRouteBuilder.MapControllers())
 								.UseRateLimiter()
 								.UseForwardedHeaders()
