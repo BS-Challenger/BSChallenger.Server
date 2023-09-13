@@ -12,7 +12,6 @@ namespace BSChallenger.Server.Discord.Commands
     public class ListFeatures : InteractionModuleBase<SocketInteractionContext>
     {
         [SlashCommand("list-features", "Lists all features")]
-        [RequireRole("Rank Team")]
         public async Task Create()
         {
 			await RespondAsync($"", new Embed[] { ListFeaturesEmbed.Build() });

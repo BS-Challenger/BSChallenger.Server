@@ -33,7 +33,7 @@ namespace BSChallenger.Server.Providers
 
 			var content = await result.Content.ReadAsStringAsync();
 			var obj = JsonConvert.DeserializeObject<BLIdentityResponse>(content);
-			return obj.id;
+			return obj == null ? "-1" : obj.id;
 		}
 
 		private async Task<string> GetBLOauthTokenAsync(string code)

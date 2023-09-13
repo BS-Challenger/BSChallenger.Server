@@ -15,11 +15,14 @@ namespace BSChallenger.Server.Discord.Commands.Private
 		}
 
 		[SlashCommand("partner-ranking", "Partners a ranking")]
-		[RequireOwner]
 		public async Task Create([Autocomplete(typeof(RankingIdentifierAutoComplete))] string ranking)
 		{
+			if (Context.User.Id != 741727188809810181)
+			{
+				return;
+			}
 			await RespondAsync(ranking, ephemeral: true);
-			var rankingObj = _database.Rankings.FirstOrDefault(x=>x.Name == ranking);
+			var rankingObj = _database.Rankings.FirstOrDefault(x=>x.Identifier == ranking);
 			rankingObj.Partnered = true;
 			await _database.SaveChangesAsync();
 			await RespondAsync("Server Partnered!", ephemeral: true);

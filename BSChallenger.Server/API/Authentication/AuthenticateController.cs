@@ -37,10 +37,12 @@ namespace BSChallenger.Server.API.Authentication
 		}
 
 		[HttpGet("/identity")]
-		[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 		[EnableCors(PolicyName = "website")]
 		public async Task<ActionResult<IdentityResponse>> IdentityAsync()
 		{
+			var x = HttpContext.Request.Headers.Authorization;
+			Console.WriteLine(x);
+			if (HttpContext.Request.Method == "OPTIONS") return null;
 			var Identities = HttpContext.User.Identities;
 
 			Console.WriteLine(Identities.Count());
@@ -52,7 +54,7 @@ namespace BSChallenger.Server.API.Authentication
 			if(IdIdentity != null)
 			{
 				var user = _database.Users.FirstOrDefault(x => x.BeatLeaderId == IdIdentity.Value);
-				return Ok(new IdentityResponse(IdIdentity.Value, user?.Username));
+				return Ok(new IdentityResponse(IdIdentity.Value, user?.Username, user?.Avatar));
 			}
 			return NotFound();
 		}
@@ -62,6 +64,10 @@ namespace BSChallenger.Server.API.Authentication
 		public async Task<ActionResult<LoginResponse>> LoginAsync([FromBody] LoginRequest request)
 		{
 			var identity = await _beatleaderAPI.GetUserIdentityAsync(request.BeatLeaderToken);
+			if(identity == "-1")
+			{
+				return BadRequest(new BadRequestObjectResult("Beatleader token is stale! Please re-authenticate"));
+			}
 			var user = _database.Users.FirstOrDefault(x => x.BeatLeaderId == identity);
 			if (user == null)
 			{

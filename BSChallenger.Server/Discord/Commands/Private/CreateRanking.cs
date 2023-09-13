@@ -11,7 +11,6 @@ namespace BSChallenger.Server.Discord.Commands.Private
     public class CreateRanking : InteractionModuleBase<SocketInteractionContext>
     {
         [SlashCommand("create-ranking", "Create Ranking")]
-        [RequireRole("OneTimeRankingCreation")]
         public async Task Create()
         {
             var builder = new ModalBuilder()

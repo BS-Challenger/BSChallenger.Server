@@ -1,4 +1,5 @@
-﻿using BSChallenger.Server.Discord.Embeds;
+﻿using BSChallenger.Server.Discord.Autocompletes;
+using BSChallenger.Server.Discord.Embeds;
 using BSChallenger.Server.Models;
 using Discord;
 using Discord.Interactions;
@@ -15,10 +16,10 @@ namespace BSChallenger.Server.Discord.Commands.Global
 			_database = database;
 		}
 
-		[SlashCommand("ranking", "Get the ranking for this server")]
-		public async Task Executed()
+		[SlashCommand("ranking", "Get info for a ranking")]
+		public async Task Executed([Autocomplete(typeof(RankingIdentifierAutoComplete))] string rankingId)
 		{
-			var ranking = _database.Rankings.FirstOrDefault(x => x.GuildId == Context.Guild.Id);
+			var ranking = _database.Rankings.FirstOrDefault(x => x.Identifier == rankingId);
 			await RespondAsync($"", new Embed[] { RankingEmbed.Build(ranking, _database) });
 		}
 	}

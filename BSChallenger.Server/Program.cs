@@ -53,9 +53,9 @@ namespace BSChallenger.Server
 										{
 											ValidateIssuer = false,
 											ValidateAudience = false,
-											ValidateLifetime = true,
-											ValidateIssuerSigningKey = true,
-											IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretProvider.Secrets.Jwt.Key)),
+											ValidateLifetime = false,
+											ValidateIssuerSigningKey = false,
+											IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretProvider.Secrets.Jwt.Key)),
 										};
 									});
 							services.AddDbContext<Database>(contextLifetime: ServiceLifetime.Singleton, optionsLifetime: ServiceLifetime.Singleton)
@@ -94,7 +94,7 @@ namespace BSChallenger.Server
 								.AddQuartz(q =>
 								{
 									var jobKey = new JobKey("WeeklyScanHistoryJob");
-									q.AddJob<WeeklyScanHistoryJob>(opts => opts.WithIdentity(jobKey));
+									//q.AddJob<WeeklyScanHistoryJob>(opts => opts.WithIdentity(jobKey));
 
 									q.AddTrigger(opts => opts
 										.ForJob(jobKey)

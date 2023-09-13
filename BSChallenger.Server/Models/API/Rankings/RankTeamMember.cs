@@ -11,5 +11,13 @@ namespace BSChallenger.Server.Models.API.Rankings
 		public Ranking Ranking { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
+        public RankTeamRole Role { get; set; }
+	}
+
+    public enum RankTeamRole
+    {
+		None,
+		RankTeam,
+		Owner,
     }
 }

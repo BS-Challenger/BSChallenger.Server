@@ -70,7 +70,6 @@ namespace BSChallenger.Server.Discord
                 //TODO: Seperate this into classes
                 if (x.Data.CustomId == "create_ranking")
                 {
-					await (x.User as SocketGuildUser).RemoveRoleAsync(1147688876106842193);
 					List<SocketMessageComponentData> components = x.Data.Components.ToList();
                     string name = GetModalItem(components, "name");
                     string desc = GetModalItem(components, "desc");
@@ -80,6 +79,7 @@ namespace BSChallenger.Server.Discord
                     if (ulong.TryParse(guildId, out var id))
                     {
                         var ranking = new Ranking(id, name, desc, iconURL);
+                        ranking.Private = true;
                         await _db.Rankings.AddAsync(ranking);
                         await _db.SaveChangesAsync();
 

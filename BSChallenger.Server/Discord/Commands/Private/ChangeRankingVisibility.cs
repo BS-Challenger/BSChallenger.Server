@@ -14,9 +14,12 @@ namespace BSChallenger.Server.Discord.Commands.Private
 		}
 
 		[SlashCommand("change-visibility", "Changes Visiblity of a ranking")]
-		[RequireOwner]
 		public async Task Create([Autocomplete(typeof(RankingIdentifierAutoComplete))] string ranking, bool isPrivate)
 		{
+			if(Context.User.Id != 741727188809810181)
+			{
+				return;
+			}
 			var rankingObj = _database.Rankings.Find(ranking);
 			rankingObj.Private = isPrivate;
 			await _database.SaveChangesAsync();
