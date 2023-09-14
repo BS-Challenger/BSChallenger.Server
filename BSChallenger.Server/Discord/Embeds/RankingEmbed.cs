@@ -12,11 +12,11 @@ namespace BSChallenger.Server.Discord.Embeds
 {
     public static class RankingEmbed
     {
-        public static Embed Build(Ranking ranking, Database database) => new EmbedBuilder()
+        public static Embed Build(Ranking ranking, Database database, bool isInfo = true) => new EmbedBuilder()
             .WithTitle(ranking.Name)
             .WithColor(new Color(114, 75, 27))
             .WithThumbnailUrl(ranking.IconURL)
-            .WithFields(new List<EmbedFieldBuilder>() {
+            .WithFields(isInfo ? new List<EmbedFieldBuilder>() {
                 new EmbedFieldBuilder()
                     .WithName("Active Users")
                     .WithIsInline(true)
@@ -29,7 +29,21 @@ namespace BSChallenger.Server.Discord.Embeds
                     .WithName("Levels")
                     .WithIsInline(true)
                     .WithValue(database.EagerLoadRankings().Find(x=>x.Identifier==ranking.Identifier).Levels.Count().ToString())
-            })
+            } : new List<EmbedFieldBuilder>()
+            {
+				new EmbedFieldBuilder()
+					.WithName("Desc")
+					.WithIsInline(false)
+					.WithValue(ranking.Description),
+				new EmbedFieldBuilder()
+					.WithName("Id")
+					.WithIsInline(false)
+					.WithValue(ranking.Identifier),
+				new EmbedFieldBuilder()
+					.WithName("Guild")
+					.WithIsInline(false)
+					.WithValue(ranking.GuildId),
+			})
             .WithFooter("v" + Program.Version)
             .WithCurrentTimestamp()
             .Build();

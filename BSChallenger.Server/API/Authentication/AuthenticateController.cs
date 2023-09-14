@@ -41,7 +41,6 @@ namespace BSChallenger.Server.API.Authentication
 		public async Task<ActionResult<IdentityResponse>> IdentityAsync()
 		{
 			var x = HttpContext.Request.Headers.Authorization;
-			Console.WriteLine(x);
 			if (HttpContext.Request.Method == "OPTIONS") return null;
 			var Identities = HttpContext.User.Identities;
 
@@ -71,13 +70,15 @@ namespace BSChallenger.Server.API.Authentication
 			var user = _database.Users.FirstOrDefault(x => x.BeatLeaderId == identity);
 			if (user == null)
 			{
-				user = new User();
-				user.BeatLeaderId = identity;
+				user = new User
+				{
+					BeatLeaderId = identity
+				};
 				var playerInfo = await _beatleaderAPI.GetPlayerInfoAsync(identity);
 				//Migrate existing socials
 				if(playerInfo.Socials != null)
 				{
-					var discord = playerInfo.Socials.FirstOrDefault(x => x.Service == "Discord");
+					var discord = playerInfo.Socials.Find(x => x.Service == "Discord");
 					if(discord != null)
 					{
 						user.DiscordId = discord.UserId;

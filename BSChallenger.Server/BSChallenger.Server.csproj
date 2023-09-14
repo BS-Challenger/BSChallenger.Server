@@ -57,7 +57,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Jobs\" />
     <Folder Include="Migrations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="HTML\ModAuth.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

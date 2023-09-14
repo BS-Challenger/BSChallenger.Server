@@ -14,13 +14,10 @@ namespace BSChallenger.Server.Providers
             Console.WriteLine(Environment.CurrentDirectory);
             if (File.Exists(SecretPath))
             {
-				Console.WriteLine("aaaa");
 				Secrets = JsonConvert.DeserializeObject<Secrets>(File.ReadAllText(SecretPath));
-				Console.WriteLine(Secrets.Database.Host);
 			}
 			else
             {
-                Console.WriteLine("dddd");
                 Secrets = new Secrets();
                 Save();
             }
@@ -38,7 +35,7 @@ namespace BSChallenger.Server.Providers
         public string BLclientSecret { get; set; } = "";
         public string DiscordBotToken { get; set; } = "";
         public DBInfo Database { get; set; } = new DBInfo();
-        public JWTInfo Jwt { get; set; } = new JWTInfo();
+        public JwtInfo Jwt { get; set; } = new JwtInfo();
     }
 
     public class DBInfo
@@ -49,7 +46,7 @@ namespace BSChallenger.Server.Providers
         public string Host { get; set; } = "";
     }
 
-    public class JWTInfo
+    public class JwtInfo
     {
         public string Key { get; set; } = "";
     }

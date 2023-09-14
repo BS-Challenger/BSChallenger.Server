@@ -2,7 +2,6 @@ using BSChallenger.Server.Configuration;
 using BSChallenger.Server.Discord;
 using BSChallenger.Server.Extensions;
 using BSChallenger.Server.Filters;
-using BSChallenger.Server.Jobs;
 using BSChallenger.Server.Models;
 using BSChallenger.Server.Providers;
 using Discord.Interactions;
@@ -91,7 +90,7 @@ namespace BSChallenger.Server
 								{
 									c.SwaggerDoc("v1", new OpenApiInfo { Title = "Challenger API", Version = "v1" });
 								})
-								.AddQuartz(q =>
+								/*.AddQuartz(q =>
 								{
 									var jobKey = new JobKey("WeeklyScanHistoryJob");
 									//q.AddJob<WeeklyScanHistoryJob>(opts => opts.WithIdentity(jobKey));
@@ -101,7 +100,7 @@ namespace BSChallenger.Server
 										.WithIdentity("WeeklyScanHistoryJob-trigger")
 										.WithCronSchedule("0 0 0 ? * SUN *"));
 								})
-								.AddQuartzHostedService(q => q.WaitForJobsToComplete = true)
+								.AddQuartzHostedService(q => q.WaitForJobsToComplete = true)*/
 								.AddControllers(options =>
 									{
 										options.Filters.Add(new HttpResponseExceptionFilter());
@@ -113,7 +112,7 @@ namespace BSChallenger.Server
 								.UseSwagger()
 								.UseSwaggerUI(c =>
 								{
-									c.SwaggerEndpoint("/swagger/v1/swagger.json", "Challenger API V1");
+									c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "Challenger API V1");
 								})
 								.UseRouting()
 								.UseAuthentication()

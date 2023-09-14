@@ -18,7 +18,6 @@ namespace BSChallenger.Server.Discord.Commands
 			_database = database;
 		}
 		[SlashCommand("add-map", "Add Map to Ranking")]
-        [RequireRole("Rank Team")]
         public async Task Create([Autocomplete(typeof(RankingIdentifierAutoComplete))] string rankingId, [Autocomplete(typeof(LevelNumberAutoComplete))] int level)
         {
 			var ranking = _database.Rankings.FirstOrDefault(x => x.Identifier == rankingId);
