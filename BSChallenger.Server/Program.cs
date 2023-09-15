@@ -113,6 +113,7 @@ namespace BSChallenger.Server
 								.UseSwaggerUI(c =>
 								{
 									c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "Challenger API V1");
+									c.SwaggerEndpoint("/swagger/v1/swagger.json", "Challenger API V1 Debug");
 								})
 								.UseRouting()
 								.UseAuthentication()
