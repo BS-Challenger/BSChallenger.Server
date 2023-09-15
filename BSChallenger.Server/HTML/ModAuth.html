@@ -10,7 +10,7 @@
         window.onload = async () => {
             const token = window.location.hash.substring(1);
             window.location.hash = "";
-            const socket = new WebSocket("ws://localhost:8080");
+            const socket = new WebSocket("ws://localhost:6942");
 
             socket.onopen = () => {
                 socket.send(JSON.stringify({
