@@ -8,11 +8,14 @@
     <p>Authenticating...</p>
     <script>
         window.onload = async () => {
+            console.log("test");
             const token = window.location.hash.substring(1);
+            console.log(token);
             window.location.hash = "";
             const socket = new WebSocket("ws://localhost:6942");
-
+            console.log("socket opened");
             socket.onopen = () => {
+                console.log("woooo");
                 socket.send(JSON.stringify({
                     token: token
                 }));

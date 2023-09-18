@@ -31,6 +31,7 @@ namespace BSChallenger.Server.Models.API
         public int MapsReqForPass { get; set; }
         public string IconURL { get; set; }
         public string Color { get; set; }
+        public string RequiredCategoryData { get; set; }
         public List<Map> AvailableForPass { get; set; } = new List<Map>();
 
         [JsonIgnore]

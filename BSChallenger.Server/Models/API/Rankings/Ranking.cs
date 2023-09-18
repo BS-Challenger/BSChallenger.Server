@@ -1,4 +1,5 @@
-﻿using BSChallenger.Server.Providers;
+﻿using BSChallenger.Server.Models.API.Users;
+using BSChallenger.Server.Providers;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
@@ -30,8 +31,11 @@ namespace BSChallenger.Server.Models.API.Rankings
         public string IconURL { get; set; }
         public bool Private { get; set; }
         public bool Partnered { get; set; }
-        public ICollection<Level> Levels { get; set; } = new List<Level>();
-        public ICollection<RankTeamMember> RankTeamMembers { get; set; } = new List<RankTeamMember>();
-        public ICollection<ScanHistory> History { get; set; } = new List<ScanHistory>();
-    }
+        public List<Level> Levels { get; set; } = new();
+        public List<RankTeamMember> RankTeamMembers { get; set; } = new();
+
+        //Will be updated daily by quartz job
+        public int ActiveUsers { get; set; }
+        public int WeeklyScans { get; set; }
+	}
 }

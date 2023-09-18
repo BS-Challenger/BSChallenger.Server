@@ -19,17 +19,23 @@ namespace BSChallenger.Server.Models
         public DbSet<User> Users { get; set; }
         public DbSet<Ranking> Rankings { get; set; }
 
-        public List<Ranking> EagerLoadRankings()
+        public IEnumerable<Ranking> EagerLoadRankings()
         {
             return Rankings
                     .Include(x => x.Levels)
                     .ThenInclude(x => x.AvailableForPass)
-                    .Include(x => x.History)
-                    .Include(x => x.RankTeamMembers)
-					.ToList();
+                    .Include(x => x.RankTeamMembers);
 		}
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		public IEnumerable<User> EagerLoadUsers()
+		{
+            return Users
+                    .Include(x => x.ScanHistory)
+                    .ThenInclude(x => x.Scores)
+                    .Include(x => x.AssignedRankings);
+		}
+
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
                 .UseNpgsql(string.Format("Host={0};Database={1};Username={2};Password={3}", _secrets.Secrets.Database.Host, _secrets.Secrets.Database.DatabaseName, _secrets.Secrets.Database.Username, _secrets.Secrets.Database.Password))

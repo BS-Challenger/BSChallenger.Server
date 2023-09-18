@@ -20,8 +20,7 @@ namespace BSChallenger.Server.Discord.Autocompletes
         public override Task<AutocompletionResult> GenerateSuggestionsAsync(IInteractionContext context, IAutocompleteInteraction autocompleteInteraction, IParameterInfo parameter, IServiceProvider services)
         {
             string rankingId = (string)autocompleteInteraction.Data.Options?.FirstOrDefault(x => x.Name == "ranking")?.Value;
-            Console.WriteLine(rankingId);
-            var ranking = _dbContext.EagerLoadRankings().Find(x => x.Identifier == rankingId);
+            var ranking = _dbContext.EagerLoadRankings().FirstOrDefault(x => x.Identifier == rankingId);
             if (ranking != null)
             {
                 IEnumerable<AutocompleteResult> results = ranking.Levels.Select(x => new AutocompleteResult(x.LevelNumber.ToString(), x.LevelNumber));

@@ -1,11 +1,13 @@
-﻿using BSChallenger.Server.Providers;
+﻿using BSChallenger.Server.Models.API.Rankings;
+using BSChallenger.Server.Models.API.Users;
+using BSChallenger.Server.Providers;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace BSChallenger.Server.Models.API.Rankings
+namespace BSChallenger.Server.Models.API.Scan
 {
     [PrimaryKey("Id")]
     public class ScanHistory
@@ -25,9 +27,11 @@ namespace BSChallenger.Server.Models.API.Rankings
         public string Identifier => SqidProvider.GenerateID(IDType.ScanHistory, Id);
         public DateTime Time { get; set; }
 
+        public List<ScoreData> Scores { get; set; }
+
         [JsonIgnore]
-        public int RankingId { get; set; }
+        public int UserId { get; set; }
         [JsonIgnore]
-        public Ranking Ranking { get; set; }
+        public User User { get; set; }
     }
 }

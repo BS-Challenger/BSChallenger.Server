@@ -1,4 +1,6 @@
-﻿using BSChallenger.Server.Models.API.Rankings;
+﻿using BSChallenger.Server.Models.API.Maps;
+using BSChallenger.Server.Models.API.Rankings;
+using BSChallenger.Server.Models.API.Scan;
 using BSChallenger.Server.Providers;
 using Newtonsoft.Json;
 using System;
@@ -38,5 +40,7 @@ namespace BSChallenger.Server.Models.API.Users
         //Extras
         public DateTime LastScanDate { get; set; }
         public List<RankTeamMember> AssignedRankings { get; set; } = new();
-    }
+        public List<ScanHistory> ScanHistory { get; set; } = new();
+        public List<UserLevel> UserLevels { get; set; } = new();
+	}
 }

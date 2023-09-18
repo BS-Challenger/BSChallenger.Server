@@ -31,7 +31,7 @@ namespace BSChallenger.Server.API
 		[EnableCors(PolicyName = "website")]
 		public ActionResult<User> GetUser(string id)
 		{
-			return _database.Users.FirstOrDefault(x => x.BeatLeaderId == id);
+			return _database.EagerLoadUsers().FirstOrDefault(x => x.BeatLeaderId == id);
 		}
 	}
 }

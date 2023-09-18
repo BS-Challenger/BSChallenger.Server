@@ -28,7 +28,7 @@ namespace BSChallenger.Server.Discord.Embeds
                 new EmbedFieldBuilder()
                     .WithName("Levels")
                     .WithIsInline(true)
-                    .WithValue(database.EagerLoadRankings().Find(x=>x.Identifier==ranking.Identifier).Levels.Count().ToString())
+                    .WithValue(database.EagerLoadRankings().FirstOrDefault(x=>x.Identifier==ranking.Identifier).Levels.Count().ToString())
             } : new List<EmbedFieldBuilder>()
             {
 				new EmbedFieldBuilder()

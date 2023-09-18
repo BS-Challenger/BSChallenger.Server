@@ -40,16 +40,8 @@ namespace BSChallenger.Server.API.Authentication
 		[EnableCors(PolicyName = "website")]
 		public async Task<ActionResult<IdentityResponse>> IdentityAsync()
 		{
-			var x = HttpContext.Request.Headers.Authorization;
-			if (HttpContext.Request.Method == "OPTIONS") return null;
 			var Identities = HttpContext.User.Identities;
-
-			Console.WriteLine(Identities.Count());
-
-			var IdIdentity = Identities.SelectMany(x => x.Claims).FirstOrDefault(x => {
-				Console.WriteLine(x.Type);
-				return x.Type.Contains("nameidentifier");
-			});
+			var IdIdentity = Identities.SelectMany(x => x.Claims).FirstOrDefault(x => x.Type.Contains("nameidentifier"));
 			if(IdIdentity != null)
 			{
 				var user = _database.Users.FirstOrDefault(x => x.BeatLeaderId == IdIdentity.Value);

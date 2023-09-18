@@ -15,7 +15,6 @@ namespace BSChallenger.Server.Providers
             if (File.Exists(SecretPath))
             {
 				Secrets = JsonConvert.DeserializeObject<Secrets>(File.ReadAllText(SecretPath));
-                Console.WriteLine(JsonConvert.SerializeObject(Secrets));
 			}
 			else
             {
