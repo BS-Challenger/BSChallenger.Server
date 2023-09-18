@@ -23,7 +23,7 @@ namespace BSChallenger.Server.Jobs
 
 		private List<BeatLeaderScore> CurrentScanningScores { get; set; }
 
-		public async Task<bool> ScanUser(User user, Ranking ranking, List<BeatLeaderScore> scores)
+		public void ScanUser(User user, Ranking ranking, List<BeatLeaderScore> scores)
 		{
 			CurrentScanningScores = scores;
 			List<ScoreData> scanHistoryScores = new();
@@ -48,15 +48,18 @@ namespace BSChallenger.Server.Jobs
 				}
 				else
 				{
-					SetUserLevelForRanking(user, latestLevelPassed, ranking);
 					break;
 				}
 			}
+			if(latestLevelPassed != null)
+			{
+				SetUserLevelForRanking(user, latestLevelPassed, ranking);
+			}
+			user.ScanHistory.Add(new ScanHistory(DateTime.UtcNow, scanHistoryScores));
 			CurrentScanningScores = null;
-			return false;
 		}
 
-		private void SetUserLevelForRanking(User user, Level level, Ranking ranking)
+		private static void SetUserLevelForRanking(User user, Level level, Ranking ranking)
 		{
 			var existing = user.UserLevels.FirstOrDefault(x => x.RankingId == ranking.Identifier);
 			if(existing == null)

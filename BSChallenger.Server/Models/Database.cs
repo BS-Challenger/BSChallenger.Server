@@ -32,7 +32,8 @@ namespace BSChallenger.Server.Models
             return Users
                     .Include(x => x.ScanHistory)
                     .ThenInclude(x => x.Scores)
-                    .Include(x => x.AssignedRankings);
+                    .Include(x => x.UserLevels)
+					.Include(x => x.AssignedRankings);
 		}
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

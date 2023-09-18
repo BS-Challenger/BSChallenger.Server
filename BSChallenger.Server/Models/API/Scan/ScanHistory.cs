@@ -12,9 +12,10 @@ namespace BSChallenger.Server.Models.API.Scan
     [PrimaryKey("Id")]
     public class ScanHistory
     {
-        public ScanHistory(DateTime week)
+        public ScanHistory(DateTime week, List<ScoreData> scores)
         {
             Time = week;
+            Scores = scores;
         }
 
         public ScanHistory()

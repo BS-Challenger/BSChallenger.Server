@@ -52,10 +52,17 @@ namespace BSChallenger.Server.Providers
 			int AmountLeft = 100000000;
 			int page = 1;
 			List<BeatLeaderScore> scores = new();
+			DateTime StartTime = DateTime.Now;
 			while (AmountLeft > 0)
 			{
-				var res = await _httpClient.GetAsync(BeatleaderEndpoint + $"player/{userId}/scores?sortBy=date&page={page}&count=300");
-				var obj = JsonConvert.DeserializeObject<Root>(await res.Content.ReadAsStringAsync());
+				var res = await _httpClient.GetAsync(BeatleaderEndpoint + $"player/{userId}/scores?sortBy=date&page={page}&count={Math.Min(AmountLeft, 100)}");
+				var content = await res.Content.ReadAsStringAsync();
+				if(content.Contains("API calls quota exceeded!"))
+				{
+					await Task.Delay(10250 - Math.Abs(StartTime.Subtract(DateTime.Now).Milliseconds));
+					continue;
+				}
+				var obj = JsonConvert.DeserializeObject<Root>(content);
 				//If this is first iteration then set the real total
 				if (AmountLeft == 100000000)
 				{
