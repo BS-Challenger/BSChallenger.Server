@@ -47,6 +47,11 @@ namespace BSChallenger.Server.Discord.Commands.Private
 				rankingObj.RankTeamMembers.Add(newOwner);
 				await _database.SaveChangesAsync();
 			}
+			else
+			{
+				member.User = user;
+				await _database.SaveChangesAsync();
+			}
 		}
 	}
 }

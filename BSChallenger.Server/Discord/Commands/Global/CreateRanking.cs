@@ -4,16 +4,29 @@ using Discord;
 using Discord.Interactions;
 using Discord.WebSocket;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BSChallenger.Server.Discord.Commands.Global
 {
     public class CreateRanking : InteractionModuleBase<SocketInteractionContext>
     {
-        [SlashCommand("create-ranking", "Create Ranking")]
+		private Database _database;
+		public CreateRanking(Database database)
+		{
+			_database = database;
+		}
+
+		[SlashCommand("create-ranking", "Create Ranking")]
         public async Task Create()
         {
-            var builder = new ModalBuilder()
+			var user = _database.EagerLoadUsers().FirstOrDefault(x => x.DiscordId == Context.User.Id.ToString());
+			if (user == null)
+			{
+				await RespondAsync("No BSChallenger account linked to your discord!", ephemeral: true);
+				return;
+			}
+			var builder = new ModalBuilder()
                             .WithCustomId("create_ranking")
                             .WithTitle("Create Ranking")
                             .AddTextInput("Name", "name", required: true, minLength: 5, maxLength: 15)

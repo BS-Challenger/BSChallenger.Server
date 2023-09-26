@@ -79,6 +79,8 @@ namespace BSChallenger.Server.Discord
 				//TODO: Seperate this into classes
 				if (x.Data.CustomId == "create_ranking")
 				{
+					var user = _db.EagerLoadUsers().FirstOrDefault(y => y.DiscordId == x.User.Id.ToString());
+
 					string name = GetModalItem(components, "name");
 					string desc = GetModalItem(components, "desc");
 					string iconURL = GetModalItem(components, "icon_url");
@@ -88,7 +90,14 @@ namespace BSChallenger.Server.Discord
 					{
 						var ranking = new Ranking(id, name, desc, iconURL)
 						{
-							Private = true
+							Private = true,
+							RankTeamMembers = new List<RankTeamMember>()
+							{
+								new RankTeamMember()
+								{
+									User = user
+								}
+							}
 						};
 						await _db.Rankings.AddAsync(ranking);
 						await _db.SaveChangesAsync();
