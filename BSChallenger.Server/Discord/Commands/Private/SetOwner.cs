@@ -15,7 +15,7 @@ namespace BSChallenger.Server.Discord.Commands.Private
 			_database = database;
 		}
 
-		[SlashCommand("set-owner", "Changes Visiblity of a ranking")]
+		[SlashCommand("set-owner", "Sets the Owner of a ranking")]
 		public async Task Create([Autocomplete(typeof(RankingIdentifierAutoComplete))] string ranking, string userId)
 		{
 			if (Context.User.Id != 741727188809810181)
@@ -23,10 +23,10 @@ namespace BSChallenger.Server.Discord.Commands.Private
 				await RespondAsync("Insufficient Permissions!", ephemeral: true);
 				return;
 			}
-			var user = _database.EagerLoadUsers().FirstOrDefault(x => x.DiscordId == Context.User.Id.ToString());
+			var user = _database.EagerLoadUsers().FirstOrDefault(x => x.DiscordId == userId);
 			if (user == null)
 			{
-				await RespondAsync("No BSChallenger account linked to your discord!", ephemeral: true);
+				await RespondAsync("No BSChallenger account linked to this discord user!", ephemeral: true);
 				return;
 			}
 			var rankingObj = _database.EagerLoadRankings().FirstOrDefault(x => x.Identifier == ranking);
