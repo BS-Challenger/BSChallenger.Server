@@ -18,6 +18,7 @@ namespace BSChallenger.Server.Discord.Commands.Private
 		{
 			if(Context.User.Id != 741727188809810181)
 			{
+				await RespondAsync("Insufficient Permissions!", ephemeral: true);
 				return;
 			}
 			var rankingObj = _database.Rankings.Find(ranking);

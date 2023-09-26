@@ -19,6 +19,7 @@ namespace BSChallenger.Server.Discord.Commands.Private
 		{
 			if (Context.User.Id != 741727188809810181)
 			{
+				await RespondAsync("Insufficient Permissions!", ephemeral: true);
 				return;
 			}
 			await RespondAsync(ranking, ephemeral: true);

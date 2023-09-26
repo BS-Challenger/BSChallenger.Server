@@ -6,7 +6,7 @@ using Discord.WebSocket;
 using System;
 using System.Threading.Tasks;
 
-namespace BSChallenger.Server.Discord.Commands.Private
+namespace BSChallenger.Server.Discord.Commands.Global
 {
     public class CreateRanking : InteractionModuleBase<SocketInteractionContext>
     {

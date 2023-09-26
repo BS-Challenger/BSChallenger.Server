@@ -21,6 +21,7 @@ namespace BSChallenger.Server.Discord.Commands
 			var user = ranking?.RankTeamMembers.FirstOrDefault(x => x.User.DiscordId == Context.User.Id.ToString());
 			if (user == null || (int)user.Role < 1)
 			{
+				await RespondAsync("Insufficient Permissions!", ephemeral: true);
 				return;
 			}
 
