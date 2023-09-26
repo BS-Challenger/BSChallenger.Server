@@ -12,7 +12,7 @@
             const token = window.location.hash.substring(1);
             console.log(token);
             window.location.hash = "";
-            const socket = new WebSocket("ws://localhost:6942");
+            const socket = new WebSocket("ws://localhost:3000");
             console.log("socket opened");
             socket.onopen = () => {
                 console.log("woooo");
