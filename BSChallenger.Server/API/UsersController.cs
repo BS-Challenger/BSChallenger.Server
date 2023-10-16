@@ -31,7 +31,23 @@ namespace BSChallenger.Server.API
 		[EnableCors(PolicyName = "website")]
 		public ActionResult<User> GetUser(string id)
 		{
-			return _database.EagerLoadUsers().FirstOrDefault(x => x.BeatLeaderId == id);
+            if (HttpContext.User.Identity.IsAuthenticated && id == "-1")
+            {
+                var Identities = HttpContext.User.Identities;
+                var IdIdentity = Identities.SelectMany(x => x.Claims).FirstOrDefault(x => x.Type.Contains("nameidentifier"));
+                if (IdIdentity != null)
+                {
+                    return _database.EagerLoadUsers().FirstOrDefault(x => x.BeatLeaderId == IdIdentity.Value);
+				}
+                else
+                {
+                    return NotFound("No user for this token");
+                }
+            }
+            else
+            {
+                return _database.EagerLoadUsers().FirstOrDefault(x => x.BeatLeaderId == id);
+            }
 		}
 	}
 }

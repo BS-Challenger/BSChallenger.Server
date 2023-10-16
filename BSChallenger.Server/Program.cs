@@ -79,6 +79,7 @@ namespace BSChallenger.Server
 										options.QueueLimit = 5;
 									}))
 								.AddSingleton<JWTProvider>()
+								.AddSingleton<UserProvider>()
 								.AddSingleton<DiscordSocketClient>()
 								.AddSingleton<InteractionService>()
 								.AddHostedService<DiscordBot>()

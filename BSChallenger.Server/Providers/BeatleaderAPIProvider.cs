@@ -29,6 +29,10 @@ namespace BSChallenger.Server.Providers
 			var token = await GetBLOauthTokenAsync(code);
 			_httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
 			var result = await _httpClient.GetAsync(BeatleaderEndpoint + "oauth2/identity");
+			if (!result.IsSuccessStatusCode)
+			{
+				_logger.Error(result.ReasonPhrase);
+			}
 			_httpClient.DefaultRequestHeaders.Remove("Authorization");
 
 			var content = await result.Content.ReadAsStringAsync();
@@ -38,8 +42,12 @@ namespace BSChallenger.Server.Providers
 
 		private async Task<string> GetBLOauthTokenAsync(string code)
 		{
-			var reqContent = new StringContent("grant_type=authorization_code&client_id=BSChallengerClientID&client_secret=" + _secrets.Secrets.BLclientSecret + "&code=" + code + "&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fbeatleader-callback", Encoding.UTF8, "application/x-www-form-urlencoded");
+			var reqContent = new StringContent("grant_type=authorization_code&client_id=BSChallengerClientID&client_secret=" + _secrets.Secrets.BLclientSecret + "&code=" + code + "&redirect_uri=https%3A%2F%2Flocalhost%3A8081%2Fmod-auth", Encoding.UTF8, "application/x-www-form-urlencoded");
 			var res = await _httpClient.PostAsync(BeatleaderEndpoint + "oauth2/token", reqContent);
+			if(!res.IsSuccessStatusCode)
+			{
+				_logger.Error(res.ReasonPhrase);
+			}
 			var content = await res.Content.ReadAsStringAsync();
 			var obj = JsonConvert.DeserializeObject<BLOauthTokenResponse>(content);
 			return obj.access_token;
@@ -56,6 +64,10 @@ namespace BSChallenger.Server.Providers
 			while (AmountLeft > 0)
 			{
 				var res = await _httpClient.GetAsync(BeatleaderEndpoint + $"player/{userId}/scores?sortBy=date&page={page}&count={Math.Min(AmountLeft, 100)}");
+				if (!res.IsSuccessStatusCode)
+				{
+					_logger.Error(res.ReasonPhrase);
+				}
 				var content = await res.Content.ReadAsStringAsync();
 				if(content.Contains("API calls quota exceeded!"))
 				{

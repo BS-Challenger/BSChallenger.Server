@@ -49,22 +49,6 @@ namespace BSChallenger.Server.Providers
 			return token.RawData;
 		}
 
-		public UserToken GetUserToken(string jwt)
-		{
-			using (var priv = RSA.Create())
-			{
-				priv.ImportFromPem(File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "private.pem")));
-				using (var pub = RSA.Create())
-				{
-					pub.ImportFromPem(File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "public.pem")));
-					return JwtBuilder.Create()
-						.WithAlgorithm(new RS256Algorithm(priv, pub))
-						.MustVerifySignature()
-						.Decode<UserToken>(jwt);
-				}
-			}
-		}
-
 		public User FindUser(UserToken token) => _database.Users.FirstOrDefault(x => x.BeatLeaderId == token.BeatLeaderId);
 	}
 }

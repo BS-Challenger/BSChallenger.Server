@@ -18,7 +18,7 @@ namespace BSChallenger.Server.Discord.Commands.Private
 		[SlashCommand("set-owner", "Sets the Owner of a ranking")]
 		public async Task Create([Autocomplete(typeof(RankingIdentifierAutoComplete))] string ranking, string userId)
 		{
-			if (Context.User.Id != 741727188809810181)
+			if (Context.User.Id != 1163263452098347118)
 			{
 				await RespondAsync("Insufficient Permissions!", ephemeral: true);
 				return;

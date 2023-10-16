@@ -5,22 +5,34 @@
     <title>Auth</title>
 </head>
 <body>
-    <p>Authenticating...</p>
+    <p id="auth-text">Authenticating...</p>
     <script>
         window.onload = async () => {
-            console.log("test");
             const token = window.location.hash.substring(1);
-            console.log(token);
             window.location.hash = "";
             const socket = new WebSocket("ws://localhost:3000");
-            console.log("socket opened");
             socket.onopen = () => {
-                console.log("woooo");
+                console.log("token sent to mod");
                 socket.send(JSON.stringify({
                     token: token
                 }));
+                document.getElementById("auth-text").innerHTML = "Token sent, you can close this window";
             };
+            socket.onerror = () => {
+                document.getElementById("auth-text").innerHTML = "Failed to open socket, is game running?";
+            }
         };
-    </script>
+    </script
 </body>
+<style>
+    body {
+        background-color: #101010;
+    }
+    p {
+        font-family: Sans-serif;
+        font-size: 50px;
+        color: #DDDDDD;
+        margin: auto;
+    }
+</style>
 </html>
