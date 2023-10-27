@@ -47,7 +47,7 @@ namespace BSChallenger.Server.API.Authentication
 		[EnableCors(PolicyName = "website")]
 		public async Task<ActionResult<LoginResponse>> LoginAsync([FromBody] LoginRequest request)
 		{
-			var identity = await _beatleaderAPI.GetUserIdentityAsync(request.BeatLeaderToken);
+			var identity = await _beatleaderAPI.GetUserIdentityAsync(request.BeatLeaderToken, request.RedirectURL);
 			if (identity == "-1")
 			{
 				return BadRequest(new BadRequestObjectResult("Beatleader token is stale! Please re-authenticate"));

@@ -42,7 +42,7 @@ namespace BSChallenger.Server.API.Authentication
 				return Forbid("Invalid Issuer");
 			}
 
-			var identity = await _beatleaderAPI.GetUserIdentityAsync(code);
+			var identity = await _beatleaderAPI.GetUserIdentityAsync(code, iss);
 			if(identity == "-1")
 			{
 				return this.Unauthorized("Beatleader token is invalid");

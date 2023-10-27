@@ -24,9 +24,9 @@ namespace BSChallenger.Server.Providers
 			_secrets = secrets;
 		}
 
-		public async Task<string> GetUserIdentityAsync(string code)
+		public async Task<string> GetUserIdentityAsync(string code, string iss)
 		{
-			var token = await GetBLOauthTokenAsync(code);
+			var token = await GetBLOauthTokenAsync(code, iss);
 			_httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
 			var result = await _httpClient.GetAsync(BeatleaderEndpoint + "oauth2/identity");
 			if (!result.IsSuccessStatusCode)
@@ -40,9 +40,9 @@ namespace BSChallenger.Server.Providers
 			return obj == null ? "-1" : obj.id;
 		}
 
-		private async Task<string> GetBLOauthTokenAsync(string code)
+		private async Task<string> GetBLOauthTokenAsync(string code, string iss)
 		{
-			var reqContent = new StringContent("grant_type=authorization_code&client_id=BSChallengerClientID&client_secret=" + _secrets.Secrets.BLclientSecret + "&code=" + code + "&redirect_uri=https%3A%2F%2Flocalhost%3A8081%2Fmod-auth", Encoding.UTF8, "application/x-www-form-urlencoded");
+			var reqContent = new StringContent("grant_type=authorization_code&client_id=BSChallengerClientID&client_secret=" + _secrets.Secrets.BLclientSecret + "&code=" + code + "&redirect_uri=" + iss, Encoding.UTF8, "application/x-www-form-urlencoded");
 			var res = await _httpClient.PostAsync(BeatleaderEndpoint + "oauth2/token", reqContent);
 			if(!res.IsSuccessStatusCode)
 			{
