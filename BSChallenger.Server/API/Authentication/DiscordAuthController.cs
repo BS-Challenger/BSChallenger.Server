@@ -33,7 +33,7 @@ namespace BSChallenger.Server.API.Authentication
 		[HttpPost("/discord-auth")]
 		public async Task<ActionResult> RedirectDiscord(DiscordAuthRequest request	)
 		{
-			var nvc = new List<KeyValuePair<string, string>>();
+			/*var nvc = new List<KeyValuePair<string, string>>();
 			nvc.Add(new KeyValuePair<string, string>("client_id", "1163555058479272006"));
 			nvc.Add(new KeyValuePair<string, string>("client_secret", "4szTTvYxPTtCVSRkFKHg4AmiNeNWTBwS"));
 			nvc.Add(new KeyValuePair<string, string>("grant_type", "authorization_code"));
@@ -43,13 +43,13 @@ namespace BSChallenger.Server.API.Authentication
 			var req = new HttpRequestMessage(HttpMethod.Post, "https://discord.com/api/v10/oauth2/token") { Content = new FormUrlEncodedContent(nvc) };
 			var res = await _client.SendAsync(req);
 
-			_httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + res.Content.ReadAsStringAsync());
-			var result = await _httpClient.GetAsync(BeatleaderEndpoint + "oauth2/identity");
+			_client.DefaultRequestHeaders.Add("Authorization", "Bearer " + res.Content.ReadAsStringAsync());
+			var result = await _client.GetAsync(BeatleaderEndpoint + "oauth2/identity");
 			if (!result.IsSuccessStatusCode)
 			{
 				_logger.Error(result.ReasonPhrase);
 			}
-			_httpClient.DefaultRequestHeaders.Remove("Authorization");
+			_client.DefaultRequestHeaders.Remove("Authorization");
 
 			var nvc2 = new List<KeyValuePair<string, string>>();
 			nvc.Add(new KeyValuePair<string, string>("client_id", "1163555058479272006"));
@@ -59,7 +59,7 @@ namespace BSChallenger.Server.API.Authentication
 			nvc.Add(new KeyValuePair<string, string>("scope", "identify"));
 			nvc.Add(new KeyValuePair<string, string>("code", request.DiscordOauthCode));
 			var req2 = new HttpRequestMessage(HttpMethod.Get, "https://discord.com/api/v10/oauth2/token") { Content = new FormUrlEncodedContent(nvc) };
-			var res2 = await _client.SendAsync(req);
+			var res2 = await _client.SendAsync(req);*/
 
 
 			return Ok();
