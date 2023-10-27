@@ -34,7 +34,8 @@ namespace BSChallenger.Server.Providers
     {
         public string BLclientSecret { get; set; } = "";
         public string DiscordBotToken { get; set; } = "";
-        public DBInfo Database { get; set; } = new DBInfo();
+        public string DiscordOauthSecret { get; set; } = "";
+		public DBInfo Database { get; set; } = new DBInfo();
         public JwtInfo Jwt { get; set; } = new JwtInfo();
     }
 

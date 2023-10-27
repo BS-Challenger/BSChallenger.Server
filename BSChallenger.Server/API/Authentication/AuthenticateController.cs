@@ -1,18 +1,11 @@
 ﻿using BSChallenger.Server.Models;
 using BSChallenger.Server.Models.API.Authentication;
-using BSChallenger.Server.Models.API.Scan;
 using BSChallenger.Server.Models.API.Users;
 using BSChallenger.Server.Providers;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.Elfie.Serialization;
 using Serilog;
-using System;
 using System.Linq;
-using System.Security.Claims;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace BSChallenger.Server.API.Authentication
@@ -21,7 +14,7 @@ namespace BSChallenger.Server.API.Authentication
 	[Route("[controller]")]
 	public class AuthenticateController : ControllerBase
 	{
-		private readonly ILogger _logger = Log.ForContext<ScanController>();
+		private readonly ILogger _logger = Log.ForContext<AuthenticateController>();
 		private readonly BeatLeaderApiProvider _beatleaderAPI;
 		private readonly JWTProvider _jwtProvider;
 		private readonly Database _database;
@@ -42,7 +35,7 @@ namespace BSChallenger.Server.API.Authentication
 		{
 			var Identities = HttpContext.User.Identities;
 			var IdIdentity = Identities.SelectMany(x => x.Claims).FirstOrDefault(x => x.Type.Contains("nameidentifier"));
-			if(IdIdentity != null)
+			if (IdIdentity != null)
 			{
 				var user = _database.Users.FirstOrDefault(x => x.BeatLeaderId == IdIdentity.Value);
 				return Ok(new IdentityResponse(IdIdentity.Value, user?.Username, user?.Avatar));
@@ -55,7 +48,7 @@ namespace BSChallenger.Server.API.Authentication
 		public async Task<ActionResult<LoginResponse>> LoginAsync([FromBody] LoginRequest request)
 		{
 			var identity = await _beatleaderAPI.GetUserIdentityAsync(request.BeatLeaderToken);
-			if(identity == "-1")
+			if (identity == "-1")
 			{
 				return BadRequest(new BadRequestObjectResult("Beatleader token is stale! Please re-authenticate"));
 			}
@@ -68,10 +61,10 @@ namespace BSChallenger.Server.API.Authentication
 				};
 				var playerInfo = await _beatleaderAPI.GetPlayerInfoAsync(identity);
 				//Migrate existing socials
-				if(playerInfo.Socials != null)
+				if (playerInfo.Socials != null)
 				{
 					var discord = playerInfo.Socials.Find(x => x.Service == "Discord");
-					if(discord != null)
+					if (discord != null)
 					{
 						user.DiscordId = discord.UserId;
 					}

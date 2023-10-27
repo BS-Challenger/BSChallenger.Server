@@ -1,10 +1,17 @@
 ﻿using Azure.Core;
+using BSChallenger.Server.Models;
+using BSChallenger.Server.Models.API.Authentication;
 using BSChallenger.Server.Providers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
+using NuGet.Common;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Security.Policy;
 using System.Threading.Tasks;
 
 namespace BSChallenger.Server.API.Authentication
@@ -13,33 +20,68 @@ namespace BSChallenger.Server.API.Authentication
 	[Route("[controller]")]
 	public class DiscordAuthController : ControllerBase
 	{
-		private readonly UserProvider _userProvider;
-		private readonly BeatLeaderApiProvider _beatleaderAPI;
-		private readonly JWTProvider _jwtProvider;
+		private readonly Database _database;
+		private readonly SecretProvider _secretProvider;
+		private readonly HttpClient _client = new();
 
-		public DiscordAuthController(UserProvider userProvider, BeatLeaderApiProvider beatleaderAPI, JWTProvider jwtProvider)
+		public DiscordAuthController(Database database, SecretProvider secretProvider)
 		{
-			_userProvider = userProvider;
-			_beatleaderAPI = beatleaderAPI;
-			_jwtProvider = jwtProvider;
+			_database = database;
+			_secretProvider = secretProvider;
 		}
 
-		[HttpGet("/discord-auth")]
-		public async Task<ActionResult> RedirectDiscord([FromQuery(Name = "code")] string code)
+		[HttpPost("/discord-auth")]
+		public async Task<ActionResult> RedirectDiscord(DiscordAuthRequest request	)
 		{
-			if (string.IsNullOrEmpty(code))
+			var nvc = new List<KeyValuePair<string, string>>();
+			nvc.Add(new KeyValuePair<string, string>("client_id", "1163555058479272006"));
+			nvc.Add(new KeyValuePair<string, string>("client_secret", "4szTTvYxPTtCVSRkFKHg4AmiNeNWTBwS"));
+			nvc.Add(new KeyValuePair<string, string>("grant_type", "authorization_code"));
+			nvc.Add(new KeyValuePair<string, string>("redirect_uri", request.DiscordRedirectURL));
+			nvc.Add(new KeyValuePair<string, string>("scope", "identify"));
+			nvc.Add(new KeyValuePair<string, string>("code", request.DiscordOauthCode));
+			var req = new HttpRequestMessage(HttpMethod.Post, "https://discord.com/api/v10/oauth2/token") { Content = new FormUrlEncodedContent(nvc) };
+			var res = await _client.SendAsync(req);
+
+			_httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + res.Content.ReadAsStringAsync());
+			var result = await _httpClient.GetAsync(BeatleaderEndpoint + "oauth2/identity");
+			if (!result.IsSuccessStatusCode)
 			{
-				return Redirect("https://discord.com/api/oauth2/authorize?client_id=1163555058479272006&redirect_uri=http%3A%2F%2Flocalhost%3A8081%2Fdiscord-auth&response_type=code&scope=identify");
+				_logger.Error(result.ReasonPhrase);
 			}
+			_httpClient.DefaultRequestHeaders.Remove("Authorization");
 
-			HttpContext.Response.Cookies.Append("discordCode", code, new CookieOptions
+			var nvc2 = new List<KeyValuePair<string, string>>();
+			nvc.Add(new KeyValuePair<string, string>("client_id", "1163555058479272006"));
+			nvc.Add(new KeyValuePair<string, string>("client_secret", "4szTTvYxPTtCVSRkFKHg4AmiNeNWTBwS"));
+			nvc.Add(new KeyValuePair<string, string>("grant_type", "authorization_code"));
+			nvc.Add(new KeyValuePair<string, string>("redirect_uri", request.DiscordRedirectURL));
+			nvc.Add(new KeyValuePair<string, string>("scope", "identify"));
+			nvc.Add(new KeyValuePair<string, string>("code", request.DiscordOauthCode));
+			var req2 = new HttpRequestMessage(HttpMethod.Get, "https://discord.com/api/v10/oauth2/token") { Content = new FormUrlEncodedContent(nvc) };
+			var res2 = await _client.SendAsync(req);
+
+
+			return Ok();
+			/*var Identities = HttpContext.User.Identities;
+			var IdIdentity = Identities.SelectMany(x => x.Claims).FirstOrDefault(x => x.Type.Contains("nameidentifier"));
+			if (IdIdentity != null)
 			{
-				MaxAge = TimeSpan.FromSeconds(180), //give user time to login to beatleader
-				Secure = true,
-				IsEssential = true,
-			});
+				var user = _database.Users.FirstOrDefault(x => x.BeatLeaderId == IdIdentity.Value);
 
-			return Redirect("");
+				var nvc = new List<KeyValuePair<string, string>>();
+				nvc.Add(new KeyValuePair<string, string>("client_id", "1163555058479272006"));
+				nvc.Add(new KeyValuePair<string, string>("client_secret", "4szTTvYxPTtCVSRkFKHg4AmiNeNWTBwS"));
+				nvc.Add(new KeyValuePair<string, string>("grant_type", "authorization_code"));
+				nvc.Add(new KeyValuePair<string, string>("redirect_uri", request.DiscordRedirectURL));
+				nvc.Add(new KeyValuePair<string, string>("scope", "identify"));
+				nvc.Add(new KeyValuePair<string, string>("code", request.DiscordOauthCode));
+				var req = new HttpRequestMessage(HttpMethod.Post, "https://discord.com/api/v10/oauth2/token") { Content = new FormUrlEncodedContent(nvc) };
+				var res = await _client.SendAsync(req);
+
+				return Ok(new IdentityResponse(IdIdentity.Value, user?.Username, user?.Avatar));
+			}
+			return NotFound();*/
 		}
 	}
 }
