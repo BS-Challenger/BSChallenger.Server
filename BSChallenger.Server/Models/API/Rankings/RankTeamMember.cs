@@ -1,6 +1,5 @@
 ﻿using BSChallenger.Server.Models.API.Users;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json.Serialization;
 
 namespace BSChallenger.Server.Models.API.Rankings
 {
@@ -9,10 +8,12 @@ namespace BSChallenger.Server.Models.API.Rankings
     {
         public int Id { get; set; }
         public int RankingId { get; set; }
-		[JsonIgnore]
+		[System.Text.Json.Serialization.JsonIgnore]
+		[Newtonsoft.Json.JsonIgnore]
 		public Ranking Ranking { get; set; }
         public int UserId { get; set; }
-        [JsonIgnore]
+		[System.Text.Json.Serialization.JsonIgnore]
+		[Newtonsoft.Json.JsonIgnore]
         public User User { get; set; }
         public RankTeamRole Role { get; set; }
 	}
