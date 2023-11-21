@@ -44,7 +44,7 @@ namespace BSChallenger.Server.API.Authentication
 			if (IdIdentity != null)
 			{
 				var nvc = new List<KeyValuePair<string, string>>();
-				nvc.Add(new KeyValuePair<string, string>("client_id", "1176563245755154532"));
+				nvc.Add(new KeyValuePair<string, string>("client_id", _secretProvider.Secrets.DiscordOauthClientId));
 				nvc.Add(new KeyValuePair<string, string>("client_secret", _secretProvider.Secrets.DiscordOauthSecret));
 				nvc.Add(new KeyValuePair<string, string>("grant_type", "authorization_code"));
 				nvc.Add(new KeyValuePair<string, string>("redirect_uri", request.DiscordRedirectURL));

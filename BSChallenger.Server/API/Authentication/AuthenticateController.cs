@@ -31,14 +31,14 @@ namespace BSChallenger.Server.API.Authentication
 
 		[HttpGet("/identity")]
 		[EnableCors(PolicyName = "website")]
-		public async Task<ActionResult<IdentityResponse>> IdentityAsync()
+		public async Task<ActionResult<User>> IdentityAsync()
 		{
 			var Identities = HttpContext.User.Identities;
 			var IdIdentity = Identities.SelectMany(x => x.Claims).FirstOrDefault(x => x.Type.Contains("nameidentifier"));
 			if (IdIdentity != null)
 			{
 				var user = _database.Users.FirstOrDefault(x => x.BeatLeaderId == IdIdentity.Value);
-				return Ok(new IdentityResponse(IdIdentity.Value, user?.Username, user?.Avatar));
+				return Ok(user);
 			}
 			return NotFound();
 		}
