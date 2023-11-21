@@ -20,8 +20,8 @@ namespace BSChallenger.Server.Discord.Commands
 		[SlashCommand("add-map", "Add Map to Ranking")]
         public async Task Create([Autocomplete(typeof(RankingIdentifierAutoComplete))] string rankingId, [Autocomplete(typeof(LevelNumberAutoComplete))] int level)
         {
-			var ranking = _database.Rankings.FirstOrDefault(x => x.Identifier == rankingId);
-			var user = ranking?.RankTeamMembers.FirstOrDefault(x => x.User.DiscordId == Context.User.Id.ToString());
+			var ranking = _database.EagerLoadRankings().AsEnumerable().FirstOrDefault(x => x.Identifier == rankingId);
+			var user = ranking?.RankTeamMembers.AsEnumerable().FirstOrDefault(x => x.User.DiscordId == Context.User.Id.ToString());
 			if (user == null || (int)user.Role < 1)
 			{
 				await RespondAsync("Insufficient Permissions!", ephemeral: true);
