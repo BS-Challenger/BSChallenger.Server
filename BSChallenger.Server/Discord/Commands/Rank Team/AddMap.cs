@@ -1,9 +1,12 @@
-﻿using BSChallenger.Server.Discord.Autocompletes;
+﻿using BSChallenger.Server.API.Authentication;
+using BSChallenger.Server.Discord.Autocompletes;
 using BSChallenger.Server.Discord.Embeds;
 using BSChallenger.Server.Models;
 using Discord;
 using Discord.Interactions;
 using Discord.WebSocket;
+using Newtonsoft.Json;
+using Serilog;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,6 +16,7 @@ namespace BSChallenger.Server.Discord.Commands
     public class AddMap : InteractionModuleBase<SocketInteractionContext>
     {
 		private Database _database;
+		private readonly ILogger _logger = Log.ForContext<AddMap>();
 		public AddMap(Database database)
 		{
 			_database = database;
@@ -21,7 +25,13 @@ namespace BSChallenger.Server.Discord.Commands
         public async Task Create([Autocomplete(typeof(RankingIdentifierAutoComplete))] string rankingId, [Autocomplete(typeof(LevelNumberAutoComplete))] int level)
         {
 			var ranking = _database.EagerLoadRankings().AsEnumerable().FirstOrDefault(x => x.Identifier == rankingId);
-			var user = ranking?.RankTeamMembers.AsEnumerable().FirstOrDefault(x => x.User.DiscordId == Context.User.Id.ToString());
+			_logger.Debug(JsonConvert.SerializeObject(ranking));
+			var members =  ranking?.RankTeamMembers.AsEnumerable();
+			_logger.Debug("members: " + members.Count().ToString());
+			var user = members.FirstOrDefault(x =>
+			x.User.DiscordId
+			==
+			Context.User.Id.ToString());
 			if (user == null || (int)user.Role < 1)
 			{
 				await RespondAsync("Insufficient Permissions!", ephemeral: true);
