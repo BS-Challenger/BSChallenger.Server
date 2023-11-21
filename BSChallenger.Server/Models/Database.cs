@@ -24,7 +24,8 @@ namespace BSChallenger.Server.Models
             return Rankings
                     .Include(x => x.Levels)
                     .ThenInclude(x => x.AvailableForPass)
-                    .Include(x => x.RankTeamMembers);
+                    .Include(x => x.RankTeamMembers)
+                    .ThenInclude(x => x.User);
 		}
 
 		public IEnumerable<User> EagerLoadUsers()
