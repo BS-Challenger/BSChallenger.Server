@@ -38,7 +38,7 @@ namespace BSChallenger.Server.Discord.Commands
                             .WithTitle("Add level to ranking")
                             .AddTextInput("Ranking ID", "ranking", required: true, value: rankingId)
                             .AddTextInput("Level Number", "level", required: true, value: level.ToString())
-                            .AddTextInput("BeatSaver Key", "id", required: true, placeholder: "25f", minLength: 15)
+                            .AddTextInput("BeatSaver Key", "id", required: true, placeholder: "25f", minLength: 3, maxLength: 7)
                             .AddTextInput("Characteristic", "char", required: true, placeholder: "Standard, One Saber, 360, 90, Lawless", minLength: 5)
                             .AddTextInput("Difficulty", "difficulty", required: true, placeholder: "Easy, Normal, Hard, Expert, Expert+", minLength: 4);
             await RespondWithModalAsync(builder.Build());
