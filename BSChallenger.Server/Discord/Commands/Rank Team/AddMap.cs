@@ -25,13 +25,9 @@ namespace BSChallenger.Server.Discord.Commands
         public async Task Create([Autocomplete(typeof(RankingIdentifierAutoComplete))] string rankingId, [Autocomplete(typeof(LevelNumberAutoComplete))] int level)
         {
 			var ranking = _database.EagerLoadRankings().AsEnumerable().FirstOrDefault(x => x.Identifier == rankingId);
-			_logger.Debug(JsonConvert.SerializeObject(ranking));
 			var members =  ranking?.RankTeamMembers.AsEnumerable();
-			_logger.Debug("members: " + members.Count().ToString());
-			var user = members.FirstOrDefault(x =>
-			x.User.DiscordId
-			==
-			Context.User.Id.ToString());
+			var user = members.FirstOrDefault(x => x.User.DiscordId == Context.User.Id.ToString());
+
 			if (user == null || (int)user.Role < 1)
 			{
 				await RespondAsync("Insufficient Permissions!", ephemeral: true);
@@ -42,8 +38,8 @@ namespace BSChallenger.Server.Discord.Commands
                             .WithTitle("Add level to ranking")
                             .AddTextInput("Ranking ID", "ranking", required: true, value: rankingId)
                             .AddTextInput("Level Number", "level", required: true, value: level.ToString())
-                            .AddTextInput("Hash", "hash", required: true, minLength: 15)
-                            .AddTextInput("Characteristic", "char", required: true, minLength: 5)
+                            .AddTextInput("BeatSaver Key", "id", required: true, placeholder: "25f", minLength: 15)
+                            .AddTextInput("Characteristic", "char", required: true, placeholder: "Standard, One Saber, 360, 90, Lawless", minLength: 5)
                             .AddTextInput("Difficulty", "difficulty", required: true, placeholder: "Easy, Normal, Hard, Expert, Expert+", minLength: 4);
             await RespondWithModalAsync(builder.Build());
         }

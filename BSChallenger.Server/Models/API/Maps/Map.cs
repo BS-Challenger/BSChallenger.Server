@@ -9,16 +9,16 @@ namespace BSChallenger.Server.Models.API.Maps
     [PrimaryKey("Id")]
     public class Map
     {
-        public Map(string hash, string chari, string diff)
+        public Map(string id, string chari, string diff)
         {
-            Hash = hash;
+			BeatSaverId = id;
             Characteristic = chari;
             Difficulty = diff;
         }
 
-        public Map(string hash, string chari, string diff, List<MapFeature> features)
+        public Map(string id, string chari, string diff, List<MapFeature> features)
         {
-            Hash = hash;
+			BeatSaverId = id;
             Characteristic = chari;
             Difficulty = diff;
             Features = features;
@@ -32,7 +32,7 @@ namespace BSChallenger.Server.Models.API.Maps
         public int Id { get; set; }
         [Key]
         public string Identifier => SqidProvider.GenerateID(IDType.Map, Id);
-        public string Hash { get; set; }
+        public string BeatSaverId { get; set; }
         public string Characteristic { get; set; }
         public string Difficulty { get; set; }
         public virtual List<MapFeature> Features { get; set; } = new();

@@ -89,7 +89,7 @@ namespace BSChallenger.Server.Jobs
 			List<ScorePair> ScoresToCheck = new();
 			foreach (var score in CurrentScanningScores)
 			{
-				var map = level.AvailableForPass.FirstOrDefault(y => string.Equals(score.Leaderboard.Song.Hash, y.Hash, StringComparison.OrdinalIgnoreCase) && string.Equals(score.Leaderboard.Difficulty.DifficultyName, y.Difficulty, StringComparison.OrdinalIgnoreCase) && string.Equals(score.Leaderboard.Difficulty.ModeName.Replace("-PinkPlay_Controllable", ""), y.Characteristic, StringComparison.OrdinalIgnoreCase));
+				var map = level.AvailableForPass.FirstOrDefault(y => string.Equals(score.Leaderboard.Song.Id, y.BeatSaverId, StringComparison.OrdinalIgnoreCase) && string.Equals(score.Leaderboard.Difficulty.DifficultyName, y.Difficulty, StringComparison.OrdinalIgnoreCase) && string.Equals(score.Leaderboard.Difficulty.ModeName.Replace("-PinkPlay_Controllable", ""), y.Characteristic, StringComparison.OrdinalIgnoreCase));
 				if (map != null)
 				{
 					ScoresToCheck.Add(new ScorePair(map, score));

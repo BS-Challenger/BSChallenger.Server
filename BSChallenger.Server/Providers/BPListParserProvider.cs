@@ -27,7 +27,7 @@ namespace BSChallenger.Server.Providers
             var x = playlistHandler.Deserialize<LegacyPlaylist>(readStream);
             foreach (var item in x)
             {
-                level.AvailableForPass.Add(new Map(item.Hash, item.Difficulties[0].Characteristic, ((BeatmapDifficulty)item.Difficulties[0].DifficultyValue).ToString()));
+                level.AvailableForPass.Add(new Map(item.Key, item.Difficulties[0].Characteristic, ((BeatmapDifficulty)item.Difficulties[0].DifficultyValue).ToString()));
             }
             await _database.SaveChangesAsync();
         }

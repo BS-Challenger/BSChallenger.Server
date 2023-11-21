@@ -117,7 +117,7 @@ namespace BSChallenger.Server.Discord
 				{
 					string rankingId = GetModalItem(components, "ranking");
 					int lvl = int.Parse(GetModalItem(components, "level"));
-					string hash = GetModalItem(components, "hash");
+					string id = GetModalItem(components, "id");
 					string chari = GetModalItem(components, "char");
 					string diff = GetModalItem(components, "difficulty");
 
@@ -130,7 +130,7 @@ namespace BSChallenger.Server.Discord
 							level = new Level(lvl, 1, "", "");
 							ranking.Levels.Add(level);
 						}
-						var map = new Map(hash, chari, diff);
+						var map = new Map(id, chari, diff);
 						level.AvailableForPass.Add(map);
 					}
 					else
@@ -160,6 +160,7 @@ namespace BSChallenger.Server.Discord
 							}
 							var stream = await playlist.Content.ReadAsStreamAsync();
 							await _parser.Parse(level, stream);
+							await _db.SaveChangesAsync();
 						}
 						else
 						{
