@@ -19,7 +19,7 @@ namespace BSChallenger.Server.Jobs
 {
 	public class ScanProcess
 	{
-		private readonly List<IMapFeature> _features = MapFeatureFactory.CreateInstancesFromCurrentAssembly();
+		public static readonly List<IMapFeature> features = MapFeatureFactory.CreateInstancesFromCurrentAssembly();
 
 		private List<BeatLeaderScore> CurrentScanningScores { get; set; }
 
@@ -75,7 +75,7 @@ namespace BSChallenger.Server.Jobs
 		//TODO: Check categories
 		private bool ScanMap(Map map, BeatLeaderScore score, Level level)
 		{
-			var featuresToCheck = _features.Where(x => map.Features.Any(z => z.Type == x.GetName())).ToList();
+			var featuresToCheck = features.Where(x => map.Features.Any(z => z.Type == x.GetName())).ToList();
 
 			bool passing = true;
 			featuresToCheck.ForEach(z => passing &= z.GetValid(score, map.Features.First(x => x.Type == z.GetName()).Data) == MapFeatureResult.Pass);

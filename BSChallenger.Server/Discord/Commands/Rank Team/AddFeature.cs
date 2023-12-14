@@ -33,7 +33,7 @@ namespace BSChallenger.Server.Discord.Commands
                             .WithTitle("Add feature to map")
                             .AddTextInput("Ranking ID", "ranking", required: true, value: rankingId)
                             .AddTextInput("Map ID", "map", required: true, value: map)
-                            .AddTextInput("Featue Name", "feature", required: true, value: feature)
+                            .AddTextInput("Feature Name", "feature", required: true, value: feature)
                             .AddTextInput("Feature Data", "data", required: true);
             await RespondWithModalAsync(builder.Build());
         }

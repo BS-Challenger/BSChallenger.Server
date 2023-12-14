@@ -1,8 +1,10 @@
 ﻿using BSChallenger.Server.Discord.Embeds;
+using BSChallenger.Server.Jobs;
 using BSChallenger.Server.Models;
 using BSChallenger.Server.Models.API;
 using BSChallenger.Server.Models.API.Maps;
 using BSChallenger.Server.Models.API.Rankings;
+using BSChallenger.Server.Models.BeatLeader.Scores;
 using BSChallenger.Server.Providers;
 using Discord;
 using Discord.Interactions;
@@ -135,7 +137,49 @@ namespace BSChallenger.Server.Discord
 					}
 					else
 					{
-						await x.RespondAsync("Failed to add map!");
+						await x.RespondAsync("Failed to add map! Ranking does not exist");
+					}
+					await _db.SaveChangesAsync();
+				}
+
+				if (x.Data.CustomId == "add_feature")
+				{
+					string rankingId = GetModalItem(components, "ranking");
+					string map = GetModalItem(components, "map");
+					string feature = GetModalItem(components, "feature");
+					string data = GetModalItem(components, "data");
+
+					var ranking = _db.EagerLoadRankings().FirstOrDefault(x => x.Identifier == rankingId);
+					if (ranking != null)
+					{
+						Map target = ranking.Levels.SelectMany(x => x.AvailableForPass).First(x => x.Identifier == map);
+						if (target != null)
+						{
+							var featureToCheck = ScanProcess.features.FirstOrDefault(x => x.GetName() == feature);
+							if (featureToCheck != null)
+							{
+								if (featureToCheck.GetValid(new BeatLeaderScore(), data) != MapFeatures.MapFeatureResult.Error)
+								{
+									target.Features.Add(new MapFeature(feature, data));
+								}
+								else
+								{
+									await x.RespondAsync("Failed to add feature! Feature data is in invalid format");
+								}
+							}
+							else
+							{
+								await x.RespondAsync("Failed to add feature! Feature does not exist");
+							}
+						}
+						else
+                        {
+							await x.RespondAsync("Failed to add feature! Map does not exist");
+						}
+                    }
+					else
+					{
+						await x.RespondAsync("Failed to add feature! Ranking does not exist");
 					}
 					await _db.SaveChangesAsync();
 				}
