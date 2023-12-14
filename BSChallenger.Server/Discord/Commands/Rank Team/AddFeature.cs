@@ -22,7 +22,12 @@ namespace BSChallenger.Server.Discord.Commands
         {
 			var ranking = _database.Rankings.FirstOrDefault(x => x.Identifier == rankingId);
             var user = ranking?.RankTeamMembers.FirstOrDefault(x => x.User.DiscordId == Context.User.Id.ToString());
-            if(user == null || (int)user.Role < 1)
+			if (user == null)
+			{
+				await RespondAsync("No BSChallenger account linked to your discord!", ephemeral: true);
+				return;
+			}
+			if ((int)user.Role < 1)
             {
 				await RespondAsync("Insufficient Permissions!", ephemeral: true);
 				return;
