@@ -127,7 +127,7 @@ namespace BSChallenger.Server.Discord
 						Level level = ranking.Levels.FirstOrDefault(x => x.LevelNumber == lvl);
 						if (level == null)
 						{
-							level = new Level(lvl, 1, "", "");
+							level = new Level(lvl, 1, "Default", "");
 							ranking.Levels.Add(level);
 						}
 						var map = new Map(id, chari, diff);
@@ -155,7 +155,7 @@ namespace BSChallenger.Server.Discord
 							Level level = ranking.Levels.FirstOrDefault(x => x.LevelNumber == lvl);
 							if (level == null)
 							{
-								level = new Level(lvl, 1, "", "");
+								level = new Level(lvl, 1, "Default", "");
 								ranking.Levels.Add(level);
 							}
 							var stream = await playlist.Content.ReadAsStreamAsync();

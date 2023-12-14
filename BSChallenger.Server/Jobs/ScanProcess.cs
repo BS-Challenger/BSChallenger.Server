@@ -80,7 +80,6 @@ namespace BSChallenger.Server.Jobs
 			bool passing = true;
 			featuresToCheck.ForEach(z => passing &= z.GetValid(score, map.Features.First(x => x.Type == z.GetName()).Data) == MapFeatureResult.Pass);
 
-
 			return passing;
 		}
 
