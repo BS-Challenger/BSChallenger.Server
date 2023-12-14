@@ -1,27 +1,45 @@
 ﻿using BSChallenger.Server.Models;
+using BSChallenger.Server.Models.API.Maps;
 using BSChallenger.Server.Models.API.Rankings;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.Xml;
 
 namespace BSChallenger.Server.API
 {
     [ApiController]
-    [Route("/rankings")]
-    public class RankingsController : ControllerBase
+    [Route("/format/{map}")]
+    public class FormatController : ControllerBase
     {
         private readonly Database _database;
 
-        public RankingsController(
+        public FormatController(
             Database database)
         {
             _database = database;
         }
 
-        [HttpGet]
-        public ActionResult<IEnumerable<Ranking>> Get()
+        IEnumerable<string> GetFeatures(Map map)
         {
-            return Ok(_database.EagerLoadRankings().Where(x => !x.Private));
+			foreach (var feature in map.Features)
+			{
+                //TODO, use formatter function + proper formatted name
+                yield return feature.Type + ": " + feature.Data;
+			}
+		}
+
+        [HttpGet]
+        public ActionResult<string> Get([FromRoute] string map)
+        {
+            var allMaps = _database.EagerLoadRankings().SelectMany(x => x.Levels).SelectMany(x => x.AvailableForPass);
+            var target = allMaps.FirstOrDefault(x => x.Identifier == map);
+
+			if (target != null)
+            {
+                return GetFeatures(target).Aggregate((x1, x2) => x1 + "\n" + x2);
+            }
+            return map;
         }
     }
 }
