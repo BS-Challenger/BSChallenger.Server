@@ -23,6 +23,11 @@ namespace BSChallenger.Server.Jobs
 
 		private List<BeatLeaderScore> CurrentScanningScores { get; set; }
 
+		string[] ParseCategories(Level level)
+		{
+			return level.RequiredCategoryData.Split(",");
+		}
+
 		public void ScanUser(User user, Ranking ranking, List<BeatLeaderScore> scores)
 		{
 			CurrentScanningScores = scores;
@@ -35,13 +40,26 @@ namespace BSChallenger.Server.Jobs
 				if(ScoresToCheck.Count > 0)
 				{
 					var anyPassed = true;
+					List<string> categoriesPassed = new();
 					foreach(var score in ScoresToCheck)
 					{
 						var passed = ScanMap(score.map, score.score, level);
+						if(passed)
+						{
+							var categoryFeature = score.map.Features.FirstOrDefault(x => x.Type == "category");
+							if (categoryFeature != null && !categoriesPassed.Contains(categoryFeature.Data))
+							{
+								categoriesPassed.Add(categoryFeature.Data);
+							}
+						}
 						scanHistoryScores.Add(new ScoreData(score.map, passed, score.score.ModifiedScore, (float)score.score.Accuracy, score.score.Modifiers));
 						anyPassed &= passed;
 					}
-					if(anyPassed)
+					if (level.RequiredCategoryData.StartsWith("min:") && int.TryParse(level.RequiredCategoryData.Replace("min:", ""), out int minimumCategories) && minimumCategories > categoriesPassed.Count)
+					{
+						anyPassed = false;
+					}
+					if (anyPassed)
 					{
 						latestLevelPassed = level;
 					}
@@ -62,7 +80,7 @@ namespace BSChallenger.Server.Jobs
 		private static void SetUserLevelForRanking(User user, Level level, Ranking ranking)
 		{
 			var existing = user.UserLevels.FirstOrDefault(x => x.RankingId == ranking.Identifier);
-			if(existing == null)
+			if (existing == null)
 			{
 				user.UserLevels.Add(new UserLevel(level.LevelNumber, ranking.Identifier));
 			}
