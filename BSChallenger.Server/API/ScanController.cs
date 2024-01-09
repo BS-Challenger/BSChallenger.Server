@@ -14,14 +14,13 @@ namespace BSChallenger.Server.API
 	[Route("[controller]")]
 	public class ScanController : ControllerBase
 	{
-		private readonly ILogger _logger = Log.ForContext<ScanController>();
 		private readonly Database _database;
-		private readonly JWTProvider _jwtProvider;
+		private readonly JwtProvider _jwtProvider;
 		private readonly BeatLeaderApiProvider _beatleaderAPI;
 
 		public ScanController(
 			Database database,
-			JWTProvider jwtProvider,
+			JwtProvider jwtProvider,
 			BeatLeaderApiProvider beatleaderAPI)
 		{
 			_database = database;

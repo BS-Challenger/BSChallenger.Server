@@ -32,6 +32,7 @@ namespace BSChallenger.Server.Providers
 
     public class Secrets
     {
+        public string URLBase { get; set; } = "/api";
         public string BLclientSecret { get; set; } = "";
         public string DiscordBotToken { get; set; } = "";
         public string DiscordOauthSecret { get; set; } = "";

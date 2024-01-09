@@ -12,20 +12,25 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Quartz;
+using Serilog;
 using System;
-using System.Security.Cryptography;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading.RateLimiting;
 
 namespace BSChallenger.Server
 {
+	public class LogApp
+	{
+
+	}
+
 	public static class Program
 	{
-		public static Version Version = new Version(1, 0, 0);
+		private static readonly ILogger _logger = Log.ForContext<LogApp>();
+		public static readonly Version Version = new Version(1, 0, 0);
 		public static void Main(string[] args)
 		{
 			CreateHostBuilder(args).Build().Run();
@@ -34,10 +39,12 @@ namespace BSChallenger.Server
 		public static IHostBuilder CreateHostBuilder(string[] args) =>
 			Host.CreateDefaultBuilder(args)
 				.ConfigureWebHostDefaults(webBuilder =>
+				{
+					_logger.Information("Testing");
+					var secretProvider = new SecretProvider();
 					webBuilder
 						.ConfigureServices((_, services) =>
 						{
-							var secretProvider = new SecretProvider();
 							services.AddSingleton(secretProvider);
 							services
 								.AddAuthorization()
@@ -52,8 +59,8 @@ namespace BSChallenger.Server
 										{
 											ValidateIssuer = false,
 											ValidateAudience = false,
-											ValidateLifetime = false,
-											ValidateIssuerSigningKey = false,
+											ValidateLifetime = true,
+											ValidateIssuerSigningKey = true,
 											IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretProvider.Secrets.Jwt.Key)),
 										};
 									});
@@ -78,43 +85,34 @@ namespace BSChallenger.Server
 										options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
 										options.QueueLimit = 5;
 									}))
-								.AddSingleton<JWTProvider>()
+								.AddSingleton<AuthBuilder>()
+								.AddSingleton<JwtProvider>()
 								.AddSingleton<UserProvider>()
 								.AddSingleton<DiscordSocketClient>()
 								.AddSingleton<InteractionService>()
+								.AddSingleton<BeatLeaderApiProvider>()
+								.AddSingleton<BPListParserProvider>()
 								.AddHostedService<DiscordBot>()
 								.AddOptions()
 								.AddConfiguration<AppConfiguration>("App")
-								.AddSingleton<BeatLeaderApiProvider>()
-								.AddSingleton<BPListParserProvider>()
 								.AddSwaggerGen(c =>
-								{
-									c.SwaggerDoc("v1", new OpenApiInfo { Title = "Challenger API", Version = "v1" });
-								})
-								/*.AddQuartz(q =>
-								{
-									var jobKey = new JobKey("WeeklyScanHistoryJob");
-									//q.AddJob<WeeklyScanHistoryJob>(opts => opts.WithIdentity(jobKey));
-
-									q.AddTrigger(opts => opts
-										.ForJob(jobKey)
-										.WithIdentity("WeeklyScanHistoryJob-trigger")
-										.WithCronSchedule("0 0 0 ? * SUN *"));
-								})
-								.AddQuartzHostedService(q => q.WaitForJobsToComplete = true)*/
+									c.SwaggerDoc("v1", new OpenApiInfo { Title = "Challenger API", Version = "v1" })
+								)
 								.AddControllers(options =>
-									{
-										options.Filters.Add(new HttpResponseExceptionFilter());
-									}
+										options.Filters.Add(new HttpResponseExceptionFilter())
 								);
 						})
 						.Configure(applicationBuilder =>
 							applicationBuilder
-								.UseSwagger()
+								.UseSwagger(c =>
+								{
+									c.RouteTemplate = "swagger/{documentName}/swagger.json";
+									c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
+										swaggerDoc.Servers = new List<OpenApiServer> { new OpenApiServer { Url = $"{httpReq.Scheme}://{httpReq.Host.Value}{secretProvider.Secrets.URLBase}" } });
+								})
 								.UseSwaggerUI(c =>
 								{
-									c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "Challenger API V1");
-									c.SwaggerEndpoint("/swagger/v1/swagger.json", "Challenger API V1 Debug");
+									c.SwaggerEndpoint("/swagger/v1/swagger.json", "Challenger API V1");
 								})
 								.UseRouting()
 								.UseAuthentication()
@@ -123,7 +121,8 @@ namespace BSChallenger.Server
 								.UseEndpoints(endPointRouteBuilder => endPointRouteBuilder.MapControllers())
 								.UseRateLimiter()
 								.UseForwardedHeaders()
-						)
+						);
+				}
 				)
 				.UseSerilog();
 	}

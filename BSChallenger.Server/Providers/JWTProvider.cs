@@ -1,32 +1,20 @@
-﻿using JWT.Algorithms;
-using JWT.Serializers;
-using JWT;
-using System.Collections.Generic;
-using JWT.Builder;
-using System;
-using System.Security.Cryptography;
-using System.ComponentModel.DataAnnotations;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text.Encodings.Web;
-using Microsoft.AspNetCore.DataProtection;
-using NuGet.Common;
+﻿using BSChallenger.Server.Models;
 using BSChallenger.Server.Models.API.Users;
-using BSChallenger.Server.Models;
-using System.Linq;
-using System.IO;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.IdentityModel.Tokens;
-using System.Net.Sockets;
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 
 namespace BSChallenger.Server.Providers
 {
-	public class JWTProvider
+	public class JwtProvider
 	{
 		private readonly Database _database;
 		private readonly SecretProvider _secretProvider;
-		public JWTProvider(
+		public JwtProvider(
 			Database database,
 			SecretProvider provider)
 		{
@@ -37,7 +25,7 @@ namespace BSChallenger.Server.Providers
 		{
 			var token = new JwtSecurityTokenHandler().CreateJwtSecurityToken(new SecurityTokenDescriptor()
 			{
-				Claims = new Dictionary<string, object?>()
+				Claims = new Dictionary<string, object>()
 				{
 					[ClaimTypes.NameIdentifier] = BLId,
 				},

@@ -14,9 +14,9 @@ namespace BSChallenger.Server.API.Authentication
 		private readonly byte[] _authPage = System.IO.File.ReadAllBytes(Path.Combine(Environment.CurrentDirectory, "HTML/ModAuth.html"));
 		private readonly UserProvider _userProvider;
 		private readonly BeatLeaderApiProvider _beatleaderAPI;
-		private readonly JWTProvider _jwtProvider;
+		private readonly JwtProvider _jwtProvider;
 
-		public ModAuthController(UserProvider userProvider, BeatLeaderApiProvider beatleaderAPI, JWTProvider jwtProvider)
+		public ModAuthController(UserProvider userProvider, BeatLeaderApiProvider beatleaderAPI, JwtProvider jwtProvider)
 		{
 			_userProvider = userProvider;
 			_beatleaderAPI = beatleaderAPI;

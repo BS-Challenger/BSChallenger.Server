@@ -1,5 +1,6 @@
 ﻿using BSChallenger.Server.Models;
 using BSChallenger.Server.Models.API.Users;
+using BSChallenger.Server.Providers;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -14,12 +15,16 @@ namespace BSChallenger.Server.API
     public class UsersController : ControllerBase
     {
         private readonly Database _database;
+        private readonly AuthBuilder _authBuilder;
 
-        public UsersController(
-            Database database)
+		public UsersController(
+            Database database,
+            AuthBuilder authBuilder)
         {
             _database = database;
-        }
+			_authBuilder = authBuilder;
+
+		}
 
         [HttpGet]
         public ActionResult<IEnumerable<User>> GetAll()
@@ -33,20 +38,16 @@ namespace BSChallenger.Server.API
 		{
             if (HttpContext.User.Identity.IsAuthenticated && id == "-1")
             {
-                var Identities = HttpContext.User.Identities;
-                var IdIdentity = Identities.SelectMany(x => x.Claims).FirstOrDefault(x => x.Type.Contains("nameidentifier"));
-                if (IdIdentity != null)
-                {
-                    return _database.EagerLoadUsers().FirstOrDefault(x => x.BeatLeaderId == IdIdentity.Value);
-				}
-                else
-                {
-                    return NotFound("No user for this token");
-                }
-            }
+				User ret = null;
+				_authBuilder.WithHTTPUser(HttpContext, (user) =>
+				{
+					ret = user;
+				});
+				return ret != null ? Ok(ret) : NotFound("No user for this token");
+			}
             else
             {
-                return _database.EagerLoadUsers().FirstOrDefault(x => x.BeatLeaderId == id);
+                return _authBuilder.WithUser(id);
             }
 		}
 	}

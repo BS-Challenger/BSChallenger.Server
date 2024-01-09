@@ -9,7 +9,7 @@ namespace BSChallenger.Server.Discord.Commands
 {
 	public class ImportFromPlaylist : InteractionModuleBase<SocketInteractionContext>
 	{
-		private Database _database;
+		private readonly Database _database;
 		public ImportFromPlaylist(Database database)
 		{
 			_database = database;

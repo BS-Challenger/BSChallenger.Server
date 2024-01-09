@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using System;
 
 namespace BSChallenger.Server.Extensions
 {
@@ -28,15 +29,18 @@ namespace BSChallenger.Server.Extensions
 
                     if (configuration.WriteToConsole)
                         loggerConfiguration.WriteTo.Console();
-
-                    if (configuration.File is not null && configuration.File.Path is not null)
-                        loggerConfiguration.WriteTo.File(
+					Console.WriteLine("x");
+					if (configuration.File is not null && configuration.File.Path is not null)
+                    {
+						Console.WriteLine("x2");
+						loggerConfiguration.WriteTo.File(
                             configuration.File.Path,
                             fileSizeLimitBytes: configuration.File.FileSizeLimitBytes,
                             retainedFileCountLimit: configuration.File.RetainedFileCountLimit,
                             rollingInterval: RollingInterval.Day,
                             buffered: configuration.File.Buffered
                         );
+                    }
 
                     Log.Logger = loggerConfiguration.CreateLogger();
                     loggingBuilder.AddSerilog(Log.Logger, true);

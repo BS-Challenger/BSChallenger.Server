@@ -14,33 +14,30 @@ namespace BSChallenger.Server.API.Authentication
 	[Route("[controller]")]
 	public class AuthenticateController : ControllerBase
 	{
-		private readonly ILogger _logger = Log.ForContext<AuthenticateController>();
 		private readonly BeatLeaderApiProvider _beatleaderAPI;
-		private readonly JWTProvider _jwtProvider;
+		private readonly JwtProvider _jwtProvider;
 		private readonly Database _database;
+		private readonly AuthBuilder _authBuilder;
 
 		public AuthenticateController(
 			BeatLeaderApiProvider beatleaderAPI,
-			JWTProvider jwtProvider,
-			Database database)
+			JwtProvider jwtProvider,
+			Database database,
+			AuthBuilder authBuilder)
 		{
 			_beatleaderAPI = beatleaderAPI;
 			_jwtProvider = jwtProvider;
 			_database = database;
+			_authBuilder = authBuilder;
 		}
 
 		[HttpGet("/identity")]
 		[EnableCors(PolicyName = "website")]
-		public async Task<ActionResult<User>> IdentityAsync()
+		public ActionResult<User> IdentityAsync()
 		{
-			var Identities = HttpContext.User.Identities;
-			var IdIdentity = Identities.SelectMany(x => x.Claims).FirstOrDefault(x => x.Type.Contains("nameidentifier"));
-			if (IdIdentity != null)
-			{
-				var user = _database.Users.FirstOrDefault(x => x.BeatLeaderId == IdIdentity.Value);
-				return Ok(user);
-			}
-			return NotFound();
+			User user = null;
+			_authBuilder.WithHTTPUser(HttpContext, (_user) => user = _user);
+			return user != null ? Ok(user) : NotFound();
 		}
 
 		[HttpPost("/login")]
@@ -52,7 +49,7 @@ namespace BSChallenger.Server.API.Authentication
 			{
 				return BadRequest(new BadRequestObjectResult("Beatleader token is stale! Please re-authenticate"));
 			}
-			var user = _database.Users.FirstOrDefault(x => x.BeatLeaderId == identity);
+			var user = _authBuilder.WithUser(identity);
 			if (user == null)
 			{
 				user = new User
