@@ -17,7 +17,7 @@ namespace BSChallenger.Server.Discord.Commands.Private
 		[SlashCommand("partner-ranking", "Partners a ranking")]
 		public async Task Create([Autocomplete(typeof(RankingIdentifierAutoComplete))] string ranking)
 		{
-			if (Context.User.Id != 1163263452098347118)
+			if (Context.User.Id != 1191170302944759878)
 			{
 				await RespondAsync("Insufficient Permissions!", ephemeral: true);
 				return;

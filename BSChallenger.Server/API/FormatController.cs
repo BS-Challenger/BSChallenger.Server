@@ -24,7 +24,7 @@ namespace BSChallenger.Server.API
 		{
 			foreach (var feature in map.Features)
 			{
-				//TODO, use formatter function + proper formatted name
+				//TODO: use formatter function + proper formatted name
 				yield return feature.Type + ": " + feature.Data;
 			}
 		}
