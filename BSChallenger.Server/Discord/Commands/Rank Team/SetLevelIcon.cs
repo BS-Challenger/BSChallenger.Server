@@ -17,8 +17,8 @@ namespace BSChallenger.Server.Discord.Commands
 		{
 			_database = database;
 		}
-		[SlashCommand("add-feature", "Add Feature to Map")]
-        public async Task Create([Autocomplete(typeof(RankingIdentifierAutoComplete))] string rankingId, string map, string feature)
+		[SlashCommand("set-icon", "Set Icon of a level")]
+        public async Task Create([Autocomplete(typeof(RankingIdentifierAutoComplete))] string rankingId, int level, string url)
         {
 			var ranking = _database.Rankings.FirstOrDefault(x => x.Identifier == rankingId);
             var user = ranking?.RankTeamMembers.FirstOrDefault(x => x.User.DiscordId == Context.User.Id.ToString());
@@ -33,14 +33,24 @@ namespace BSChallenger.Server.Discord.Commands
 				return;
             }
 
-			var builder = new ModalBuilder()
-                            .WithCustomId("add_feature")
-                            .WithTitle("Add feature to map")
-                            .AddTextInput("Ranking ID", "ranking", required: true, value: rankingId)
-                            .AddTextInput("Map ID", "map", required: true, value: map)
-                            .AddTextInput("Feature Name", "feature", required: true, value: feature)
-                            .AddTextInput("Feature Data", "data", required: true);
-            await RespondWithModalAsync(builder.Build());
+			var levelObj = ranking.Levels.FirstOrDefault(x => x.LevelNumber == level);
+			if(levelObj == null)
+			{
+				await RespondAsync($"No Level {level} for ranking {rankingId}!", ephemeral: true);
+				return;
+			}
+
+			levelObj.IconURL = url;
+			await _database.SaveChangesAsync();
+
+			if (url == "Default")
+			{
+				await RespondAsync($"Success! Icon URL set to default");
+			}
+			else
+			{
+				await RespondAsync($"Success! [Icon URL]({url})");
+			}
         }
     }
 }
