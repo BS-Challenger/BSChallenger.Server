@@ -10,16 +10,18 @@ namespace BSChallenger.Server.Models.API.Rankings
     [PrimaryKey("Id")]
     public class Ranking
     {
-        public Ranking(ulong guild, string name, string desc, string iconURL)
+        public Ranking(ulong guild, string name, string desc, string iconURL, string discordURL)
         {
             GuildId = guild;
             Name = name;
             Description = desc;
             IconURL = iconURL;
-        }
+            DiscordURL = discordURL;
+		}
         public Ranking()
         {
         }
+
         [Key, JsonIgnore]
         public int Id { get; set; }
         [Key]
@@ -31,7 +33,8 @@ namespace BSChallenger.Server.Models.API.Rankings
         public string IconURL { get; set; }
         public bool Private { get; set; }
         public bool Partnered { get; set; }
-        public List<Level> Levels { get; set; } = new();
+        public string DiscordURL { get; set; }
+		public List<Level> Levels { get; set; } = new();
         public List<RankTeamMember> RankTeamMembers { get; set; } = new();
 
         //Will be updated daily by quartz job

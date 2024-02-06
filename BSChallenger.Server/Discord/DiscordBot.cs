@@ -87,10 +87,11 @@ namespace BSChallenger.Server.Discord
 					string desc = GetModalItem(components, "desc");
 					string iconURL = GetModalItem(components, "icon_url");
 					string guildId = GetModalItem(components, "server_id");
+					string guildInv = GetModalItem(components, "server_inv");
 
 					if (ulong.TryParse(guildId, out var id))
 					{
-						var ranking = new Ranking(id, name, desc, iconURL)
+						var ranking = new Ranking(id, name, desc, iconURL, guildInv)
 						{
 							Private = true,
 							RankTeamMembers = new List<RankTeamMember>()

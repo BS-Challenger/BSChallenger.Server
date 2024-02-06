@@ -32,8 +32,9 @@ namespace BSChallenger.Server.Discord.Commands.Global
                             .AddTextInput("Name", "name", required: true, minLength: 5, maxLength: 15)
                             .AddTextInput("Description", "desc", required: true, placeholder: "Detail what your ranking contains and map styles", minLength: 50, maxLength: 100)
                             .AddTextInput("IconURL", "icon_url", required: true, placeholder: "URL to an image of your icon", minLength: 15)
-                            .AddTextInput("Discord Server ID", "server_id", required: true, placeholder: "ID of your discord server", minLength: 15);
-            await RespondWithModalAsync(builder.Build());
+                            .AddTextInput("Discord Server ID", "server_id", required: true, placeholder: "ID of your discord server", minLength: 15)
+                            .AddTextInput("Discord Server Invite", "server_inv", required: false, placeholder: "Invite to yourdiscord server", minLength: 15);
+			await RespondWithModalAsync(builder.Build());
         }
     }
 }
