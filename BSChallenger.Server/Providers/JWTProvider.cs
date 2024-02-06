@@ -36,7 +36,5 @@ namespace BSChallenger.Server.Providers
 
 			return token.RawData;
 		}
-
-		public User FindUser(UserToken token) => _database.Users.FirstOrDefault(x => x.BeatLeaderId == token.BeatLeaderId);
 	}
 }
